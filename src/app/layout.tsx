@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { CursorFollower } from "@/components/cursor-follower";
+import { ScrollProgress } from "@/components/scroll-progress";
+import { FloatingOrbs } from "@/components/floating-orbs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,8 +53,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <div className="noise-overlay" />
+        <FloatingOrbs />
+        <CursorFollower />
+        <ScrollProgress />
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 relative z-10">{children}</main>
         <Footer />
       </body>
     </html>

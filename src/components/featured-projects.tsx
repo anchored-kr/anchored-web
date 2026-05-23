@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, useMotionValue, useTransform } from "framer-motion";
+import { useRef, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
 import { projects, categoryLabels, type Project } from "@/data/projects";
 
@@ -17,74 +17,113 @@ const statusLabels: Record<string, string> = {
   upcoming: "Upcoming",
 };
 
+const categoryEmojis: Record<string, string> = {
+  games: "🎮",
+  community: "👥",
+  education: "🎓",
+  events: "🎪",
+  partnerships: "🤝",
+};
+
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], [5, -5]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-5, 5]);
+
+  const handleMouse = (e: ReactMouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const handleLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
-        duration: 0.6,
+        duration: 0.7,
         delay: index * 0.08,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: [0.25, 0.46, 0.45, 0.94] as const,
       }}
+      style={{ perspective: 800 }}
     >
-      <Link
+      <motion.a
+        ref={ref}
         href={`/projects/${project.slug}`}
-        className="group block relative p-6 rounded-2xl border border-border bg-surface/50 card-hover h-full"
+        onMouseMove={handleMouse}
+        onMouseLeave={handleLeave}
+        style={{ rotateX, rotateY }}
+        className="interactive group block relative p-6 rounded-2xl border border-border bg-surface/50 h-full overflow-hidden"
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.3 }}
       >
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl"
+          style={{ background: "radial-gradient(circle, rgba(0,229,255,0.15) 0%, transparent 70%)" }}
+        />
+
         <div className="relative">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-accent">
-              {categoryLabels[project.category]}
-            </span>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">{categoryEmojis[project.category]}</span>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-accent">
+                {categoryLabels[project.category]}
+              </span>
+            </div>
             {project.status && (
-              <span
-                className={`text-[10px] px-2 py-0.5 rounded-full border font-mono ${statusColors[project.status]}`}
-              >
+              <span className={`text-[10px] px-2 py-0.5 rounded-full border font-mono ${statusColors[project.status]}`}>
                 {statusLabels[project.status]}
               </span>
             )}
           </div>
 
-          <h3 className="text-lg font-semibold mb-2 group-hover:text-accent transition-colors">
+          <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors duration-300">
             {project.title}
           </h3>
 
-          <p className="text-sm text-muted leading-relaxed mb-4">
+          <p className="text-sm text-muted leading-relaxed mb-5">
             {project.descriptionKo}
           </p>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-5">
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] px-2 py-1 rounded-md bg-border/50 text-muted font-mono"
+                className="text-[10px] px-2.5 py-1 rounded-md bg-border/50 text-muted font-mono"
               >
                 {tag}
               </span>
             ))}
           </div>
 
-          <div className="mt-4 flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors">
+          <div className="flex items-center gap-2 text-xs text-muted group-hover:text-accent transition-colors">
             <span>Read more</span>
-            <svg
-              className="w-3 h-3 transition-transform group-hover:translate-x-1"
+            <motion.svg
+              className="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2}
+              animate={{ x: 0 }}
+              whileHover={{ x: 4 }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </motion.svg>
           </div>
         </div>
-      </Link>
+      </motion.a>
     </motion.div>
   );
 }
@@ -134,25 +173,22 @@ export function FeaturedProjects() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="mt-12 text-center"
+          className="mt-14 text-center"
         >
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold border border-border rounded-lg hover:border-accent/50 hover:text-accent transition-all group"
+            className="interactive inline-flex items-center gap-3 px-8 py-4 text-sm font-semibold border border-border rounded-xl hover:border-accent/50 hover:text-accent transition-all group relative overflow-hidden"
           >
-            View All Projects
+            <span className="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/5 to-accent/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            <span className="relative">View All Projects</span>
             <svg
-              className="w-4 h-4 transition-transform group-hover:translate-x-1"
+              className="relative w-4 h-4 transition-transform group-hover:translate-x-2"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
         </motion.div>
