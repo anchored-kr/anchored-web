@@ -22,11 +22,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2 }: { target: number
     return unsub;
   }, [rounded]);
 
-  return (
-    <span ref={ref} className="tabular-nums">
-      {display}{suffix}
-    </span>
-  );
+  return <span ref={ref} className="tabular-nums">{display}{suffix}</span>;
 }
 
 function GlitchText({ text }: { text: string }) {
@@ -39,17 +35,13 @@ function GlitchText({ text }: { text: string }) {
     if (!inView || revealed) return;
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let iteration = 0;
-
     const interval = setInterval(() => {
       setDisplay(
-        text
-          .split("")
-          .map((char, i) => {
-            if (char === " " || char === "\n") return char;
-            if (i < iteration) return text[i];
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join("")
+        text.split("").map((char, i) => {
+          if (char === " " || char === "\n") return char;
+          if (i < iteration) return text[i];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join("")
       );
       iteration += 0.5;
       if (iteration >= text.length) {
@@ -58,7 +50,6 @@ function GlitchText({ text }: { text: string }) {
         setDisplay(text);
       }
     }, 30);
-
     return () => clearInterval(interval);
   }, [inView, revealed, text]);
 
@@ -90,9 +81,7 @@ export function About() {
           className="grid grid-cols-1 md:grid-cols-12 gap-16 items-start"
         >
           <div className="md:col-span-5">
-            <span className="text-xs font-mono text-accent uppercase tracking-widest">
-              About
-            </span>
+            <span className="text-xs font-mono text-blue uppercase tracking-widest">About</span>
             <h2 className="mt-4 text-4xl md:text-5xl font-bold tracking-tight leading-tight">
               <GlitchText text="Roblox Ecosystem Builder" />
             </h2>
@@ -109,9 +98,7 @@ export function About() {
                   <div className="text-3xl md:text-4xl font-bold text-accent font-mono group-hover:scale-110 transition-transform origin-left">
                     <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                   </div>
-                  <div className="text-xs text-muted mt-2 uppercase tracking-wider font-mono">
-                    {stat.label}
-                  </div>
+                  <div className="text-xs text-muted mt-2 uppercase tracking-wider font-mono">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -138,7 +125,7 @@ export function About() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="relative p-8 rounded-2xl glass"
             >
-              <div className="absolute top-0 left-8 w-12 h-[2px] bg-accent/50" />
+              <div className="absolute top-0 left-8 w-12 h-[2px] bg-blue" />
               <p className="text-base text-muted leading-relaxed">
                 앵커드는 한국을 기반으로 한 Roblox Ecosystem Builder입니다. 우리는
                 신진 크리에이터들이 게임을 만들고, 팀을 구성하고, 유저와 만나고,

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { AnchorLogo } from "./anchor-logo";
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -26,21 +27,15 @@ export function Navbar() {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "glass border-b border-border"
-          : "bg-transparent"
+        scrolled ? "glass border-b border-border" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-              <span className="text-accent font-bold text-sm font-mono">A</span>
-            </div>
-          </div>
-          <span className="text-lg font-semibold tracking-tight">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <AnchorLogo className="w-7 h-7 text-accent group-hover:text-accent-dim transition-colors" color="currentColor" />
+          <span className="text-lg font-bold tracking-tight uppercase">
             Anchored
           </span>
         </Link>
@@ -72,9 +67,7 @@ export function Navbar() {
             className="w-5 h-px bg-foreground block"
           />
           <motion.span
-            animate={
-              mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }
-            }
+            animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
             className="w-5 h-px bg-foreground block"
           />
         </button>

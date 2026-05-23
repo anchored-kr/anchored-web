@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AnchorLogo } from "./anchor-logo";
 
 const links = [
   { label: "Discord", href: "https://discord.gg/anchored" },
@@ -12,13 +13,9 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-md bg-accent/10 border border-accent/30 flex items-center justify-center">
-                <span className="text-accent font-bold text-xs font-mono">
-                  A
-                </span>
-              </div>
-              <span className="font-semibold">Anchored</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <AnchorLogo className="w-6 h-6 text-accent" color="currentColor" />
+              <span className="font-bold uppercase tracking-tight">Anchored</span>
             </div>
             <p className="text-sm text-muted leading-relaxed">
               Building Korea&apos;s Roblox Creator Ecosystem.
@@ -51,26 +48,17 @@ export function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a
-                  href="#about"
-                  className="text-sm text-muted hover:text-accent transition-colors"
-                >
+                <a href="#about" className="text-sm text-muted hover:text-accent transition-colors">
                   About
                 </a>
               </li>
               <li>
-                <Link
-                  href="/projects"
-                  className="text-sm text-muted hover:text-accent transition-colors"
-                >
+                <Link href="/projects" className="text-sm text-muted hover:text-accent transition-colors">
                   Projects
                 </Link>
               </li>
               <li>
-                <a
-                  href="#partners"
-                  className="text-sm text-muted hover:text-accent transition-colors"
-                >
+                <a href="#partners" className="text-sm text-muted hover:text-accent transition-colors">
                   Partners
                 </a>
               </li>

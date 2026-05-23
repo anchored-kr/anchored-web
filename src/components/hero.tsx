@@ -27,15 +27,15 @@ function ConstellationBackground() {
     };
     window.addEventListener("mousemove", onMouse, { passive: true });
 
-    const PARTICLE_COUNT = 120;
-    const CONNECTION_DIST = 150;
-    const MOUSE_DIST = 200;
+    const PARTICLE_COUNT = 100;
+    const CONNECTION_DIST = 140;
+    const MOUSE_DIST = 180;
 
     const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
       size: Math.random() * 2 + 0.5,
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: 0.02 + Math.random() * 0.02,
@@ -43,7 +43,6 @@ function ConstellationBackground() {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       const { x: mx, y: my } = mouseRef.current;
 
       for (const p of particles) {
@@ -62,24 +61,24 @@ function ConstellationBackground() {
 
         if (mouseDist < MOUSE_DIST) {
           const force = (MOUSE_DIST - mouseDist) / MOUSE_DIST;
-          p.vx += (dmx / mouseDist) * force * 0.02;
-          p.vy += (dmy / mouseDist) * force * 0.02;
+          p.vx += (dmx / mouseDist) * force * 0.015;
+          p.vy += (dmy / mouseDist) * force * 0.015;
         }
 
         p.vx *= 0.99;
         p.vy *= 0.99;
 
-        const alpha = 0.3 + Math.sin(p.pulse) * 0.2;
+        const alpha = 0.25 + Math.sin(p.pulse) * 0.15;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 229, 255, ${alpha})`;
+        ctx.fillStyle = `rgba(0, 114, 206, ${alpha})`;
         ctx.fill();
 
         if (mouseDist < MOUSE_DIST) {
-          const glowAlpha = (1 - mouseDist / MOUSE_DIST) * 0.4;
+          const glowAlpha = (1 - mouseDist / MOUSE_DIST) * 0.3;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0, 229, 255, ${glowAlpha * 0.1})`;
+          ctx.fillStyle = `rgba(241, 196, 0, ${glowAlpha * 0.15})`;
           ctx.fill();
         }
       }
@@ -91,11 +90,11 @@ function ConstellationBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < CONNECTION_DIST) {
-            const alpha = (1 - dist / CONNECTION_DIST) * 0.15;
+            const alpha = (1 - dist / CONNECTION_DIST) * 0.12;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(0, 229, 255, ${alpha})`;
+            ctx.strokeStyle = `rgba(0, 114, 206, ${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -107,11 +106,11 @@ function ConstellationBackground() {
         const dmy = p.y - my;
         const mouseDist = Math.sqrt(dmx * dmx + dmy * dmy);
         if (mouseDist < MOUSE_DIST) {
-          const alpha = (1 - mouseDist / MOUSE_DIST) * 0.3;
+          const alpha = (1 - mouseDist / MOUSE_DIST) * 0.2;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mx, my);
-          ctx.strokeStyle = `rgba(0, 229, 255, ${alpha})`;
+          ctx.strokeStyle = `rgba(241, 196, 0, ${alpha})`;
           ctx.lineWidth = 0.3;
           ctx.stroke();
         }
@@ -128,13 +127,7 @@ function ConstellationBackground() {
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
-      aria-hidden
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" aria-hidden />;
 }
 
 function TypeWriter({ texts, className }: { texts: string[]; className?: string }) {
@@ -144,7 +137,6 @@ function TypeWriter({ texts, className }: { texts: string[]; className?: string 
 
   const tick = useCallback(() => {
     const full = texts[currentIndex];
-
     if (!isDeleting) {
       setDisplayed(full.slice(0, displayed.length + 1));
       if (displayed.length + 1 === full.length) {
@@ -203,8 +195,8 @@ function MagneticButton({ children, href, variant = "primary" }: {
       onMouseLeave={handleLeave}
       className={`interactive group relative inline-flex items-center gap-2 px-8 py-4 font-semibold text-sm rounded-xl overflow-hidden transition-all duration-300 ${
         variant === "primary"
-          ? "bg-accent text-background hover:shadow-[0_0_40px_rgba(0,229,255,0.4)]"
-          : "border border-border text-foreground hover:border-accent/50 hover:text-accent"
+          ? "bg-accent text-background hover:shadow-[0_0_40px_rgba(241,196,0,0.3)]"
+          : "border border-border text-foreground hover:border-blue/50 hover:text-blue-light"
       }`}
       style={{ transition: "transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s, border-color 0.3s, color 0.3s" }}
     >
@@ -218,17 +210,13 @@ function MagneticButton({ children, href, variant = "primary" }: {
 
 const containerVariants = {
   hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.5 },
-  },
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.5 } },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
   visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
+    opacity: 1, y: 0, filter: "blur(0px)",
     transition: { duration: 1, ease: [0.25, 0.46, 0.45, 0.94] as const },
   },
 };
@@ -240,11 +228,11 @@ export function Hero() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/30 to-background pointer-events-none" />
 
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20 pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(0,229,255,0.15) 0%, transparent 70%)" }}
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-15 pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(0,114,206,0.12) 0%, transparent 70%)" }}
       />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px] opacity-15 pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(100,0,255,0.1) 0%, transparent 70%)" }}
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px] opacity-10 pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(241,196,0,0.08) 0%, transparent 70%)" }}
       />
 
       <motion.div
@@ -268,14 +256,8 @@ export function Hero() {
           className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.05] tracking-tight mb-6"
         >
           <span className="block">Building Korea&apos;s</span>
-          <span className="block gradient-text glow-text py-1">
-            <TypeWriter
-              texts={[
-                "Roblox Creator",
-                "Game Developer",
-                "Creative Studio",
-              ]}
-            />
+          <span className="block text-accent glow-text py-1">
+            <TypeWriter texts={["Roblox Creator", "Game Developer", "Creative Studio"]} />
           </span>
           <span className="block">Ecosystem.</span>
         </motion.h1>
@@ -304,10 +286,7 @@ export function Hero() {
           </MagneticButton>
         </motion.div>
 
-        <motion.div
-          variants={itemVariants}
-          className="mt-24 flex items-center justify-center"
-        >
+        <motion.div variants={itemVariants} className="mt-24 flex items-center justify-center">
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}

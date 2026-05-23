@@ -26,8 +26,8 @@ const categoryDisplay: Record<string, string> = {
 
 const statusColors: Record<string, string> = {
   live: "bg-green-500/20 text-green-400 border-green-500/30",
-  "in-progress": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-  upcoming: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  "in-progress": "bg-accent/20 text-accent border-accent/30",
+  upcoming: "bg-blue/20 text-blue-light border-blue/30",
 };
 
 const statusLabels: Record<string, string> = {
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="text-xs font-mono text-accent uppercase tracking-widest">
+          <span className="text-xs font-mono text-blue uppercase tracking-widest">
             Projects & Stories
           </span>
           <h1 className="mt-4 text-3xl md:text-5xl font-bold tracking-tight">
