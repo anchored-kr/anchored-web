@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anchored | Building Korea's Roblox Creator Ecosystem",
+  title: "Anchored | The OS for UGC Game Creators",
   description:
-    "Anchored is a Roblox Ecosystem Builder connecting creators, games, communities, education, events, and partners in Korea.",
+    "Anchored is building a LiveOps engine for creator-led games. Starting with Roblox.",
   openGraph: {
-    title: "Anchored | Building Korea's Roblox Creator Ecosystem",
+    title: "Anchored | The OS for UGC Game Creators",
     description:
-      "Anchored is a Roblox Ecosystem Builder connecting creators, games, communities, education, events, and partners.",
+      "Anchored is building a LiveOps engine for creator-led games. Starting with Roblox.",
     type: "website",
     locale: "ko_KR",
     url: "https://anchored.kr",

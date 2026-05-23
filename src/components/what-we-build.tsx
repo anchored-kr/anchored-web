@@ -3,13 +3,37 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const pillars = [
-  { num: "01", title: "Creator Community", desc: "Roblox 크리에이터들이 모이고, 배우고, 협업하는 커뮤니티를 운영합니다." },
-  { num: "02", title: "Game Projects", desc: "크리에이터 팀과 함께 Roblox 게임을 기획, 개발, 출시, 운영합니다." },
-  { num: "03", title: "Education & Incubation", desc: "초보자와 성장 중인 크리에이터가 실제 게임 제작을 경험할 수 있는 교육과 인큐베이션 프로그램을 운영합니다." },
-  { num: "04", title: "Events & Meetups", desc: "Roblox 크리에이터들이 서로 연결될 수 있는 온라인/오프라인 이벤트를 만듭니다." },
-  { num: "05", title: "Publishing & LiveOps", desc: "게임 출시 이후 데이터 분석, 업데이트, 이벤트, 수익화, 커뮤니티 피드백 루프를 설계합니다." },
-  { num: "06", title: "Partnerships", desc: "게임사, 플랫폼, 브랜드, 교육기관과 함께 Roblox 생태계 확장을 위한 협업을 만듭니다." },
+const layers = [
+  {
+    num: "01",
+    title: "Analytics & Insights",
+    desc: "실시간 플레이어 데이터, 리텐션 분석, 코호트 추적. 크리에이터가 자기 게임을 숫자로 이해할 수 있는 대시보드.",
+    descEn: "Real-time player data, retention analysis, and cohort tracking for creator-led games.",
+  },
+  {
+    num: "02",
+    title: "LiveOps Engine",
+    desc: "이벤트 스케줄링, A/B 테스트, 시즌 관리, 보상 시스템. 업데이트를 코드 없이 운영하는 엔진.",
+    descEn: "Event scheduling, A/B testing, season management, and reward systems — without code.",
+  },
+  {
+    num: "03",
+    title: "Community Layer",
+    desc: "인게임 피드백 루프, 크리에이터-플레이어 커뮤니케이션, 커뮤니티 기반 콘텐츠 사이클.",
+    descEn: "In-game feedback loops, creator-player communication, and community-driven content cycles.",
+  },
+  {
+    num: "04",
+    title: "Monetization Framework",
+    desc: "수익 모델 설계, 인앱 이코노미 밸런싱, 결제 인프라. 크리에이터가 지속 가능한 비즈니스를 만들 수 있도록.",
+    descEn: "Revenue model design, in-app economy balancing, and payment infrastructure for sustainable creator businesses.",
+  },
+  {
+    num: "05",
+    title: "Publishing & Distribution",
+    desc: "게임 출시 파이프라인, 스토어 최적화, 크로스 프로모션. 만든 게임이 유저에게 닿도록.",
+    descEn: "Launch pipelines, store optimization, and cross-promotion to connect games with players.",
+  },
 ];
 
 export function WhatWeBuild() {
@@ -18,43 +42,45 @@ export function WhatWeBuild() {
 
   return (
     <section id="what-we-build" className="py-32 border-t border-border">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-5xl px-6">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">What We Build</p>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-20">
-            Building the ecosystem,
-            <br />
-            <span className="text-muted">one project at a time.</span>
+          <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">
+            What We&apos;re Building
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
+            The LiveOps Operating System.
           </h2>
+          <p className="text-lg text-dim max-w-2xl leading-relaxed mb-20">
+            A full-stack platform that turns individual creators into
+            game operations teams — from analytics to monetization.
+          </p>
         </motion.div>
 
         <div className="space-y-0">
-          {pillars.map((p, i) => (
+          {layers.map((l, i) => (
             <motion.div
-              key={p.num}
+              key={l.num}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group grid grid-cols-12 gap-6 py-8 border-t border-border hover:bg-white/[0.02] transition-colors cursor-default"
+              className="group grid grid-cols-12 gap-6 py-8 border-t border-border hover:bg-white/[0.015] transition-colors cursor-default"
             >
               <div className="col-span-1 text-xs text-muted font-mono pt-1">
-                {p.num}
+                {l.num}
               </div>
-              <div className="col-span-4 md:col-span-4">
+              <div className="col-span-11 md:col-span-4">
                 <h3 className="text-lg font-semibold group-hover:text-white transition-colors">
-                  {p.title}
+                  {l.title}
                 </h3>
               </div>
-              <div className="col-span-7 md:col-span-7">
-                <p className="text-sm text-muted leading-relaxed">
-                  {p.desc}
-                </p>
+              <div className="hidden md:block col-span-7">
+                <p className="text-sm text-muted leading-relaxed">{l.desc}</p>
               </div>
             </motion.div>
           ))}

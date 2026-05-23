@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AnchorLogo } from "./anchor-logo";
 
 const navItems = [
-  { label: "About", href: "#about" },
+  { label: "Vision", href: "#vision" },
+  { label: "Product", href: "#what-we-build" },
   { label: "Projects", href: "#projects" },
-  { label: "Partners", href: "#partners" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "#partners" },
 ];
 
 export function Navbar() {
