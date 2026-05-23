@@ -1,40 +1,31 @@
 import Link from "next/link";
 import { AnchorLogo } from "./anchor-logo";
 
-const links = [
-  { label: "Discord", href: "https://discord.gg/anchored" },
-  { label: "X (Twitter)", href: "https://x.com/anchored_kr" },
-  { label: "Email", href: "mailto:contact@anchored.kr" },
-];
-
 export function Footer() {
   return (
-    <footer id="contact" className="border-t border-border bg-surface/50">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <AnchorLogo className="w-6 h-6 text-accent" color="currentColor" />
-              <span className="font-bold uppercase tracking-tight">Anchored</span>
+    <footer id="contact" className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <AnchorLogo className="w-5 h-5" />
+              <span className="text-sm font-semibold tracking-[0.2em] uppercase">Anchored</span>
             </div>
-            <p className="text-sm text-muted leading-relaxed">
+            <p className="text-sm text-muted leading-relaxed max-w-xs">
               Building Korea&apos;s Roblox Creator Ecosystem.
             </p>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted mb-4">
-              Links
-            </h3>
+            <p className="text-xs tracking-[0.2em] uppercase text-muted mb-4">Navigate</p>
             <ul className="space-y-3">
-              {links.map((link) => (
+              {[
+                { label: "About", href: "#about" },
+                { label: "Projects", href: "/projects" },
+                { label: "Partners", href: "#partners" },
+              ].map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted hover:text-accent transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-muted hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -43,36 +34,26 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted mb-4">
-              Navigate
-            </h3>
+            <p className="text-xs tracking-[0.2em] uppercase text-muted mb-4">Connect</p>
             <ul className="space-y-3">
-              <li>
-                <a href="#about" className="text-sm text-muted hover:text-accent transition-colors">
-                  About
-                </a>
-              </li>
-              <li>
-                <Link href="/projects" className="text-sm text-muted hover:text-accent transition-colors">
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <a href="#partners" className="text-sm text-muted hover:text-accent transition-colors">
-                  Partners
-                </a>
-              </li>
+              {[
+                { label: "Discord", href: "https://discord.gg/anchored" },
+                { label: "X", href: "https://x.com/anchored_kr" },
+                { label: "Email", href: "mailto:contact@anchored.kr" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-sm text-muted hover:text-white transition-colors">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Anchored. All rights reserved.
-          </p>
-          <p className="text-xs text-muted font-mono">
-            Seoul, South Korea
-          </p>
+        <div className="mt-20 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted">&copy; {new Date().getFullYear()} Anchored</p>
+          <p className="text-xs text-muted">Seoul, South Korea</p>
         </div>
       </div>
     </footer>

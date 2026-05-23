@@ -4,9 +4,6 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
-import { ScrollProgress } from "@/components/scroll-progress";
-import { FloatingOrbs } from "@/components/floating-orbs";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -21,16 +18,6 @@ export const metadata: Metadata = {
   title: "Anchored | Building Korea's Roblox Creator Ecosystem",
   description:
     "Anchored is a Roblox Ecosystem Builder connecting creators, games, communities, education, events, and partners in Korea.",
-  keywords: [
-    "Roblox",
-    "Korea",
-    "Creator",
-    "Ecosystem",
-    "Game Development",
-    "Community",
-    "Education",
-    "Anchored",
-  ],
   openGraph: {
     title: "Anchored | Building Korea's Roblox Creator Ecosystem",
     description:
@@ -51,13 +38,9 @@ export default function RootLayout({
       lang="ko"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <div className="noise-overlay" />
-        <FloatingOrbs />
-
-        <ScrollProgress />
+      <body className="min-h-full flex flex-col bg-black text-white">
         <Navbar />
-        <main className="flex-1 relative z-10">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

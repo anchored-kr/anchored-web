@@ -7,7 +7,6 @@ import { AnchorLogo } from "./anchor-logo";
 
 const navItems = [
   { label: "About", href: "#about" },
-  { label: "What We Build", href: "#what-we-build" },
   { label: "Projects", href: "#projects" },
   { label: "Partners", href: "#partners" },
   { label: "Contact", href: "#contact" },
@@ -24,18 +23,15 @@ export function Navbar() {
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass border-b border-border" : "bg-transparent"
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-black/80 backdrop-blur-xl border-b border-border" : ""
       }`}
     >
-      <nav className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <AnchorLogo className="w-7 h-7 text-accent group-hover:text-accent-dim transition-colors" color="currentColor" />
-          <span className="text-lg font-bold tracking-tight uppercase">
+      <nav className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3">
+          <AnchorLogo className="w-6 h-6" />
+          <span className="text-sm font-semibold tracking-[0.2em] uppercase">
             Anchored
           </span>
         </Link>
@@ -45,31 +41,21 @@ export function Navbar() {
             <a
               key={item.href}
               href={item.href}
-              className="text-sm text-muted hover:text-foreground transition-colors duration-300 relative group"
+              className="text-xs tracking-wider uppercase text-muted hover:text-foreground transition-colors"
             >
               {item.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </div>
 
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
-          aria-label="Toggle menu"
+          className="md:hidden w-6 h-6 flex flex-col items-center justify-center gap-1"
+          aria-label="Menu"
         >
-          <motion.span
-            animate={mobileOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-            className="w-5 h-px bg-foreground block"
-          />
-          <motion.span
-            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="w-5 h-px bg-foreground block"
-          />
-          <motion.span
-            animate={mobileOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-            className="w-5 h-px bg-foreground block"
-          />
+          <motion.span animate={mobileOpen ? { rotate: 45, y: 4 } : {}} className="w-4 h-px bg-white block" />
+          <motion.span animate={mobileOpen ? { opacity: 0 } : {}} className="w-4 h-px bg-white block" />
+          <motion.span animate={mobileOpen ? { rotate: -45, y: -4 } : {}} className="w-4 h-px bg-white block" />
         </button>
       </nav>
 
@@ -79,15 +65,15 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-border overflow-hidden"
+            className="md:hidden bg-black border-t border-border overflow-hidden"
           >
-            <div className="px-6 py-6 flex flex-col gap-4">
+            <div className="px-6 py-8 flex flex-col gap-6">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-lg text-muted hover:text-foreground transition-colors"
+                  className="text-sm tracking-wider uppercase text-muted hover:text-foreground transition-colors"
                 >
                   {item.label}
                 </a>
@@ -96,6 +82,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }
