@@ -45,7 +45,7 @@ export default function RootLayout({
       lang="ko"
       className={`${nunito.variable} ${notoSansKR.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-black text-white">
+      <body className="min-h-full flex flex-col bg-white text-ink">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
