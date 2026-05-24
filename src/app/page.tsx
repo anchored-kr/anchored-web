@@ -90,21 +90,6 @@ const pipeline = [
   { n: "07", t: "Expand IP", d: "가능성 있는 게임이 브랜드, 캐릭터, 커뮤니티, 장기 IP로 확장될 수 있도록 돕습니다." },
 ];
 
-const provides = [
-  { t: "Creator Community", d: "UGC 크리에이터들이 만나고, 배우고, 협업하는 Discord 기반 커뮤니티." },
-  { t: "Education & Mentorship", d: "신진 크리에이터를 위한 워크숍, 캠프, 멘토링 프로그램." },
-  { t: "Team Building", d: "개발자, 빌더, 아티스트, 기획자, 애니메이터, 운영자를 연결하는 팀 빌딩." },
-  { t: "Project Incubation", d: "팀이 아이디어를 플레이 가능하고 출시 가능한 게임으로 발전시키도록 돕는 인큐베이션." },
-  { t: "Publishing & LiveOps", d: "출시, 업데이트, 이벤트, 데이터 분석, 커뮤니티 피드백, 수익화 운영 지원." },
-  { t: "IP Development", d: "가능성 있는 UGC 프로젝트를 장기 IP로 성장시키는 IP 개발." },
-  { t: "Partnerships", d: "크리에이터를 플랫폼, 퍼블리셔, 스폰서, 브랜드, 투자자와 연결." },
-];
-
-const journey = [
-  "길드 참여", "미션과 퀘스트 수행", "워크숍과 이벤트 참여", "프로토타입 공유",
-  "협업자 발견", "팀 구성", "플레이 가능한 프로젝트 제작", "커뮤니티 피드백 기반 출시", "IP로 성장",
-];
-
 /* ── Page ── */
 
 export default function Home() {
@@ -138,22 +123,36 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── 2. Thesis ── */}
+      {/* ── 2. About ── */}
       <section className="py-28 border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-snug tracking-tight mb-10">
-              The next mega-hit IPs will be born<br />from creator communities.
-            </h2>
-            <p className="text-base text-dim leading-relaxed mb-6">
-              과거의 게임 IP는 대형 스튜디오와 퍼블리셔 중심으로 만들어졌습니다. 하지만 Roblox, Fortnite UEFN, Minecraft 같은 UGC 플랫폼에서는 개인 크리에이터와 소규모 팀이 새로운 세계관, 캐릭터, 게임 시스템, 팬덤을 만들어내고 있습니다.
-            </p>
-            <div className="mt-12 p-8 md:p-10 border border-white/5 rounded-2xl">
-              <p className="text-xl md:text-2xl font-bold leading-snug tracking-tight">
-                &quot;Great IPs do not appear overnight.<br />
-                <span className="text-muted">They are discovered, nurtured, tested, and grown.&quot;</span>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">About Anchored</p>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">From community to mega-hit IP.</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <p className="text-base text-dim leading-relaxed">
+                앵커드는 한국 Roblox 크리에이터 커뮤니티에서 시작했습니다. 우리는 크리에이터들이 만나고, 배우고, 팀을 만들고, 게임을 출시하고, 유저와 함께 성장할 수 있는 생태계를 만들고 있습니다.
+              </p>
+              <p className="text-base text-dim leading-relaxed">
+                앵커드의 목표는 단순히 더 많은 게임을 만드는 것이 아닙니다. 커뮤니티 속에서 미래의 IP 창업가를 발굴하고, 그들이 자신만의 세계를 만들고, 그 세계가 메가 히트 IP로 성장할 수 있도록 돕습니다.
               </p>
             </div>
+
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-10">
+              {[
+                { v: 200, s: "+", l: "Creators" },
+                { v: 10, s: "+", l: "Game Projects" },
+                { v: 50, s: "+", l: "Events" },
+                { v: 15, s: "+", l: "Partners" },
+              ].map((s, i) => (
+                <motion.div key={s.l} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
+                  <div className="text-3xl md:text-4xl font-bold font-mono"><Counter target={s.v} suffix={s.s} /></div>
+                  <div className="text-xs text-muted mt-2 tracking-[0.2em] uppercase">{s.l}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            <p className="mt-16 text-lg font-semibold">Anchored inspires future IP entrepreneurs.</p>
           </motion.div>
         </div>
       </section>
@@ -192,7 +191,6 @@ export default function Home() {
             <p className="text-sm text-muted mb-16">크리에이터의 작은 불꽃에서 메가 히트 IP까지.</p>
           </motion.div>
 
-          {/* Pipeline visual */}
           <div className="flex flex-wrap justify-center gap-2 mb-16">
             {["Discover", "Incubate", "Team Up", "Build", "Launch", "Grow", "Expand IP"].map((s, i) => (
               <motion.div key={s} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: i * 0.06 }}
@@ -219,28 +217,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 5. What We Provide ── */}
-      <section className="py-28 border-t border-white/5">
-        <div className="max-w-5xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">What We Provide</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-16">The ecosystem creators need to build worlds.</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {provides.map((p, i) => (
-              <motion.div key={p.t} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
-                className="p-7 border border-white/5 rounded-2xl hover:border-white/10 transition-colors"
-              >
-                <h3 className="text-sm font-semibold mb-2">{p.t}</h3>
-                <p className="text-sm text-muted leading-relaxed">{p.d}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 6. IP Lab ── */}
+      {/* ── 5. IP Lab ── */}
       <section id="ip-lab" className="py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -254,12 +231,15 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {featured.map((p, i) => (
               <motion.div key={p.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}>
-                <Link href={`/projects/${p.slug}`} className="group block p-7 border border-white/5 rounded-2xl hover:border-white/10 hover:bg-white/[0.015] transition-all h-full">
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {p.tags.map((tag) => <span key={tag} className="text-[10px] tracking-wider uppercase text-muted">{tag}</span>)}
+                <Link href={`/projects/${p.slug}`} className="group block border border-white/5 rounded-2xl hover:border-white/10 hover:bg-white/[0.015] transition-all h-full overflow-hidden">
+                  <Img label={p.title} aspect="16/9" className="rounded-none border-0" />
+                  <div className="p-7">
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {p.tags.map((tag) => <span key={tag} className="text-[10px] tracking-wider uppercase text-muted">{tag}</span>)}
+                    </div>
+                    <h3 className="text-base font-semibold mb-2 group-hover:text-white transition-colors">{p.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{p.descriptionKo}</p>
                   </div>
-                  <h3 className="text-base font-semibold mb-2 group-hover:text-white transition-colors">{p.title}</h3>
-                  <p className="text-sm text-muted leading-relaxed">{p.descriptionKo}</p>
                 </Link>
               </motion.div>
             ))}
@@ -273,38 +253,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. Creator Journey ── */}
-      <section className="py-28 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">Creator Journey</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-16">A path for creators to become IP builders.</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-            <div className="relative pl-8">
-              <div className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-white/20 via-white/10 to-transparent" />
-              {journey.map((step, i) => (
-                <motion.div key={step} initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: i * 0.05 }}
-                  className="relative mb-6 last:mb-0"
-                >
-                  <div className="absolute -left-8 top-1.5 w-[7px] h-[7px] rounded-full bg-white/30 border border-white/20" />
-                  <p className="text-sm">{step}</p>
-                </motion.div>
-              ))}
-            </div>
-            <div>
-              <Img label="Creator Journey Illustration" aspect="3/4" />
-              <div className="mt-8 p-6 border border-white/5 rounded-xl">
-                <p className="text-sm font-semibold mb-1">We do not just find talent.</p>
-                <p className="text-sm text-muted">We build the path for talent to become IP.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 8 & 9. For Creators + Partners ── */}
+      {/* ── 6. For Creators + Partners ── */}
       <section id="partners" className="py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -316,12 +265,10 @@ export default function Home() {
               <p className="text-sm text-muted leading-relaxed mb-8">
                 Roblox 게임을 만들고 싶거나, 이미 프로젝트가 있다면 앵커드 길드에서 시작하세요. 커뮤니티, 교육, 팀 빌딩, 퍼블리싱, LiveOps를 통해 함께 성장합니다.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-black text-sm font-medium rounded-full hover:bg-gray-200 transition-colors">
-                  Join Guild
-                  <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                </a>
-              </div>
+              <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-black text-sm font-medium rounded-full hover:bg-gray-200 transition-colors">
+                Join Guild
+                <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+              </a>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
@@ -340,41 +287,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 10. About ── */}
-      <section className="py-28 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">About Anchored</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">From community to mega-hit IP.</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <p className="text-base text-dim leading-relaxed">
-                앵커드는 한국 Roblox 크리에이터 커뮤니티에서 시작했습니다. 우리는 크리에이터들이 만나고, 배우고, 팀을 만들고, 게임을 출시하고, 유저와 함께 성장할 수 있는 생태계를 만들고 있습니다.
-              </p>
-              <p className="text-base text-dim leading-relaxed">
-                앵커드의 목표는 단순히 더 많은 게임을 만드는 것이 아닙니다. 커뮤니티 속에서 미래의 IP 창업가를 발굴하고, 그들이 자신만의 세계를 만들고, 그 세계가 메가 히트 IP로 성장할 수 있도록 돕습니다.
-              </p>
-            </div>
-
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-10">
-              {[
-                { v: 200, s: "+", l: "Creators" },
-                { v: 10, s: "+", l: "Game Projects" },
-                { v: 50, s: "+", l: "Events" },
-                { v: 15, s: "+", l: "Partners" },
-              ].map((s, i) => (
-                <motion.div key={s.l} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
-                  <div className="text-3xl md:text-4xl font-bold font-mono"><Counter target={s.v} suffix={s.s} /></div>
-                  <div className="text-xs text-muted mt-2 tracking-[0.2em] uppercase">{s.l}</div>
-                </motion.div>
-              ))}
-            </div>
-
-            <p className="mt-16 text-lg font-semibold">Anchored inspires future IP entrepreneurs.</p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 11. Contact ── */}
+      {/* ── 7. Contact ── */}
       <section id="contact" className="py-28 border-t border-white/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
