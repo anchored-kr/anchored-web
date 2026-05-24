@@ -9,7 +9,6 @@ const navItems = [
   { label: "Ecosystem", href: "#ecosystem" },
   { label: "IP Lab", href: "#ip-lab" },
   { label: "Partners", href: "#partners" },
-  { label: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {

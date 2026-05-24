@@ -124,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* ── 2. About ── */}
-      <section className="py-28 border-t border-white/5">
+      <section className="py-20 border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">About Anchored</p>
@@ -287,22 +287,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. Contact ── */}
-      <section id="contact" className="py-28 border-t border-white/5">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">Contact</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">From creator community to mega-hit UGC IP.</h2>
-            <p className="text-sm text-muted mb-10">크리에이터 커뮤니티에서 메가 히트 UGC IP까지.</p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3 px-8 py-3.5 bg-white text-black text-sm font-medium rounded-full hover:bg-gray-200 transition-colors">
-                Join Guild <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-              </a>
-              <a href="mailto:contact@anchored.kr" className="inline-flex items-center gap-3 px-8 py-3.5 text-sm font-medium text-white border border-white/15 rounded-full hover:border-white/30 transition-colors">contact@anchored.kr</a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </>
   );
 }
