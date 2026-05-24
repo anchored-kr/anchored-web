@@ -3,10 +3,10 @@
 @theme inline {
   --color-background: #ffffff;
   --color-foreground: #101114;
-  --color-primary: #7132f5;
-  --color-primary-dark: #5741d8;
-  --color-primary-deep: #5b1ecf;
-  --color-primary-subtle: rgba(133,91,251,0.16);
+  --color-primary: #0072CE;
+  --color-primary-dark: #003A70;
+  --color-primary-deep: #002B54;
+  --color-primary-subtle: rgba(0,114,206,0.12);
   --color-on-primary: #ffffff;
   --color-ink: #101114;
   --color-body: #686b82;
