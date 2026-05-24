@@ -124,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* ── 2. About ── */}
-      <section className="py-20 border-t border-white/5">
+      <section className="py-12 border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">About Anchored</p>
