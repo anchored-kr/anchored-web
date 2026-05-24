@@ -16,31 +16,16 @@ function TypeWriter({ texts }: { texts: string[] }) {
     const full = texts[idx];
     if (!deleting) {
       setText(full.slice(0, text.length + 1));
-      if (text.length + 1 === full.length) {
-        setTimeout(() => setDeleting(true), 2500);
-        return;
-      }
+      if (text.length + 1 === full.length) { setTimeout(() => setDeleting(true), 2500); return; }
     } else {
       setText(full.slice(0, text.length - 1));
-      if (text.length - 1 === 0) {
-        setDeleting(false);
-        setIdx((i) => (i + 1) % texts.length);
-        return;
-      }
+      if (text.length - 1 === 0) { setDeleting(false); setIdx((i) => (i + 1) % texts.length); return; }
     }
   }, [texts, idx, text, deleting]);
 
-  useEffect(() => {
-    const t = setTimeout(tick, deleting ? 25 : 50);
-    return () => clearTimeout(t);
-  }, [tick, deleting]);
+  useEffect(() => { const t = setTimeout(tick, deleting ? 25 : 50); return () => clearTimeout(t); }, [tick, deleting]);
 
-  return (
-    <>
-      {text}
-      <span className="inline-block w-[2px] h-[0.8em] bg-white ml-0.5 animate-pulse align-middle" />
-    </>
-  );
+  return <>{text}<span className="inline-block w-[2px] h-[0.8em] bg-white ml-0.5 animate-pulse align-middle" /></>;
 }
 
 /* ─── Counter ─── */
@@ -51,72 +36,69 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (v) => Math.round(v));
   const [d, setD] = useState(0);
-
-  useEffect(() => {
-    if (inView) return animate(count, target, { duration: 2, ease: "easeOut" }).stop;
-  }, [inView, count, target]);
-
+  useEffect(() => { if (inView) return animate(count, target, { duration: 2, ease: "easeOut" }).stop; }, [inView, count, target]);
   useEffect(() => rounded.on("change", setD), [rounded]);
-
   return <span ref={ref} className="tabular-nums">{d}{suffix}</span>;
+}
+
+/* ─── Placeholder Image ─── */
+
+function PlaceholderImage({ label, aspect = "16/9", className = "" }: { label: string; aspect?: string; className?: string }) {
+  return (
+    <div
+      className={`relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden ${className}`}
+      style={{ aspectRatio: aspect }}
+    >
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 mx-auto mb-3 rounded-lg border border-white/10 flex items-center justify-center">
+            <svg className="w-5 h-5 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+            </svg>
+          </div>
+          <p className="text-[10px] tracking-[0.2em] uppercase text-white/20">{label}</p>
+        </div>
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
+    </div>
+  );
 }
 
 /* ─── Grid Background ─── */
 
 function Grid() {
   const ref = useRef<HTMLCanvasElement>(null);
-
   useEffect(() => {
-    const c = ref.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-    if (!ctx) return;
+    const c = ref.current; if (!c) return;
+    const ctx = c.getContext("2d"); if (!ctx) return;
     let id: number, t = 0;
-
     const resize = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
-    resize();
-    window.addEventListener("resize", resize);
-
+    resize(); window.addEventListener("resize", resize);
     const draw = () => {
-      t += 0.003;
-      ctx.clearRect(0, 0, c.width, c.height);
-      const g = 80;
-      const cols = Math.ceil(c.width / g) + 1;
-      const rows = Math.ceil(c.height / g) + 1;
-
-      ctx.strokeStyle = "rgba(255,255,255,0.025)";
-      ctx.lineWidth = 0.5;
+      t += 0.003; ctx.clearRect(0, 0, c.width, c.height);
+      const g = 80, cols = Math.ceil(c.width / g) + 1, rows = Math.ceil(c.height / g) + 1;
+      ctx.strokeStyle = "rgba(255,255,255,0.025)"; ctx.lineWidth = 0.5;
       for (let i = 0; i < cols; i++) { ctx.beginPath(); ctx.moveTo(i * g, 0); ctx.lineTo(i * g, c.height); ctx.stroke(); }
       for (let j = 0; j < rows; j++) { ctx.beginPath(); ctx.moveTo(0, j * g); ctx.lineTo(c.width, j * g); ctx.stroke(); }
-
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          const x = i * g, y = j * g;
-          const d = Math.sqrt((x - c.width / 2) ** 2 + (y - c.height * 0.4) ** 2);
-          ctx.beginPath();
-          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,255,255,${(Math.sin(d * 0.003 - t * 2) * 0.5 + 0.5) * 0.1})`;
-          ctx.fill();
-        }
+      for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
+        const x = i * g, y = j * g, d = Math.sqrt((x - c.width / 2) ** 2 + (y - c.height * 0.4) ** 2);
+        ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${(Math.sin(d * 0.003 - t * 2) * 0.5 + 0.5) * 0.1})`; ctx.fill();
       }
       id = requestAnimationFrame(draw);
     };
     draw();
     return () => { cancelAnimationFrame(id); window.removeEventListener("resize", resize); };
   }, []);
-
   return <canvas ref={ref} className="absolute inset-0 pointer-events-none" aria-hidden />;
 }
 
 /* ─── Animations ─── */
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } } };
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] as const } },
-};
+const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] as const } } };
 
-/* ─── Page ─── */
+/* ─── Data ─── */
 
 const featured = projects.filter((p) => p.featured).slice(0, 6);
 
@@ -134,6 +116,8 @@ const stats = [
   { v: 50, s: "+", l: "Events" },
   { v: 15, s: "+", l: "Partners" },
 ];
+
+/* ─── Page ─── */
 
 export default function Home() {
   const vRef = useRef(null);
@@ -177,16 +161,38 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* ── Hero Image (Dashboard Mockup) ── */}
+      <section className="pb-32 -mt-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+          >
+            <PlaceholderImage label="Product Dashboard Screenshot" aspect="16/9" className="shadow-2xl shadow-white/5" />
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── Vision ── */}
       <section className="py-32 border-t border-white/5">
-        <div ref={vRef} className="max-w-4xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={vInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8 }}>
-            <p className="text-lg md:text-xl text-dim leading-relaxed mb-10">
-              Millions of creators build games on platforms like Roblox. But after launch, they&apos;re on their own — no analytics, no update pipeline, no community tools, no monetization framework.
-            </p>
-            <p className="text-lg md:text-xl text-white leading-relaxed">
-              Anchored is building the operating system that closes this gap.
-            </p>
+        <div ref={vRef} className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={vInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+          >
+            <div>
+              <p className="text-lg md:text-xl text-dim leading-relaxed mb-10">
+                Millions of creators build games on platforms like Roblox. But after launch, they&apos;re on their own — no analytics, no update pipeline, no community tools, no monetization framework.
+              </p>
+              <p className="text-lg md:text-xl text-white leading-relaxed">
+                Anchored is building the operating system that closes this gap.
+              </p>
+            </div>
+            <PlaceholderImage label="Creator Ecosystem Illustration" aspect="4/3" />
           </motion.div>
         </div>
       </section>
@@ -199,17 +205,31 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-20">The LiveOps Operating System.</h2>
           </motion.div>
 
-          <div className="space-y-0">
-            {layers.map((l, i) => (
-              <motion.div key={l.n} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
-                className="group grid grid-cols-12 gap-6 py-7 border-t border-white/5 hover:bg-white/[0.015] transition-colors"
-              >
-                <span className="col-span-1 text-xs text-muted font-mono pt-0.5">{l.n}</span>
-                <h3 className="col-span-4 text-base font-semibold">{l.t}</h3>
-                <p className="col-span-7 text-sm text-muted">{l.d}</p>
-              </motion.div>
-            ))}
-            <div className="border-t border-white/5" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div className="space-y-0">
+              {layers.map((l, i) => (
+                <motion.div key={l.n} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
+                  className="group py-6 border-t border-white/5 hover:bg-white/[0.015] transition-colors"
+                >
+                  <div className="flex items-baseline gap-4 mb-2">
+                    <span className="text-xs text-muted font-mono">{l.n}</span>
+                    <h3 className="text-base font-semibold">{l.t}</h3>
+                  </div>
+                  <p className="text-sm text-muted pl-8">{l.d}</p>
+                </motion.div>
+              ))}
+              <div className="border-t border-white/5" />
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="lg:sticky lg:top-32"
+            >
+              <PlaceholderImage label="LiveOps Dashboard UI" aspect="4/3" />
+            </motion.div>
           </div>
         </div>
       </section>
@@ -219,9 +239,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">Track Record</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              Built on real ecosystem experience.
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Built on real ecosystem experience.</h2>
             <p className="text-base text-muted max-w-xl leading-relaxed mb-16">
               Roblox 생태계에서 커뮤니티, 게임 운영, 교육, 이벤트, 데이터 분석을 직접 수행하며 크리에이터가 실제로 필요한 것을 학습했습니다.
             </p>
@@ -235,6 +253,20 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+
+          {/* Photo Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-20"
+          >
+            <PlaceholderImage label="Community Event" aspect="1/1" />
+            <PlaceholderImage label="Developer Meetup" aspect="1/1" />
+            <PlaceholderImage label="Workshop" aspect="1/1" />
+            <PlaceholderImage label="Demo Day" aspect="1/1" />
+          </motion.div>
 
           <div className="border-t border-white/5 pt-16">
             <p className="text-xs tracking-[0.3em] uppercase text-muted mb-8">Projects</p>
@@ -267,9 +299,7 @@ export default function Home() {
       <section className="py-32 border-t border-white/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
-              Let&apos;s build the future of UGC games.
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">Let&apos;s build the future of UGC games.</h2>
             <p className="text-base text-muted leading-relaxed mb-10 max-w-lg mx-auto">
               크리에이터, 게임사, 플랫폼, 투자사 — 함께 만들어갈 파트너를 찾고 있습니다.
             </p>
