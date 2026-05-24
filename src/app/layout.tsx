@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anchored | The OS for UGC Game Creators",
+  title: "Anchored | Discovering the Next Mega-Hit UGC IPs",
   description:
-    "Anchored is building a LiveOps engine for creator-led games. Starting with Roblox.",
+    "Anchored is a creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds — starting with Roblox.",
   openGraph: {
-    title: "Anchored | The OS for UGC Game Creators",
+    title: "Anchored | Discovering the Next Mega-Hit UGC IPs",
     description:
-      "Anchored is building a LiveOps engine for creator-led games. Starting with Roblox.",
+      "A creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds.",
     type: "website",
     locale: "ko_KR",
     url: "https://anchored.kr",
