@@ -20,7 +20,7 @@
   --color-hairline-dark: rgba(229,229,229,0.2);
   --color-hairline-light: #f3f3f3;
   --color-border: rgba(229,229,229,0.2);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-nunito), var(--font-noto-kr);
   --font-mono: var(--font-geist-mono);
 }
 
