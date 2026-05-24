@@ -138,15 +138,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── Hero Image ── */}
-      <section className="pb-24 -mt-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 60, scale: 0.95 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] as const }}>
-            <Img label="Anchored Ecosystem Visual" aspect="21/9" className="shadow-2xl shadow-white/5" />
-          </motion.div>
-        </div>
-      </section>
-
       {/* ── 2. Thesis ── */}
       <section className="py-28 border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6">
