@@ -81,7 +81,7 @@ export default function Home() {
         <div className="absolute inset-0 flex items-end pb-12 md:pb-16 lg:pb-20">
         <div className="max-w-[1280px] mx-auto px-6 md:px-12 w-full">
           <motion.div variants={stagger} initial="hidden" animate="visible">
-            <motion.div variants={fadeUp} className="mb-6">
+            <motion.div variants={fadeUp} className="mb-6 hidden md:block">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 text-[12px] font-medium text-white/80">
                 Starting with Roblox
               </span>
@@ -92,11 +92,11 @@ export default function Home() {
               <TypeWriter texts={["Mega-Hit UGC IPs.", "Creator-Led Worlds.", "Future Game Studios."]} />
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="mt-6 text-base text-white/70 leading-[1.38] max-w-xl">
+            <motion.p variants={fadeUp} className="mt-6 text-base text-white/70 leading-[1.38] max-w-xl hidden md:block">
               Anchored is a creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
+            <motion.div variants={fadeUp} className="mt-8 flex-wrap gap-3 hidden md:flex">
               <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-[13px] bg-white text-ink text-base font-medium rounded-xl hover:bg-white/90 transition-colors">
                 Join Anchored Guild
