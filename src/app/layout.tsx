@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   title: "Anchored | Discovering the Next Mega-Hit UGC IPs",
   description:
     "Anchored is a creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds — starting with Roblox.",
+  icons: {
+    icon: "/W_anchored_symbol.png",
+    apple: "/W_anchored_symbol.png",
+  },
   openGraph: {
     title: "Anchored | Discovering the Next Mega-Hit UGC IPs",
     description:
