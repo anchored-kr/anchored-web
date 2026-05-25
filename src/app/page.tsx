@@ -86,7 +86,7 @@ export default function Home() {
               </span>
             </motion.div>
 
-            <motion.h1 variants={fadeUp} className="text-[clamp(2.5rem,5.5vw,3rem)] font-bold leading-[1.17] tracking-[-1px] max-w-3xl text-white">
+            <motion.h1 variants={fadeUp} className="text-[clamp(2.5rem,5.5vw,3rem)] font-extrabold leading-[1.17] tracking-[-1px] max-w-3xl text-white">
               Discovering the Next<br />
               <TypeWriter texts={["Mega-Hit UGC IPs.", "Creator-Led Worlds.", "Future Game Studios."]} />
             </motion.h1>
@@ -114,7 +114,7 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">About Anchored</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-[1.22] tracking-[-0.5px] text-ink mb-8">
+            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-8">
               From community to mega-hit IP.
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-14">
@@ -150,7 +150,7 @@ export default function Home() {
             <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">Anchored Guild</p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-[1.22] tracking-[-0.5px] text-ink mb-5">
+                <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-5">
                   Where UGC creators begin.
                 </h2>
                 <p className="text-base text-body leading-[1.38] mb-5">
@@ -175,7 +175,7 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">Incubation Pipeline</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
+            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
               From creator spark to mega-hit IP.
             </h2>
             <p className="text-sm text-muted mb-10">크리에이터의 작은 불꽃에서 메가 히트 IP까지.</p>
@@ -209,7 +209,7 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">IP Lab</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
+            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
               Projects growing inside the Anchored ecosystem.
             </h2>
             <p className="text-sm text-muted max-w-xl leading-[1.43] mb-12">
@@ -250,7 +250,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-on-primary/60 mb-5">For Creators</p>
-              <h3 className="text-[clamp(1.5rem,3.5vw,2rem)] font-bold leading-[1.22] tracking-[-0.5px] text-on-primary mb-4">
+              <h3 className="text-[clamp(1.5rem,3.5vw,2rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-on-primary mb-4">
                 Build your world with Anchored.
               </h3>
               <p className="text-base text-on-primary/75 leading-[1.38] mb-8">
@@ -264,7 +264,7 @@ export default function Home() {
 
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
               <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-on-primary/60 mb-5">For Partners & Investors</p>
-              <h3 className="text-[clamp(1.5rem,3.5vw,2rem)] font-bold leading-[1.22] tracking-[-0.5px] text-on-primary mb-4">
+              <h3 className="text-[clamp(1.5rem,3.5vw,2rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-on-primary mb-4">
                 Partner with the next generation of UGC IP.
               </h3>
               <p className="text-base text-on-primary/75 leading-[1.38] mb-8">
