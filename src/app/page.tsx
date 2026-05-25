@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <>
       {/* ━━ Hero ━━ */}
-      <section className="relative bg-surface-dark pt-32 pb-40 min-h-[70vh] overflow-hidden">
+      <section className="relative bg-surface-dark pt-32 pb-48 min-h-screen overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
           style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-bg.jpg)` }}
