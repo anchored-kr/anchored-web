@@ -17,7 +17,7 @@ function TypeWriter({ texts }: { texts: string[] }) {
     else { setText(full.slice(0, text.length - 1)); if (text.length - 1 === 0) { setDel(false); setIdx((i) => (i + 1) % texts.length); return; } }
   }, [texts, idx, text, del]);
   useEffect(() => { const t = setTimeout(tick, del ? 25 : 50); return () => clearTimeout(t); }, [tick, del]);
-  return <><span className="text-white">{text}</span><span className="inline-block w-[2px] h-[0.8em] bg-white ml-0.5 animate-pulse align-middle" /></>;
+  return <>{text}<span className="inline-block w-[2px] h-[0.85em] bg-white ml-0.5 animate-pulse align-middle" /></>;
 }
 
 function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -80,8 +80,7 @@ function IPLabCarousel({ featured }: { featured: typeof projects }) {
         <div className="flex gap-5">
           {featured.map((p, i) => (
             <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
-              className="w-[calc(25%-15px)] min-w-[260px] flex-shrink-0"
-            >
+              className="w-[calc(25%-15px)] min-w-[260px] flex-shrink-0">
               <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
                 <Img label={p.title} aspect="16/9" className="rounded-none" />
                 <div className="p-5">
@@ -98,7 +97,6 @@ function IPLabCarousel({ featured }: { featured: typeof projects }) {
           ))}
         </div>
       </div>
-
       {canLeft && (
         <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-10 h-10 rounded-full bg-white border border-border shadow-[rgba(0,0,0,0.08)_0px_4px_16px] flex items-center justify-center hover:bg-surface-soft transition-colors z-10">
           <svg className="w-5 h-5 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
@@ -123,16 +121,6 @@ const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1, del
 
 const featured = projects.filter((p) => p.featured);
 
-const pipeline = [
-  { n: "01", t: "Discover", d: "커뮤니티 활동, 미션, 이벤트, 워크숍을 통해 잠재력 있는 신진 크리에이터를 발굴합니다." },
-  { n: "02", t: "Incubate", d: "게임 기획, 스크립팅, 빌드, 협업, LiveOps 역량을 키울 수 있도록 돕습니다." },
-  { n: "03", t: "Team Up", d: "크리에이터의 역량과 관심사를 바탕으로 팀을 구성합니다." },
-  { n: "04", t: "Build", d: "팀이 아이디어를 플레이 가능한 UGC 게임으로 전환하도록 지원합니다." },
-  { n: "05", t: "Launch", d: "커뮤니티 테스트와 퍼블리싱 지원을 통해 실제 유저와 만나도록 돕습니다." },
-  { n: "06", t: "Grow", d: "유저 피드백과 LiveOps를 활용해 리텐션과 성장을 개선합니다." },
-  { n: "07", t: "Expand IP", d: "가능성 있는 게임을 브랜드, 캐릭터, 장기 IP로 확장합니다." },
-];
-
 /* ── Page ── */
 
 export default function Home() {
@@ -151,26 +139,25 @@ export default function Home() {
           <motion.div variants={stagger} initial="hidden" animate="visible">
             <motion.div variants={fadeUp} className="mb-6 hidden md:block">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 text-[12px] font-medium text-white/80">
-                Starting with Roblox
+                The Creator Label for UGC Games
               </span>
             </motion.div>
 
-            <motion.h1 variants={fadeUp} className="text-[clamp(2.5rem,5.5vw,3rem)] font-extrabold leading-[1.17] tracking-[-1px] max-w-3xl text-white hidden md:block">
-              Discovering the Next<br />
-              <TypeWriter texts={["Mega-Hit UGC IPs.", "Creator-Led Worlds.", "Future Game Studios."]} />
+            <motion.h1 variants={fadeUp} className="text-[clamp(2rem,5.5vw,3.5rem)] font-extrabold leading-[1.1] tracking-[-1px] max-w-4xl text-white hidden md:block">
+              We debut creators as games.
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="mt-6 text-base text-white/70 leading-[1.38] max-w-xl hidden md:block">
-              Anchored is a creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds.
+            <motion.p variants={fadeUp} className="mt-6 text-lg text-white/70 leading-[1.5] max-w-2xl hidden md:block">
+              앵커드는 가능성 있는 UGC 게임 크리에이터를 발굴하고, 그들을 게임으로 데뷔시키고, 미래의 메가 히트 IP로 성장시키는 크리에이터 레이블입니다.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-8 flex-wrap gap-3 hidden md:flex">
               <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-[13px] bg-white text-ink text-base font-medium rounded-xl hover:bg-white/90 transition-colors">
-                Join Anchored Guild
+                className="inline-flex items-center gap-2 px-5 py-[13px] bg-white text-ink text-base font-semibold rounded-xl hover:bg-white/90 transition-colors">
+                Join the Guild
               </a>
               <a href="#partners"
-                className="inline-flex items-center gap-2 px-4 py-[13px] text-base font-medium text-white border border-white/20 rounded-xl hover:border-white/40 transition-colors">
+                className="inline-flex items-center gap-2 px-5 py-[13px] text-base font-semibold text-white border border-white/20 rounded-xl hover:border-white/40 transition-colors">
                 Partner with Us
               </a>
             </motion.div>
@@ -179,55 +166,170 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ━━ Manifesto ━━ */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="max-w-[900px] mx-auto px-6 md:px-12">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-8">Creator Label</p>
+            <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.3] tracking-[-0.5px] text-ink mb-8">
+              음악 산업에 아티스트를 발굴하고 데뷔시키는 레이블이 있다면,<br />
+              <span className="text-primary">앵커드는 UGC 게임 크리에이터를 위한 크리에이터 레이블입니다.</span>
+            </h2>
+            <div className="space-y-5 text-base text-body leading-[1.6]">
+              <p>
+                세상에는 아직 이름을 얻지 못한 창작자들이 많습니다. 아이디어는 있지만 팀이 없는 사람. 감각은 있지만 완성까지 가본 적 없는 사람. 게임을 사랑하지만, 그 열정을 어떻게 작품과 커리어로 바꿔야 할지 모르는 사람.
+              </p>
+              <p>
+                앵커드는 그런 크리에이터들을 위한 출발점이 되고자 합니다. 우리는 가능성 있는 UGC 게임 크리에이터를 발굴하고, 그들이 첫 번째 게임을 만들고, 출시하고, 운영하고, 나아가 자신만의 IP와 팬덤을 가진 창작자로 성장할 수 있도록 돕습니다.
+              </p>
+            </div>
+            <div className="mt-12 p-8 bg-surface-soft rounded-2xl">
+              <p className="text-xl md:text-2xl font-extrabold text-ink leading-[1.3]">
+                &quot;우리는 재능을 게임으로 데뷔시킵니다.&quot;
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ━━ Guild — Underground Scene ━━ */}
+      <section id="ecosystem" className="bg-surface-dark py-20 md:py-28">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-8">Anchored Guild</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-white mb-6">
+                  우리의 언더그라운드 씬.
+                </h2>
+                <div className="space-y-4 text-base text-white/70 leading-[1.6]">
+                  <p>
+                    크리에이터는 갑자기 등장하지 않습니다. 씬 안에서 자라고, 서로 영향을 주고받으며, 작은 시도를 반복하면서 만들어집니다.
+                  </p>
+                  <p>
+                    앵커드 길드는 단순한 디스코드 커뮤니티가 아닙니다. 한국 UGC 게임 크리에이터들의 언더그라운드 씬입니다. 누군가는 처음으로 Roblox Studio를 켜고, 누군가는 팀원을 찾고, 누군가는 첫 번째 피드백을 받습니다.
+                  </p>
+                  <p className="text-white font-semibold">
+                    이 모든 과정이 앵커드에게는 발굴의 순간입니다.
+                  </p>
+                </div>
+                <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer"
+                  className="mt-8 inline-flex items-center gap-2 px-5 py-[13px] bg-primary text-on-primary text-base font-semibold rounded-xl hover:bg-primary-dark transition-colors">
+                  Join the Guild
+                </a>
+              </div>
+              <Img label="Guild Community" aspect="4/3" className="bg-[#1a1a1f]" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ━━ School — Growth ━━ */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-8">Anchored School</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <Img label="School Program" aspect="4/3" />
+              <div>
+                <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-6">
+                  가능성을 성장으로 바꾸는 곳.
+                </h2>
+                <div className="space-y-4 text-base text-body leading-[1.6]">
+                  <p>
+                    재능만으로는 충분하지 않습니다. 게임을 끝까지 완성하는 힘, 플레이어를 이해하는 힘, 팀과 협업하는 힘, 데이터를 보고 판단하는 힘. 이 모든 역량은 훈련되어야 합니다.
+                  </p>
+                  <p>
+                    앵커드 스쿨은 크리에이터가 자신의 감각을 언어화하고, 아이디어를 구조화하고, 게임 제작의 기본기를 익히는 곳입니다.
+                  </p>
+                </div>
+                <div className="mt-8 p-6 bg-surface-soft rounded-2xl">
+                  <p className="text-sm font-semibold text-ink">앵커드에게 교육은 목적지가 아닙니다.</p>
+                  <p className="text-sm text-body mt-1">교육은 데뷔를 위한 준비 과정입니다.</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ━━ Fleet — Debut Lineup ━━ */}
+      <section className="bg-surface-soft py-20 md:py-28">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-8">Anchored Fleet</p>
+            <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-6">
+              크리에이터의 데뷔 라인업.
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+              <p className="text-base text-body leading-[1.6]">
+                앵커드 플릿은 가능성 있는 팀들이 실제 게임을 만들고 출시하는 무대입니다. 각 팀은 서로 다른 색깔과 장르, 감각을 가집니다. 앵커드는 각 크리에이터와 팀이 가진 고유한 색을 살리되, 시장에서 살아남기 위해 필요한 제작 시스템과 운영 체계를 제공합니다.
+              </p>
+              <p className="text-base text-body leading-[1.6]">
+                우리는 팀에게 단순히 &quot;게임을 만들어라&quot;라고 말하지 않습니다. 함께 목표를 정하고, 출시까지의 길을 설계하고, 플레이어 반응을 보며 다음 선택을 합니다. 앵커드 플릿은 미래의 UGC 게임 IP들이 데뷔를 준비하는 라인업입니다.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ━━ IP Lab ━━ */}
-      <section id="ip-lab" className="bg-white py-20">
+      <section id="ip-lab" className="bg-white py-20 md:py-28">
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">IP Lab</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
-              Projects growing inside the Anchored ecosystem.
-            </h2>
-            <p className="text-sm text-muted max-w-xl leading-[1.43] mb-12">
-              각 프로젝트는 크리에이터 팀, 커뮤니티 피드백, LiveOps 실험, IP 가능성을 검증하는 인큐베이션 사례입니다.
-            </p>
+            <div className="flex items-end justify-between mb-12">
+              <div>
+                <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">IP Lab</p>
+                <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink">
+                  앵커드 생태계에서 자라고 있는 프로젝트들.
+                </h2>
+              </div>
+              <Link href="/projects" className="hidden md:inline-flex items-center gap-2 px-4 py-[10px] text-sm font-medium text-primary-dark border border-primary-dark rounded-xl hover:bg-primary-subtle transition-colors whitespace-nowrap">
+                View all
+              </Link>
+            </div>
           </motion.div>
 
           <IPLabCarousel featured={featured} />
 
-          <div className="mt-8">
-            <Link href="/projects" className="inline-flex items-center gap-2 px-4 py-[13px] text-base font-medium text-primary-dark border border-primary-dark rounded-xl hover:bg-primary-subtle transition-colors">
+          <div className="mt-8 md:hidden">
+            <Link href="/projects" className="inline-flex items-center gap-2 px-4 py-[10px] text-sm font-medium text-primary-dark border border-primary-dark rounded-xl hover:bg-primary-subtle transition-colors">
               View all projects
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ━━ About ━━ */}
-      <section className="bg-surface-soft py-20">
-        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">About Anchored</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-8">
-              From community to mega-hit IP.
+      {/* ━━ Vision ━━ */}
+      <section className="bg-surface-dark py-20 md:py-28">
+        <div className="max-w-[900px] mx-auto px-6 md:px-12">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-8">Our Vision</p>
+            <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.3] tracking-[-0.5px] text-white mb-8">
+              우리는 게임이 아니라,<br />크리에이터의 커리어를 만듭니다.
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-14">
-              <p className="text-base text-body leading-[1.38]">
-                앵커드는 한국 Roblox 크리에이터 커뮤니티에서 시작했습니다. 크리에이터들이 만나고, 배우고, 팀을 만들고, 게임을 출시하고, 유저와 함께 성장할 수 있는 생태계를 만들고 있습니다.
+            <div className="space-y-5 text-base text-white/70 leading-[1.6]">
+              <p>
+                앵커드가 진짜로 만들고 싶은 것은 단기적인 게임 하나가 아닙니다. 우리는 크리에이터가 계속해서 더 큰 작품을 만들고, 자신만의 팬덤과 IP를 가진 창작자로 성장하기를 바랍니다.
               </p>
-              <p className="text-base text-body leading-[1.38]">
-                앵커드의 목표는 단순히 더 많은 게임을 만드는 것이 아닙니다. 커뮤니티 속에서 미래의 IP 창업가를 발굴하고, 그들의 세계가 메가 히트 IP로 성장할 수 있도록 돕습니다.
+              <p>
+                게임 하나가 실패해도 크리에이터는 남습니다. 출시 과정에서 배운 감각, 팀워크, 데이터, 운영 경험은 다음 게임의 자산이 됩니다.
+              </p>
+              <p className="text-white font-semibold">
+                그래서 앵커드는 프로젝트만 보지 않습니다. 우리는 사람을 봅니다.
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+
+            <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
                 { v: 200, s: "+", l: "Creators" },
-                { v: 10, s: "+", l: "Game Projects" },
+                { v: 10, s: "+", l: "Projects" },
                 { v: 50, s: "+", l: "Events" },
                 { v: 15, s: "+", l: "Partners" },
               ].map((s, i) => (
                 <motion.div key={s.l} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
-                  <div className="text-4xl font-bold text-ink font-mono"><Counter target={s.v} suffix={s.s} /></div>
-                  <div className="text-[12px] font-medium text-muted mt-2 uppercase tracking-wider">{s.l}</div>
+                  <div className="text-3xl md:text-4xl font-extrabold text-white font-mono"><Counter target={s.v} suffix={s.s} /></div>
+                  <div className="text-[12px] font-medium text-white/40 mt-2 uppercase tracking-wider">{s.l}</div>
                 </motion.div>
               ))}
             </div>
@@ -235,99 +337,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ━━ Guild ━━ */}
-      <section id="ecosystem" className="bg-white py-20">
-        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">Anchored Guild</p>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-5">
-                  Where UGC creators begin.
-                </h2>
-                <p className="text-base text-body leading-[1.38] mb-5">
-                  앵커드 길드는 Roblox를 중심으로 한 UGC 게임 크리에이터 커뮤니티입니다. 개발자, 빌더, 기획자, 아티스트들이 모여 배우고, 협업하고, 프로젝트를 만들고, 서로의 성장을 돕습니다.
-                </p>
-                <p className="text-sm text-muted leading-[1.43] mb-6">
-                  앵커드에게 커뮤니티는 단순한 Discord 서버가 아닙니다. 미래의 크리에이터, 팀, 게임, IP를 발굴하는 가장 중요한 기반입니다.
-                </p>
-                <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-[13px] bg-primary text-on-primary text-base font-medium rounded-xl hover:bg-primary-dark transition-colors">
-                  Join the Guild
-                </a>
-              </div>
-              <Img label="Guild Community" aspect="4/3" />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ━━ Pipeline ━━ */}
-      <section className="bg-surface-soft py-20">
-        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">Incubation Pipeline</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
-              From creator spark to mega-hit IP.
-            </h2>
-            <p className="text-sm text-muted mb-10">크리에이터의 작은 불꽃에서 메가 히트 IP까지.</p>
-          </motion.div>
-
-          <div className="flex flex-wrap gap-2 mb-10">
-            {["Discover", "Incubate", "Team Up", "Build", "Launch", "Grow", "Expand IP"].map((s, i) => (
-              <motion.div key={s} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: i * 0.04 }}
-                className="flex items-center gap-2">
-                <span className="px-3 py-1.5 text-[12px] font-medium text-primary bg-primary-subtle rounded-lg">{s}</span>
-                {i < 6 && <span className="text-border">→</span>}
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-[rgba(0,0,0,0.03)_0px_4px_24px] overflow-hidden">
-            {pipeline.map((p, i) => (
-              <motion.div key={p.n} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: i * 0.03 }}
-                className={`grid grid-cols-12 gap-4 py-5 px-6 ${i > 0 ? "border-t border-border" : ""}`}>
-                <span className="col-span-1 text-[14px] text-muted font-mono">{p.n}</span>
-                <h3 className="col-span-3 text-base font-semibold text-ink">{p.t}</h3>
-                <p className="col-span-8 text-sm text-body leading-[1.43]">{p.d}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ━━ CTA ━━ */}
-      <section id="partners" className="bg-primary py-20">
+      <section id="partners" className="bg-primary py-20 md:py-28">
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-on-primary/60 mb-5">For Creators</p>
               <h3 className="text-[clamp(1.5rem,3.5vw,2rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-on-primary mb-4">
-                Build your world with Anchored.
+                당신의 세계를 앵커드에서 시작하세요.
               </h3>
-              <p className="text-base text-on-primary/75 leading-[1.38] mb-8">
-                Roblox 게임을 만들고 싶거나 이미 프로젝트가 있다면, 앵커드 길드에서 시작하세요.
+              <p className="text-base text-on-primary/75 leading-[1.5] mb-8">
+                Roblox 게임을 만들고 싶은 사람. 팀원을 찾고 있는 사람. 자신만의 IP를 만들고 싶은 사람. 앵커드는 당신의 데뷔를 함께합니다.
               </p>
               <a href="https://discord.gg/anchored" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-[13px] bg-white text-primary text-base font-medium rounded-xl hover:bg-white/90 transition-colors">
-                Join Guild
+                className="inline-flex items-center gap-2 px-5 py-[13px] bg-white text-primary text-base font-semibold rounded-xl hover:bg-white/90 transition-colors">
+                Join the Guild
               </a>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-              <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-on-primary/60 mb-5">For Partners & Investors</p>
+              <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-on-primary/60 mb-5">For Partners</p>
               <h3 className="text-[clamp(1.5rem,3.5vw,2rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-on-primary mb-4">
-                Partner with the next generation of UGC IP.
+                차세대 UGC IP 생태계와 함께하세요.
               </h3>
-              <p className="text-base text-on-primary/75 leading-[1.38] mb-8">
-                플랫폼, 퍼블리셔, 브랜드, 투자자는 앵커드를 통해 크리에이터, 프로젝트, IP 기회와 연결됩니다.
+              <p className="text-base text-on-primary/75 leading-[1.5] mb-8">
+                플랫폼, 퍼블리셔, 브랜드, 투자자는 앵커드를 통해 신진 크리에이터, 게임 프로젝트, IP 기회와 연결됩니다.
               </p>
               <a href="mailto:contact@anchored.kr"
-                className="inline-flex items-center gap-2 px-4 py-[13px] text-base font-medium text-on-primary border border-on-primary/30 rounded-xl hover:border-on-primary/60 transition-colors">
+                className="inline-flex items-center gap-2 px-5 py-[13px] text-base font-semibold text-on-primary border border-on-primary/30 rounded-xl hover:border-on-primary/60 transition-colors">
                 Get in Touch
               </a>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* ━━ Closing ━━ */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="max-w-[900px] mx-auto px-6 md:px-12 text-center">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-base text-body leading-[1.6] mb-8">
+              우리는 크리에이터를 발굴합니다. 훈련합니다. 팀과 연결합니다.<br className="hidden md:block" />
+              게임을 출시합니다. IP가 성장하도록 운영합니다.
+            </p>
+            <p className="text-xl md:text-2xl font-extrabold text-ink leading-[1.3]">
+              앵커드는 UGC 게임 크리에이터를 위한<br />크리에이터 레이블입니다.
+            </p>
+          </motion.div>
         </div>
       </section>
     </>
