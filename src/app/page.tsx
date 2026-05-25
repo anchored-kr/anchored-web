@@ -78,6 +78,7 @@ export default function Home() {
           style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-bg.jpg)` }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-surface-dark/95 via-surface-dark/80 to-surface-dark/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-transparent to-transparent" />
         <div className="absolute inset-0 flex items-end pb-12 md:pb-16 lg:pb-20">
         <div className="max-w-[1280px] mx-auto px-6 md:px-12 w-full">
           <motion.div variants={stagger} initial="hidden" animate="visible">
