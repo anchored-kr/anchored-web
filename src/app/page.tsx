@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <>
       {/* ━━ Hero ━━ */}
-      <section className="relative bg-surface-dark overflow-hidden" style={{ aspectRatio: "16/9" }}>
+      <section className="relative bg-surface-dark overflow-hidden" style={{ aspectRatio: "21/9" }}>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
           style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-bg.jpg)` }}
