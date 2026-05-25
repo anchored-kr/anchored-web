@@ -87,7 +87,7 @@ export default function Home() {
               </span>
             </motion.div>
 
-            <motion.h1 variants={fadeUp} className="text-[clamp(2.5rem,5.5vw,3rem)] font-extrabold leading-[1.17] tracking-[-1px] max-w-3xl text-white">
+            <motion.h1 variants={fadeUp} className="text-[clamp(2.5rem,5.5vw,3rem)] font-extrabold leading-[1.17] tracking-[-1px] max-w-3xl text-white hidden md:block">
               Discovering the Next<br />
               <TypeWriter texts={["Mega-Hit UGC IPs.", "Creator-Led Worlds.", "Future Game Studios."]} />
             </motion.h1>
