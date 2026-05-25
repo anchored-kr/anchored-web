@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <>
       {/* ━━ Hero ━━ */}
-      <section className="relative bg-surface-dark pt-32 pb-20 overflow-hidden">
+      <section className="relative bg-surface-dark pt-32 pb-40 min-h-[70vh] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
           style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-bg.jpg)` }}
@@ -109,6 +109,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ━━ IP Lab ━━ */}
+      <section id="ip-lab" className="bg-white py-20">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">IP Lab</p>
+            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
+              Projects growing inside the Anchored ecosystem.
+            </h2>
+            <p className="text-sm text-muted max-w-xl leading-[1.43] mb-12">
+              각 프로젝트는 크리에이터 팀, 커뮤니티 피드백, LiveOps 실험, IP 가능성을 검증하는 인큐베이션 사례입니다.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {featured.map((p, i) => (
+              <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}>
+                <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
+                  <Img label={p.title} aspect="16/9" className="rounded-none" />
+                  <div className="p-5">
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {p.tags.map((tag) => (
+                        <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-border-subtle text-body uppercase tracking-wider">{tag}</span>
+                      ))}
+                    </div>
+                    <h3 className="text-base font-semibold text-ink mb-1.5 group-hover:text-primary transition-colors">{p.title}</h3>
+                    <p className="text-sm text-body leading-[1.43]">{p.descriptionKo}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <Link href="/projects" className="inline-flex items-center gap-2 px-4 py-[13px] text-base font-medium text-primary-dark border border-primary-dark rounded-xl hover:bg-primary-subtle transition-colors">
+              View all projects
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ━━ About ━━ */}
       <section className="bg-surface-soft py-20">
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
@@ -125,7 +165,6 @@ export default function Home() {
                 앵커드의 목표는 단순히 더 많은 게임을 만드는 것이 아닙니다. 커뮤니티 속에서 미래의 IP 창업가를 발굴하고, 그들의 세계가 메가 히트 IP로 성장할 수 있도록 돕습니다.
               </p>
             </div>
-
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
                 { v: 200, s: "+", l: "Creators" },
@@ -200,46 +239,6 @@ export default function Home() {
                 <p className="col-span-8 text-sm text-body leading-[1.43]">{p.d}</p>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ━━ IP Lab ━━ */}
-      <section id="ip-lab" className="bg-white py-20">
-        <div className="max-w-[1280px] mx-auto px-6 md:px-12">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-[12px] font-bold tracking-[0.3px] uppercase text-primary mb-6">IP Lab</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-3">
-              Projects growing inside the Anchored ecosystem.
-            </h2>
-            <p className="text-sm text-muted max-w-xl leading-[1.43] mb-12">
-              각 프로젝트는 크리에이터 팀, 커뮤니티 피드백, LiveOps 실험, IP 가능성을 검증하는 인큐베이션 사례입니다.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {featured.map((p, i) => (
-              <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}>
-                <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
-                  <Img label={p.title} aspect="16/9" className="rounded-none" />
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {p.tags.map((tag) => (
-                        <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-border-subtle text-body uppercase tracking-wider">{tag}</span>
-                      ))}
-                    </div>
-                    <h3 className="text-base font-semibold text-ink mb-1.5 group-hover:text-primary transition-colors">{p.title}</h3>
-                    <p className="text-sm text-body leading-[1.43]">{p.descriptionKo}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-8">
-            <Link href="/projects" className="inline-flex items-center gap-2 px-4 py-[13px] text-base font-medium text-primary-dark border border-primary-dark rounded-xl hover:bg-primary-subtle transition-colors">
-              View all projects
-            </Link>
           </div>
         </div>
       </section>
