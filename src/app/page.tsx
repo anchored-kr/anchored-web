@@ -125,23 +125,27 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {featured.map((p, i) => (
-              <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}>
-                <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
-                  <Img label={p.title} aspect="16/9" className="rounded-none" />
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {p.tags.map((tag) => (
-                        <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-border-subtle text-body uppercase tracking-wider">{tag}</span>
-                      ))}
+          <div className="overflow-x-auto -mx-6 md:-mx-12 px-6 md:px-12">
+            <div className="flex gap-5" style={{ width: `max(100%, ${featured.length * 300}px)` }}>
+              {featured.map((p, i) => (
+                <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
+                  className="w-[calc(25%-15px)] min-w-[260px] flex-shrink-0"
+                >
+                  <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
+                    <Img label={p.title} aspect="16/9" className="rounded-none" />
+                    <div className="p-5">
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {p.tags.map((tag) => (
+                          <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-border-subtle text-body uppercase tracking-wider">{tag}</span>
+                        ))}
+                      </div>
+                      <h3 className="text-base font-semibold text-ink mb-1.5 group-hover:text-primary transition-colors">{p.title}</h3>
+                      <p className="text-sm text-body leading-[1.43]">{p.descriptionKo}</p>
                     </div>
-                    <h3 className="text-base font-semibold text-ink mb-1.5 group-hover:text-primary transition-colors">{p.title}</h3>
-                    <p className="text-sm text-body leading-[1.43]">{p.descriptionKo}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           <div className="mt-8">
