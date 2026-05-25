@@ -46,6 +46,73 @@ function Img({ label, aspect = "16/9", className = "" }: { label: string; aspect
   );
 }
 
+function IPLabCarousel({ featured }: { featured: typeof projects }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(true);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 5);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 5);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    window.addEventListener("resize", checkScroll);
+    return () => { el.removeEventListener("scroll", checkScroll); window.removeEventListener("resize", checkScroll); };
+  }, []);
+
+  const scroll = (dir: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.querySelector<HTMLElement>(":scope > div > div")?.offsetWidth || 300;
+    el.scrollBy({ left: dir === "right" ? cardWidth + 20 : -(cardWidth + 20), behavior: "smooth" });
+  };
+
+  return (
+    <div className="relative">
+      <div ref={scrollRef} className="overflow-hidden -mx-6 md:-mx-12 px-6 md:px-12">
+        <div className="flex gap-5">
+          {featured.map((p, i) => (
+            <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
+              className="w-[calc(25%-15px)] min-w-[260px] flex-shrink-0"
+            >
+              <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
+                <Img label={p.title} aspect="16/9" className="rounded-none" />
+                <div className="p-5">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {p.tags.map((tag) => (
+                      <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-border-subtle text-body uppercase tracking-wider">{tag}</span>
+                    ))}
+                  </div>
+                  <h3 className="text-base font-semibold text-ink mb-1.5 group-hover:text-primary transition-colors">{p.title}</h3>
+                  <p className="text-sm text-body leading-[1.43]">{p.descriptionKo}</p>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {canLeft && (
+        <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-10 h-10 rounded-full bg-white border border-border shadow-[rgba(0,0,0,0.08)_0px_4px_16px] flex items-center justify-center hover:bg-surface-soft transition-colors z-10">
+          <svg className="w-5 h-5 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+      )}
+      {canRight && (
+        <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-10 h-10 rounded-full bg-white border border-border shadow-[rgba(0,0,0,0.08)_0px_4px_16px] flex items-center justify-center hover:bg-surface-soft transition-colors z-10">
+          <svg className="w-5 h-5 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+        </button>
+      )}
+    </div>
+  );
+}
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const } },
@@ -125,28 +192,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="overflow-x-auto -mx-6 md:-mx-12 px-6 md:px-12">
-            <div className="flex gap-5" style={{ width: `max(100%, ${featured.length * 300}px)` }}>
-              {featured.map((p, i) => (
-                <motion.div key={p.slug} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.04 }}
-                  className="w-[calc(25%-15px)] min-w-[260px] flex-shrink-0"
-                >
-                  <Link href={`/projects/${p.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:shadow-[rgba(0,0,0,0.06)_0px_8px_32px] transition-all h-full">
-                    <Img label={p.title} aspect="16/9" className="rounded-none" />
-                    <div className="p-5">
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {p.tags.map((tag) => (
-                          <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-border-subtle text-body uppercase tracking-wider">{tag}</span>
-                        ))}
-                      </div>
-                      <h3 className="text-base font-semibold text-ink mb-1.5 group-hover:text-primary transition-colors">{p.title}</h3>
-                      <p className="text-sm text-body leading-[1.43]">{p.descriptionKo}</p>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <IPLabCarousel featured={featured} />
 
           <div className="mt-8">
             <Link href="/projects" className="inline-flex items-center gap-2 px-4 py-[13px] text-base font-medium text-primary-dark border border-primary-dark rounded-xl hover:bg-primary-subtle transition-colors">
