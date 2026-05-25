@@ -246,10 +246,33 @@ export default function Home() {
             <h2 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-extrabold leading-[1.22] tracking-[-0.5px] text-ink mb-6">
               크리에이터의 데뷔 라인업.
             </h2>
-            <p className="text-base text-body leading-[1.6] max-w-2xl mb-10">
-              앵커드 플릿은 가능성 있는 팀들이 실제 게임을 만들고 출시하는 무대입니다. 각 팀의 고유한 색을 살리되, 시장에서 살아남기 위해 필요한 제작 시스템과 운영 체계를 제공합니다. 앵커드 플릿은 미래의 UGC 게임 IP들이 데뷔를 준비하는 라인업입니다.
+            <p className="text-base text-body leading-[1.6] max-w-2xl mb-12">
+              앵커드 플릿은 가능성 있는 팀들이 실제 게임을 만들고 출시하는 무대입니다. 각 팀의 고유한 색을 살리되, 시장에서 살아남기 위해 필요한 제작 시스템과 운영 체계를 제공합니다.
             </p>
           </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { name: "Team Speed Obby", genre: "Time-Attack Obby", status: "Live", statusColor: "bg-green-100 text-green-700", desc: "속도와 기록 경쟁, 데이터 기반 밸런싱에 강한 LiveOps 중심 팀.", members: "4명" },
+              { name: "Team Swarmrot", genre: "Strategy PvP", status: "In Dev", statusColor: "bg-amber-100 text-amber-700", desc: "밈 문화와 대규모 전투를 결합한 인터넷 네이티브 IP 팀.", members: "5명" },
+              { name: "Team GOKUI", genre: "Co-op Action", status: "In Dev", statusColor: "bg-amber-100 text-amber-700", desc: "오니 신화 기반 오리지널 세계관과 4인 협동 액션을 만드는 팀.", members: "4명" },
+              { name: "Team Telum", genre: "PvP Combat", status: "In Dev", statusColor: "bg-amber-100 text-amber-700", desc: "무기 탐색과 지형 전투 중심의 크리에이터 주도 PvP 팀.", members: "3명" },
+            ].map((team, i) => (
+              <motion.div key={team.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="bg-white p-6 rounded-2xl border border-border">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-bold tracking-wider uppercase text-muted">{team.genre}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${team.statusColor}`}>{team.status}</span>
+                </div>
+                <h3 className="text-base font-extrabold text-ink mb-2">{team.name}</h3>
+                <p className="text-sm text-body leading-[1.5] mb-4">{team.desc}</p>
+                <div className="flex items-center gap-2 text-[11px] text-muted">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                  {team.members}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
