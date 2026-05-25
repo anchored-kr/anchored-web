@@ -72,13 +72,14 @@ export default function Home() {
   return (
     <>
       {/* ━━ Hero ━━ */}
-      <section className="relative bg-surface-dark pt-32 pb-48 min-h-screen overflow-hidden">
+      <section className="relative bg-surface-dark overflow-hidden" style={{ aspectRatio: "16/9" }}>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
           style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-bg.jpg)` }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-surface-dark/95 via-surface-dark/80 to-surface-dark/50" />
-        <div className="relative max-w-[1280px] mx-auto px-6 md:px-12">
+        <div className="absolute inset-0 flex items-center">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-12 w-full">
           <motion.div variants={stagger} initial="hidden" animate="visible">
             <motion.div variants={fadeUp} className="mb-6">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 text-[12px] font-medium text-white/80">
@@ -106,6 +107,7 @@ export default function Home() {
               </a>
             </motion.div>
           </motion.div>
+        </div>
         </div>
       </section>
 
