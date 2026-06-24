@@ -99,8 +99,16 @@ export function Desktop() {
 
   return (
     <div className="anchor-wall fixed inset-0 overflow-hidden font-sans" onPointerDown={() => setSelected(null)}>
-      {/* Wallpaper watermark */}
-      <AnchorLogo className="pointer-events-none absolute left-1/2 top-1/2 h-[58vmin] w-[58vmin] -translate-x-1/2 -translate-y-1/2 text-white/[0.04]" />
+      {/* Wallpaper watermark — full Anchored signature (anchor + wordmark) */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/C_anchored_signature_h_eng.png`}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        className="pointer-events-none absolute left-1/2 top-1/2 w-[78vmin] max-w-[960px] -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.07]"
+        style={{ filter: "brightness(0) invert(1)" }}
+      />
 
       {/* Top bar */}
       <div className="absolute inset-x-0 top-0 z-30 flex h-10 items-center justify-between border-b border-white/10 bg-anchor-night/40 px-3 backdrop-blur-sm">
