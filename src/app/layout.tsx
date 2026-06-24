@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito, Noto_Sans_KR, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -22,13 +20,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anchored | Discovering the Next Mega-Hit UGC IPs",
+  title: "Anchored | We turn IP & content into Roblox games",
   description:
-    "Anchored is a creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds — starting with Roblox.",
+    "Anchored is a Roblox agency that turns IP, content, and brands into games people actually play — from concept to development, launch, and LiveOps.",
   openGraph: {
-    title: "Anchored | Discovering the Next Mega-Hit UGC IPs",
+    title: "Anchored | We turn IP & content into Roblox games",
     description:
-      "A creator ecosystem that discovers, incubates, and launches emerging UGC game creators and their worlds.",
+      "A Roblox agency that turns IP, content, and brands into games — concept to launch to LiveOps.",
     type: "website",
     locale: "ko_KR",
     url: "https://anchored.kr",
@@ -45,11 +43,7 @@ export default function RootLayout({
       lang="ko"
       className={`${nunito.variable} ${notoSansKR.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-ink">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+      <body className="min-h-full bg-anchor-night text-white">{children}</body>
     </html>
   );
 }
