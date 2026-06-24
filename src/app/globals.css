@@ -22,6 +22,16 @@
   --color-green-text: #026b3f;
   --color-dim: #686b82;
   --color-canvas-light: #ffffff;
+
+  /* ── Anchored OS palette ── */
+  --color-anchor-blue: #0072ce;
+  --color-anchor-blue-dark: #005199;
+  --color-anchor-night: #07254a;
+  --color-os-cream: #f3f1e7;
+  --color-os-ink: #0d1b30;
+
+  --breakpoint-xs: 400px;
+
   --font-sans: var(--font-nunito), var(--font-noto-kr);
   --font-mono: var(--font-geist-mono);
 }
@@ -44,4 +54,35 @@ body {
 ::selection {
   background: var(--color-primary);
   color: #fff;
+}
+
+/* ── Anchored OS wallpaper: night harbor ── */
+.anchor-wall {
+  background-color: #061d3c;
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, rgba(0, 114, 206, 0.35) 0%, rgba(6, 29, 60, 0) 60%),
+    radial-gradient(90% 70% at 85% 110%, rgba(0, 60, 112, 0.55) 0%, rgba(6, 29, 60, 0) 70%),
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0),
+    linear-gradient(180deg, #082545 0%, #061d3c 55%, #04152c 100%);
+  background-size: 100% 100%, 100% 100%, 22px 22px, 100% 100%;
+}
+
+/* retro thin scrollbars inside windows / lists */
+.os-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13, 27, 48, 0.35) transparent;
+}
+.os-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.os-scroll::-webkit-scrollbar-thumb {
+  background: rgba(13, 27, 48, 0.3);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 6px;
+}
+.os-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(13, 27, 48, 0.5);
+  background-clip: padding-box;
 }
