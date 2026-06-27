@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { AnchorLogo } from "@/components/anchor-logo";
 import { projectApps, appById } from "@/data/desktopItems";
 import type { WinState } from "./Window";
+import { useLang } from "./LangContext";
+import { t, ui } from "@/data/i18n";
 
 interface TaskbarProps {
   wins: WinState[];
@@ -13,6 +15,7 @@ interface TaskbarProps {
 }
 
 export function Taskbar({ wins, activeId, onOpen, onTaskClick }: TaskbarProps) {
+  const lang = useLang();
   const [startOpen, setStartOpen] = useState(false);
   const [clock, setClock] = useState("");
 
@@ -40,11 +43,11 @@ export function Taskbar({ wins, activeId, onOpen, onTaskClick }: TaskbarProps) {
               <span className="font-mono text-[12px] font-extrabold tracking-tight text-white">ANCHORED OS</span>
             </div>
             <div className="p-1.5">
-              <StartItem icon="⚓" label="About Anchored" onClick={() => { onOpen("about"); setStartOpen(false); }} />
-              <StartItem icon="🛠️" label="Services" onClick={() => { onOpen("services"); setStartOpen(false); }} />
-              <StartItem icon="✉️" label="Contact" onClick={() => { onOpen("contact"); setStartOpen(false); }} />
+              <StartItem icon="⚓" label={t(ui.startAbout, lang)} onClick={() => { onOpen("about"); setStartOpen(false); }} />
+              <StartItem icon="🛠️" label={t(ui.navServices, lang)} onClick={() => { onOpen("services"); setStartOpen(false); }} />
+              <StartItem icon="✉️" label={t(ui.navContact, lang)} onClick={() => { onOpen("contact"); setStartOpen(false); }} />
               <div className="my-1.5 border-t-2 border-dashed border-os-ink/20" />
-              <p className="px-2.5 py-1 font-mono text-[9.5px] font-bold uppercase tracking-wider text-os-ink/45">Portfolio</p>
+              <p className="px-2.5 py-1 font-mono text-[9.5px] font-bold uppercase tracking-wider text-os-ink/45">{t(ui.portfolio, lang)}</p>
               <div className="max-h-[220px] overflow-y-auto os-scroll">
                 {projectApps.map((p) => (
                   <StartItem key={p.id} icon={p.icon} label={p.title} onClick={() => { onOpen(p.id); setStartOpen(false); }} />
@@ -65,7 +68,7 @@ export function Taskbar({ wins, activeId, onOpen, onTaskClick }: TaskbarProps) {
           style={{ boxShadow: "2px 2px 0 0 rgba(8,22,43,0.85)" }}
         >
           <AnchorLogo className="h-4 w-4" />
-          <span className="hidden xs:inline">Start</span>
+          <span className="hidden xs:inline">{t(ui.start, lang)}</span>
         </button>
 
         <div className="flex h-full flex-1 items-center gap-1.5 overflow-x-auto os-scroll">
