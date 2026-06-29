@@ -239,6 +239,13 @@ export const projectApps: DesktopApp[] = [
       { label: "Role", value: "Production partner" },
     ],
   },
+];
+
+/**
+ * Non-game portfolio — hidden from the desktop for now.
+ * To bring back, splice these into `projectApps` (or set apps = [...system, ...projectApps, ...otherProjectApps]).
+ */
+export const otherProjectApps: DesktopApp[] = [
   {
     id: "brand-campaigns",
     title: "Brand in Roblox",
