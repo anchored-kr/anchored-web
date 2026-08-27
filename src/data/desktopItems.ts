@@ -44,6 +44,8 @@ export interface DesktopApp {
   links?: { label: LText; href: string }[];
   /** link to the long-form case study page */
   slug?: string;
+  /** live Roblox game — enables the thumbnail + live-stats window layout */
+  roblox?: { placeId: number };
 }
 
 export const statusLabel: Record<AppStatus, string> = {
@@ -99,6 +101,7 @@ export const projectApps: DesktopApp[] = [
     group: "games",
     status: "live",
     slug: "speed-obby",
+    // roblox: { placeId: <Speed Obby의 Roblox placeId> }, ← 게임 링크 확보 시 채우면 라이브 통계 창 활성화
     tagline: {
       ko: "기록으로 경쟁하는 라이브 타임어택 오비.",
       en: "A live time-attack obby, tuned by data.",
