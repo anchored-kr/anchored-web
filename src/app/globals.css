@@ -67,6 +67,85 @@ body {
   background-size: 100% 100%, 100% 100%, 22px 22px, 100% 100%;
 }
 
+/* ── Pacific-ocean decorations ── */
+
+/* water texture across the whole desktop, denser toward the bottom */
+.anchor-sea {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, rgba(140, 190, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(180deg, rgba(0, 40, 90, 0) 0%, rgba(0, 60, 120, 0.3) 100%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), #000 70%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), #000 70%);
+  animation: sea-drift 8s linear infinite;
+}
+@keyframes sea-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 9px, 0 0; }
+}
+
+/* gentle waves that appear, drift, and vanish */
+.harbor-wave {
+  position: absolute;
+  pointer-events: none;
+  color: rgba(190, 220, 255, 0.5);
+  opacity: 0;
+  animation: wave-fade var(--dur, 7s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes wave-fade {
+  0% { opacity: 0; transform: translateX(0); }
+  30% { opacity: 0.55; }
+  70% { opacity: 0.4; transform: translateX(12px); }
+  100% { opacity: 0; transform: translateX(20px); }
+}
+
+/* sailboat bobbing at anchor */
+.harbor-boat {
+  position: absolute;
+  right: 16%;
+  bottom: 14%;
+  pointer-events: none;
+  transform-origin: 50% 90%;
+  animation: boat-bob 5.5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+@keyframes boat-bob {
+  0%, 100% { transform: translateY(0) rotate(-1.6deg); }
+  50% { transform: translateY(5px) rotate(1.8deg); }
+}
+
+/* window open pop */
+.win-pop {
+  animation: win-pop 0.16s ease-out;
+}
+@keyframes win-pop {
+  from {
+    transform: scale(0.97) translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anchor-stars,
+  .anchor-stars-2,
+  .anchor-sea,
+  .win-pop,
+  .harbor-boat {
+    animation: none;
+  }
+  .harbor-wave {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
 /* retro thin scrollbars inside windows / lists */
 .os-scroll {
   scrollbar-width: thin;

@@ -455,9 +455,111 @@ export const otherProjectApps: DesktopApp[] = [
   },
 ];
 
-export const apps: DesktopApp[] = [aboutApp, servicesApp, contactApp, ...projectApps];
+/* ── Events (shown inside the Event folder) ── */
+
+export const eventApps: DesktopApp[] = [
+  {
+    id: "anchored-demo-day",
+    title: "Demo Day",
+    icon: "🎤",
+    kind: "project",
+    accent: "#6d4ad0",
+    group: "ecosystem",
+    status: "live",
+    slug: "anchored-demo-day",
+    tagline: {
+      ko: "매달, 만든 것을 보여주는 날.",
+      en: "A monthly stage for work in progress.",
+      ja: "毎月、作ったものを見せる日。",
+    },
+    summary: {
+      ko: "크리에이터들이 개발 중인 Roblox 프로젝트를 공유하고 피드백을 받는 월간 쇼케이스. 데뷔 전 팀들이 무대 경험과 동료의 시선을 얻는 자리입니다.",
+      en: "A monthly showcase where creators present Roblox projects in progress and get feedback — stage time and peer eyes for teams before their debut.",
+      ja: "クリエイターが開発中の Roblox プロジェクトを共有しフィードバックを得る月例ショーケース。デビュー前のチームが舞台経験と仲間の視点を得る場です。",
+    },
+    role: [
+      { ko: "행사 기획·운영", en: "Event Design", ja: "イベント企画・運営" },
+      { ko: "피드백 프로그램", en: "Feedback Program", ja: "フィードバック" },
+      { ko: "커뮤니티", en: "Community", ja: "コミュニティ" },
+    ],
+    bullets: [
+      { ko: "월간 쇼케이스 기획·운영", en: "Plan and run the monthly showcase", ja: "月例ショーケースを企画・運営" },
+      { ko: "팀별 발표·피드백 세션 설계", en: "Designed per-team presentation and feedback sessions", ja: "チーム別の発表・フィードバックセッションを設計" },
+      { ko: "데모데이 → 인큐베이션으로 이어지는 파이프라인 연결", en: "Connected Demo Day into the incubation pipeline", ja: "デモデイ→インキュベーションへのパイプラインを接続" },
+    ],
+    meta: [
+      { label: "Type", value: "Showcase" },
+      { label: "Cadence", value: "Monthly" },
+      { label: "Status", value: "Live" },
+    ],
+  },
+  {
+    id: "dev-meetup",
+    title: "Dev Meetup",
+    icon: "🎪",
+    kind: "project",
+    accent: "#b3322f",
+    group: "ecosystem",
+    status: "upcoming",
+    slug: "korea-roblox-developer-meetup-2026",
+    tagline: {
+      ko: "한국 Roblox 생태계가 한자리에.",
+      en: "Korea's Roblox ecosystem, in one room.",
+      ja: "韓国の Roblox エコシステムが一堂に。",
+    },
+    summary: {
+      ko: "한국 Roblox 생태계의 크리에이터·스튜디오·플랫폼·파트너를 연결하는 오프라인 밋업. 씬의 밀도를 높이는 네트워킹 이벤트입니다.",
+      en: "An offline meetup connecting creators, studios, platforms, and partners across Korea's Roblox ecosystem — networking that raises the scene's density.",
+      ja: "韓国の Roblox エコシステムのクリエイター・スタジオ・プラットフォーム・パートナーをつなぐオフラインミートアップ。シーンの密度を高めるネットワーキングイベントです。",
+    },
+    role: [
+      { ko: "행사 주최", en: "Host", ja: "主催" },
+      { ko: "네트워킹", en: "Networking", ja: "ネットワーキング" },
+      { ko: "생태계", en: "Ecosystem", ja: "エコシステム" },
+    ],
+    bullets: [
+      { ko: "크리에이터·스튜디오·플랫폼을 잇는 오프라인 밋업 주최", en: "Host an offline meetup linking creators, studios, and platforms", ja: "クリエイター・スタジオ・プラットフォームをつなぐオフラインミートアップを主催" },
+      { ko: "라이트닝 토크·네트워킹 세션 운영", en: "Run lightning talks and networking sessions", ja: "ライトニングトークとネットワーキングセッションを運営" },
+      { ko: "생태계 파트너 연결", en: "Connect ecosystem partners", ja: "エコシステムのパートナーを接続" },
+    ],
+    meta: [
+      { label: "Type", value: "Meetup" },
+      { label: "Status", value: "2026" },
+      { label: "For", value: "Ecosystem" },
+    ],
+  },
+];
+
+export const apps: DesktopApp[] = [
+  aboutApp,
+  servicesApp,
+  contactApp,
+  ...projectApps,
+  ...otherProjectApps,
+  ...eventApps,
+];
 
 export const appById = (id: string) => apps.find((a) => a.id === id);
+
+/* ── Folders (desktop icon groups) ── */
+
+export interface DeskFolder {
+  id: string;
+  title: string;
+  icon: string;
+  accent: string;
+  children: string[]; // app ids
+}
+
+export const folders: DeskFolder[] = [
+  { id: "folder-games", title: "Games", icon: "🕹️", accent: "#0072CE", children: ["speed-obby", "swarmrot", "gokui", "telum"] },
+  { id: "folder-workshop", title: "Workshop", icon: "🧰", accent: "#d98324", children: ["anchored-school", "creator-growth-index"] },
+  { id: "folder-event", title: "Event", icon: "🎪", accent: "#6d4ad0", children: ["anchored-demo-day", "dev-meetup"] },
+  { id: "folder-community", title: "Community", icon: "👥", accent: "#1f9e5a", children: ["anchored-guild", "shell-economy"] },
+  { id: "folder-partners", title: "Partners", icon: "🤝", accent: "#2f7d6b", children: ["brand-campaigns", "platform-partnerships"] },
+];
+
+export const folderById = (id: string) => folders.find((f) => f.id === id);
 
 /* ── Services (rendered inside the Services window) ── */
 
