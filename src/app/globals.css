@@ -56,34 +56,23 @@ body {
   color: #fff;
 }
 
-/* ── Anchored OS wallpaper: night harbor ── */
+/* ── Anchored OS wallpaper: open ocean ── */
 .anchor-wall {
   background-color: #061d3c;
   background-image:
     radial-gradient(120% 80% at 50% -10%, rgba(0, 114, 206, 0.35) 0%, rgba(6, 29, 60, 0) 60%),
     radial-gradient(90% 70% at 85% 110%, rgba(0, 60, 112, 0.55) 0%, rgba(6, 29, 60, 0) 70%),
-    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0),
     linear-gradient(180deg, #082545 0%, #061d3c 55%, #04152c 100%);
-  background-size: 100% 100%, 100% 100%, 22px 22px, 100% 100%;
 }
 
 /* ── Pacific-ocean decorations ── */
 
-/* water texture across the whole desktop, denser toward the bottom */
+/* smooth depth shading toward the bottom — no line/stripe texture, waves only */
 .anchor-sea {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    repeating-linear-gradient(180deg, rgba(140, 190, 255, 0.05) 0 2px, transparent 2px 9px),
-    linear-gradient(180deg, rgba(0, 40, 90, 0) 0%, rgba(0, 60, 120, 0.3) 100%);
-  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), #000 70%);
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), #000 70%);
-  animation: sea-drift 8s linear infinite;
-}
-@keyframes sea-drift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 0 9px, 0 0; }
+  background: linear-gradient(180deg, rgba(0, 40, 90, 0) 0%, rgba(0, 60, 120, 0.3) 100%);
 }
 
 /* gentle waves that appear, drift, and vanish */
@@ -133,9 +122,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .anchor-stars,
-  .anchor-stars-2,
-  .anchor-sea,
   .win-pop,
   .harbor-boat {
     animation: none;
