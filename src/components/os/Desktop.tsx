@@ -23,10 +23,13 @@ const desktopEntries: DeskEntry[] = [
     id: f.id,
     title: f.title,
     icon: f.icon,
-    preview: f.children.map((c) => appById(c)?.icon ?? "❔"),
+    isFolder: true,
     count: f.children.length,
   })),
 ];
+
+/** Icon-position storage key — bump to force a fresh default layout for everyone. */
+const ICONPOS_KEY = "anchored:iconpos2";
 
 /** Anchored OS — desktop window manager. Orchestrates state; rendering lives in children. */
 export function Desktop() {
@@ -125,24 +128,31 @@ export function Desktop() {
   const moveIcon = useCallback((id: string, x: number, y: number) => {
     setIconPos((p) => {
       const next = { ...p, [id]: { x, y } };
-      try { localStorage.setItem("anchored:iconpos", JSON.stringify(next)); } catch {}
+      try { localStorage.setItem(ICONPOS_KEY, JSON.stringify(next)); } catch {}
       return next;
     });
   }, []);
 
-  // Lay out desktop icons: free-positioned & draggable on desktop, restored from
-  // localStorage if the user has rearranged them. Defaults always fill in ids the
-  // saved layout doesn't know yet (e.g. new folders). (Mobile keeps the static grid.)
+  // Lay out desktop icons: two rows at the top-left — row 1 system apps, row 2
+  // folders — free-draggable, restored from localStorage if rearranged. Defaults
+  // always fill in ids the saved layout doesn't know yet. (Mobile keeps the grid.)
   useEffect(() => {
     if (isMobile) return;
-    const perCol = Math.max(3, Math.floor((window.innerHeight - 60 - 64) / 92));
     const defaults: Record<string, { x: number; y: number }> = {};
-    desktopEntries.forEach((en, i) => {
-      defaults[en.id] = { x: 12 + Math.floor(i / perCol) * 94, y: 68 + (i % perCol) * 92 };
+    let sys = 0;
+    let fold = 0;
+    desktopEntries.forEach((en) => {
+      if (en.isFolder) {
+        defaults[en.id] = { x: 12 + fold * 94, y: 68 + 96 };
+        fold += 1;
+      } else {
+        defaults[en.id] = { x: 12 + sys * 94, y: 68 };
+        sys += 1;
+      }
     });
     let saved: Record<string, { x: number; y: number }> = {};
     try {
-      const s = localStorage.getItem("anchored:iconpos");
+      const s = localStorage.getItem(ICONPOS_KEY);
       if (s) saved = JSON.parse(s) ?? {};
     } catch {}
     setIconPos({ ...defaults, ...saved });
@@ -157,16 +167,7 @@ export function Desktop() {
   return (
     <LangContext.Provider value={lang}>
     <div className="anchor-wall fixed inset-0 overflow-hidden font-sans" onPointerDown={() => setSelected(null)}>
-      {/* Pacific backdrop: the whole desktop is open sea — watermark, water texture, waves & one sailboat */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/C_anchored_signature_h_eng.png`}
-        alt=""
-        aria-hidden="true"
-        draggable={false}
-        className="pointer-events-none absolute left-1/2 top-1/2 w-[78vmin] max-w-[960px] -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.07]"
-        style={{ filter: "brightness(0) invert(1)" }}
-      />
+      {/* Pacific backdrop: the whole desktop is open sea — water texture, waves & one sailboat */}
       <div className="anchor-sea" />
       <HarborScene />
 
