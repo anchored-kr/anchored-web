@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import type { DesktopApp } from "@/data/desktopItems";
 import { statusLabel, statusColor, services, socials } from "@/data/desktopItems";
 import { AnchorLogo } from "@/components/anchor-logo";
 import { useLang } from "./LangContext";
-import { t, ui } from "@/data/i18n";
+import { t, ui, type Lang } from "@/data/i18n";
 
 /** Renders the inner content of a window based on the app kind, in the active language. */
 export function WindowBody({ app, onOpen }: { app: DesktopApp; onOpen: (id: string) => void }) {
@@ -115,6 +116,96 @@ function ContactBody() {
   );
 }
 
+/* ─────────────────────── Roblox live stats ─────────────────────── */
+
+interface RobloxData {
+  name: string | null;
+  playing: number | null;
+  visits: number | null;
+  likeRatio: number | null;
+  thumb: string | null;
+  url: string;
+}
+
+const numLocale: Record<Lang, string> = { ko: "ko", en: "en", ja: "ja" };
+
+function useRobloxStats(placeId: number) {
+  const [data, setData] = useState<RobloxData | null>(null);
+  const [failed, setFailed] = useState(false);
+  const got = useRef(false);
+  useEffect(() => {
+    let alive = true;
+    got.current = false;
+    const load = () =>
+      fetch(`/api/roblox?placeId=${placeId}`)
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((j) => { if (alive) { got.current = true; setData(j); setFailed(false); } })
+        .catch(() => { if (alive && !got.current) setFailed(true); });
+    load();
+    const timer = setInterval(load, 45_000); // keep CCU fresh
+    return () => { alive = false; clearInterval(timer); };
+  }, [placeId]);
+  return { data, failed };
+}
+
+/** Thumbnail + live CCU / like-ratio / visits, fed by /api/roblox. */
+function RobloxLive({ placeId, fallbackIcon }: { placeId: number; fallbackIcon: string }) {
+  const lang = useLang();
+  const { data, failed } = useRobloxStats(placeId);
+  if (failed) return null;
+
+  const nf = (n: number | null) =>
+    n == null ? "—" : new Intl.NumberFormat(numLocale[lang], { notation: "compact", maximumFractionDigits: 1 }).format(n);
+
+  return (
+    <div className="border-b-[2.5px] border-os-ink">
+      {/* Thumbnail */}
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#0a1e3a]">
+        {data?.thumb ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={data.thumb} alt={data.name ?? ""} className="h-full w-full object-cover" />
+        ) : (
+          <div className="grid h-full w-full animate-pulse place-items-center text-[44px]">{fallbackIcon}</div>
+        )}
+        {data?.playing != null && (
+          <span className="absolute right-2.5 top-2.5 flex items-center gap-1.5 rounded-md border-[2px] border-os-ink bg-white/95 px-2 py-1 font-mono text-[11px] font-extrabold text-os-ink">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1f9e5a] opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1f9e5a]" />
+            </span>
+            {new Intl.NumberFormat(numLocale[lang]).format(data.playing)}
+          </span>
+        )}
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 divide-x-2 divide-os-ink/15 border-t-[2.5px] border-os-ink bg-white">
+        <StatTile label={t(ui.statPlaying, lang)} value={data ? new Intl.NumberFormat(numLocale[lang]).format(data.playing ?? 0) : "—"} live />
+        <StatTile label={t(ui.statLikes, lang)} value={data?.likeRatio != null ? `${data.likeRatio}%` : "—"} icon="👍" />
+        <StatTile label={t(ui.statVisits, lang)} value={nf(data?.visits ?? null)} icon="👣" />
+      </div>
+    </div>
+  );
+}
+
+function StatTile({ label, value, icon, live }: { label: string; value: string; icon?: string; live?: boolean }) {
+  return (
+    <div className="flex flex-col items-center gap-0.5 px-2 py-2.5 text-center">
+      <span className="flex items-center gap-1.5 font-mono text-[15px] font-extrabold leading-none text-os-ink">
+        {live && (
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1f9e5a] opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1f9e5a]" />
+          </span>
+        )}
+        {icon && <span className="text-[13px]">{icon}</span>}
+        {value}
+      </span>
+      <span className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-os-ink/50">{label}</span>
+    </div>
+  );
+}
+
 /* ──────────────────────────── Project ──────────────────────────── */
 
 function ProjectBody({ app }: { app: DesktopApp }) {
@@ -139,7 +230,21 @@ function ProjectBody({ app }: { app: DesktopApp }) {
         </div>
       </div>
 
+      {/* Live Roblox block: thumbnail + CCU / likes / visits */}
+      {app.roblox && <RobloxLive placeId={app.roblox.placeId} fallbackIcon={app.icon} />}
+
       <div className="p-5 sm:p-7">
+        {app.roblox && (
+          <a
+            href={`https://www.roblox.com/games/${app.roblox.placeId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-5 flex w-full items-center justify-center gap-2 rounded-lg border-[2.5px] border-os-ink bg-[#1f9e5a] px-4 py-2.5 text-[14px] font-extrabold text-white transition-all hover:bg-[#23b167] active:translate-x-px active:translate-y-px"
+            style={{ boxShadow: "3px 3px 0 0 rgba(8,22,43,0.85)" }}
+          >
+            ▶ {t(ui.playCta, lang)}
+          </a>
+        )}
         {app.summary && <p className="text-[13.5px] leading-relaxed text-os-ink/85">{t(app.summary, lang)}</p>}
 
         {app.role && (

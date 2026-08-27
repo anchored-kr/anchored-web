@@ -1,17 +1,9 @@
 import type { NextConfig } from "next";
 
-// GitHub Pages serves this repo under a project subpath (/anchored-web); Vercel and
-// custom domains serve at the root. Gate the basePath on an explicit deploy target so
-// the same build works on both. The Pages workflow sets DEPLOY_TARGET=github-pages.
-const isPages = process.env.DEPLOY_TARGET === "github-pages";
-const basePath = isPages ? "/anchored-web" : "";
-
+// Serverful build (no static export): /api/roblox proxies Roblox stats server-side,
+// which a static export cannot host. Live hosting is Vercel; the old GitHub Pages
+// deploy (which needed `output: "export"` + a basePath) has been removed.
 const nextConfig: NextConfig = {
-  output: "export",
-  basePath,
-  env: {
-    NEXT_PUBLIC_BASE_PATH: basePath,
-  },
   images: {
     unoptimized: true,
   },

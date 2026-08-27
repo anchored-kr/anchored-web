@@ -70,4 +70,11 @@ export const ui: Record<string, Record<Lang, string>> = {
   // Project window
   weDid: { ko: "우리가 한 일", en: "WHAT WE DID", ja: "私たちの仕事" },
   ctaCaseStudy: { ko: "전체 케이스 보기 →", en: "View full case study →", ja: "ケーススタディを見る →" },
+
+  // Roblox live stats
+  statPlaying: { ko: "동접", en: "Playing", ja: "同時接続" },
+  statLikes: { ko: "좋아요", en: "Likes", ja: "高評価" },
+  statVisits: { ko: "누적 방문", en: "Visits", ja: "累計訪問" },
+  playCta: { ko: "Roblox에서 플레이", en: "Play on Roblox", ja: "Roblox でプレイ" },
+  liveLoading: { ko: "라이브 데이터 불러오는 중…", en: "Loading live data…", ja: "ライブデータを読み込み中…" },
 };
