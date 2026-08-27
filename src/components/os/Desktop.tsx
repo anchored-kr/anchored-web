@@ -1,15 +1,32 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { apps, appById, type DesktopApp } from "@/data/desktopItems";
+import { apps, appById, folders, folderById } from "@/data/desktopItems";
 import { LangContext } from "./LangContext";
 import { LANGS, t, ui, type Lang } from "@/data/i18n";
-import { DesktopIcon } from "./DesktopIcon";
+import { DesktopIcon, type DeskEntry } from "./DesktopIcon";
 import { Taskbar } from "./Taskbar";
 import { Window, type WinState } from "./Window";
 import { WindowBody } from "./WindowBody";
+import { FolderBody } from "./FolderBody";
+import { HarborScene } from "./HarborScene";
 
 const DEFAULT_W = 560;
+const FOLDER_W = 470;
+
+/** What sits on the desktop: system apps as-is, portfolio grouped into folders. */
+const desktopEntries: DeskEntry[] = [
+  ...apps
+    .filter((a) => a.group === "system")
+    .map((a) => ({ id: a.id, title: a.title, icon: a.icon, status: a.status })),
+  ...folders.map((f) => ({
+    id: f.id,
+    title: f.title,
+    icon: f.icon,
+    preview: f.children.map((c) => appById(c)?.icon ?? "❔"),
+    count: f.children.length,
+  })),
+];
 
 /** Anchored OS — desktop window manager. Orchestrates state; rendering lives in children. */
 export function Desktop() {
@@ -67,7 +84,8 @@ export function Desktop() {
         return ws.map((w) => (w.id === id ? { ...w, z, minimized: false } : w));
       }
       const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
-      const w = Math.min(DEFAULT_W, vw - 32);
+      const base = folderById(id) ? FOLDER_W : DEFAULT_W;
+      const w = Math.min(base, vw - 32);
       const step = opened.current % 6;
       opened.current += 1;
       const x = Math.max(20, vw / 2 - w / 2 - 80 + step * 30);
@@ -113,19 +131,21 @@ export function Desktop() {
   }, []);
 
   // Lay out desktop icons: free-positioned & draggable on desktop, restored from
-  // localStorage if the user has rearranged them. (Mobile keeps the static grid.)
+  // localStorage if the user has rearranged them. Defaults always fill in ids the
+  // saved layout doesn't know yet (e.g. new folders). (Mobile keeps the static grid.)
   useEffect(() => {
     if (isMobile) return;
-    let pos: Record<string, { x: number; y: number }> | null = null;
-    try { const s = localStorage.getItem("anchored:iconpos"); if (s) pos = JSON.parse(s); } catch {}
-    if (!pos) {
-      const perCol = Math.max(3, Math.floor((window.innerHeight - 60 - 64) / 92));
-      pos = {};
-      apps.forEach((a, i) => {
-        pos![a.id] = { x: 12 + Math.floor(i / perCol) * 94, y: 52 + (i % perCol) * 92 };
-      });
-    }
-    setIconPos(pos);
+    const perCol = Math.max(3, Math.floor((window.innerHeight - 60 - 64) / 92));
+    const defaults: Record<string, { x: number; y: number }> = {};
+    desktopEntries.forEach((en, i) => {
+      defaults[en.id] = { x: 12 + Math.floor(i / perCol) * 94, y: 68 + (i % perCol) * 92 };
+    });
+    let saved: Record<string, { x: number; y: number }> = {};
+    try {
+      const s = localStorage.getItem("anchored:iconpos");
+      if (s) saved = JSON.parse(s) ?? {};
+    } catch {}
+    setIconPos({ ...defaults, ...saved });
   }, [isMobile]);
 
   // Open the welcome window on mount. openApp focuses (not duplicates) if already open,
@@ -137,7 +157,7 @@ export function Desktop() {
   return (
     <LangContext.Provider value={lang}>
     <div className="anchor-wall fixed inset-0 overflow-hidden font-sans" onPointerDown={() => setSelected(null)}>
-      {/* Wallpaper watermark — full Anchored signature (anchor + wordmark) */}
+      {/* Pacific backdrop: the whole desktop is open sea — watermark, water texture, waves & one sailboat */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/C_anchored_signature_h_eng.png`}
@@ -147,13 +167,25 @@ export function Desktop() {
         className="pointer-events-none absolute left-1/2 top-1/2 w-[78vmin] max-w-[960px] -translate-x-1/2 -translate-y-1/2 select-none opacity-[0.07]"
         style={{ filter: "brightness(0) invert(1)" }}
       />
+      <div className="anchor-sea" />
+      <HarborScene />
 
       {/* Top bar */}
-      <div className="absolute inset-x-0 top-0 z-30 flex h-10 items-center justify-between border-b border-white/10 bg-anchor-night/40 px-3 backdrop-blur-sm">
-        <button onClick={(e) => { e.stopPropagation(); openApp("about"); }} className="flex items-center gap-2">
+      <div
+        className="absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-white/10 px-4 backdrop-blur-md"
+        style={{
+          background: "linear-gradient(180deg, rgba(4,17,36,0.88), rgba(4,17,36,0.45))",
+          boxShadow: "0 1px 0 rgba(0,114,206,0.35)",
+        }}
+      >
+        <button onClick={(e) => { e.stopPropagation(); openApp("about"); }} className="flex items-center gap-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/W_anchored_symbol.png`} alt="Anchored" className="h-[18px] w-auto" />
-          <span className="font-mono text-[12px] font-extrabold tracking-tight text-white">Anchored</span>
+          <img
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/B_anchored_signature_h_eng.png`}
+            alt="Anchored"
+            className="h-[24px] w-auto"
+            style={{ filter: "brightness(0) invert(1)" }}
+          />
           <span className="hidden font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/45 sm:inline">{t(ui.agencyTag, lang)}</span>
         </button>
         <div className="flex items-center gap-1.5">
@@ -169,23 +201,23 @@ export function Desktop() {
       {/* Desktop icons — static grid on mobile, free-draggable on desktop */}
       {isMobile ? (
         <div
-          className="absolute inset-x-0 top-12 z-10 grid grid-cols-4 gap-1 px-2"
+          className="absolute inset-x-0 top-[64px] z-10 grid grid-cols-4 gap-1 px-2"
           onPointerDown={(e) => e.stopPropagation()}
         >
-          {apps.map((a) => (
-            <DesktopIcon key={a.id} app={a} active={selected === a.id} onOpen={openApp} />
+          {desktopEntries.map((en) => (
+            <DesktopIcon key={en.id} entry={en} active={selected === en.id} onOpen={openApp} />
           ))}
         </div>
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 [&>*]:pointer-events-auto">
-          {apps.map((a) =>
-            iconPos[a.id] ? (
+          {desktopEntries.map((en) =>
+            iconPos[en.id] ? (
               <DesktopIcon
-                key={a.id}
-                app={a}
-                active={selected === a.id}
+                key={en.id}
+                entry={en}
+                active={selected === en.id}
                 onOpen={openApp}
-                pos={iconPos[a.id]}
+                pos={iconPos[en.id]}
                 onMove={moveIcon}
               />
             ) : null
@@ -193,28 +225,36 @@ export function Desktop() {
         </div>
       )}
 
-      {/* Windows */}
-      {wins.map((w) => {
-        const app = appById(w.id) as DesktopApp;
-        return (
-          <Window
-            key={w.id}
-            win={w}
-            title={app.title}
-            icon={app.icon}
-            accent={app.accent}
-            focused={activeId === w.id}
-            isMobile={isMobile}
-            onFocus={focusWin}
-            onClose={closeWin}
-            onMinimize={minimizeWin}
-            onToggleMax={toggleMax}
-            onMove={moveWin}
-          >
-            <WindowBody app={app} onOpen={openApp} />
-          </Window>
-        );
-      })}
+      {/* Windows — isolated stacking context so they never cover the header/taskbar */}
+      <div className="pointer-events-none absolute inset-0 z-20" style={{ isolation: "isolate" }}>
+        {wins.map((w) => {
+          const app = appById(w.id);
+          const folder = folderById(w.id);
+          if (!app && !folder) return null;
+          return (
+            <Window
+              key={w.id}
+              win={w}
+              title={(app?.title ?? folder?.title) as string}
+              icon={(app?.icon ?? folder?.icon) as string}
+              accent={(app?.accent ?? folder?.accent) as string}
+              focused={activeId === w.id}
+              isMobile={isMobile}
+              onFocus={focusWin}
+              onClose={closeWin}
+              onMinimize={minimizeWin}
+              onToggleMax={toggleMax}
+              onMove={moveWin}
+            >
+              {folder ? (
+                <FolderBody folder={folder} onOpen={openApp} />
+              ) : (
+                <WindowBody app={app!} onOpen={openApp} />
+              )}
+            </Window>
+          );
+        })}
+      </div>
 
       {/* Taskbar */}
       <Taskbar wins={wins} activeId={activeId} onOpen={openApp} onTaskClick={taskClick} />

@@ -19,7 +19,10 @@ menu, and a taskbar.
   - `Window.tsx` (draggable window chrome), `DesktopIcon.tsx` (icon + drag),
     `Taskbar.tsx` (Start menu + taskbar), `WindowBody.tsx` (per-app content).
 - `src/data/desktopItems.ts` — all desktop content (system apps, portfolio projects,
-  services, socials). **Edit copy / portfolio here.**
+  events, services, socials) **and `folders`** (Games/Workshop/Event/Community/Partners
+  groupings shown as desktop folder tiles + Start-menu submenus). **Edit copy /
+  portfolio here.** `FolderBody.tsx` renders folder windows; `HarborScene.tsx` +
+  `.anchor-sea`/`.harbor-*` CSS draw the Pacific backdrop (waves + sailboat).
 - `src/app/` — `page.tsx` renders `<Desktop/>`; `projects/` holds long-form case-study
   pages under their own dark layout; `icon.svg` is the favicon.
 - Brand: navy `#0c2b54` / `#003A70`, blue `#0072CE`. Anchor marks in `public/`:
@@ -32,6 +35,14 @@ menu, and a taskbar.
   (MX/TXT live in Gabia DNS) — **never touch the MX/TXT records.**
 - `next.config.ts` gates the GitHub Pages `basePath` behind `DEPLOY_TARGET=github-pages`;
   the Pages workflow is unrelated to the live (Vercel) site.
+
+## Local build caveat
+- This repo lives under a Korean-named directory (`…/앵커드/anchored-web`), and a stray
+  lockfile in `$HOME` made Next infer the workspace root there — so Turbopack idents
+  included the Korean path segment and its truncation panicked mid-character
+  (`start byte index … is not a char boundary`). **Fixed by pinning `turbopack.root`
+  (+ `outputFileTracingRoot`) to the project dir in `next.config.ts`.** If it ever
+  resurfaces, `npm run build:local` / `npm run dev:webpack` are webpack fallbacks.
 
 ## Conventions
 - **Do not push directly to `main`** — open a PR and merge.
