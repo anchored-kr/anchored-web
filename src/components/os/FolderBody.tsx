@@ -16,14 +16,15 @@ export function FolderBody({ folder, onOpen }: { folder: DeskFolder; onOpen: (id
         {items.map((a) => (
           <button
             key={a.id}
+            type="button"
             onClick={() => onOpen(a.id)}
-            className="group flex flex-col items-center gap-1.5 rounded-lg border-2 border-transparent p-3 text-center transition-all hover:border-os-ink hover:bg-white"
+            className="group flex flex-col items-center gap-1.5 rounded-lg border-2 border-transparent p-3 text-center transition-all hover:border-os-ink hover:bg-white focus-visible:border-os-ink focus-visible:bg-white focus-visible:outline-none"
           >
             <span
               className="relative grid h-12 w-12 place-items-center rounded-[12px] border-[2.5px] border-os-ink bg-os-cream text-[24px] transition-transform group-hover:-translate-y-0.5"
               style={{ boxShadow: "2.5px 2.5px 0 0 rgba(8,22,43,0.8)" }}
             >
-              {a.icon}
+              <span aria-hidden="true">{a.icon}</span>
               {a.status && (
                 <span
                   className="absolute -right-1.5 -top-1.5 rounded-full border-[2px] border-os-ink px-1 font-mono text-[7px] font-bold leading-[1.5] text-white"
@@ -35,7 +36,7 @@ export function FolderBody({ folder, onOpen }: { folder: DeskFolder; onOpen: (id
             </span>
             <span className="font-mono text-[10.5px] font-bold leading-tight text-os-ink">{a.title}</span>
             {a.tagline && (
-              <span className="line-clamp-2 text-[9.5px] leading-snug text-os-ink/55">{t(a.tagline, lang)}</span>
+              <span className="line-clamp-2 text-[10px] leading-snug text-os-ink/75">{t(a.tagline, lang)}</span>
             )}
           </button>
         ))}

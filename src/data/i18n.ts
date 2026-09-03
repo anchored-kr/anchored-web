@@ -11,6 +11,11 @@ export const LANGS: { code: Lang; label: string }[] = [
   { code: "ja", label: "日本語" },
 ];
 
+export const isLang = (v: unknown): v is Lang => v === "ko" || v === "en" || v === "ja";
+
+/** BCP-47 tag for <html lang> and Intl formatting. */
+export const htmlLang: Record<Lang, string> = { ko: "ko-KR", en: "en", ja: "ja-JP" };
+
 /** Resolve a localized value for the active language (falls back to Korean). */
 export function t(v: LText | undefined, lang: Lang): string {
   if (v == null) return "";
@@ -18,14 +23,24 @@ export function t(v: LText | undefined, lang: Lang): string {
 }
 
 /** Static UI strings (chrome, windows, buttons). */
-export const ui: Record<string, Record<Lang, string>> = {
+export const ui = {
   agencyTag: { ko: "ROBLOX IP 에이전시", en: "ROBLOX IP AGENCY", ja: "ROBLOX IP エージェンシー" },
   navServices: { ko: "서비스", en: "Services", ja: "サービス" },
   navContact: { ko: "문의", en: "Contact", ja: "お問い合わせ" },
 
   start: { ko: "시작", en: "Start", ja: "スタート" },
+  startMenu: { ko: "시작 메뉴", en: "Start menu", ja: "スタートメニュー" },
   portfolio: { ko: "포트폴리오", en: "Portfolio", ja: "ポートフォリオ" },
   startAbout: { ko: "Anchored 소개", en: "About Anchored", ja: "Anchored について" },
+  openWindows: { ko: "열린 창", en: "Open windows", ja: "開いているウィンドウ" },
+  desktopIcons: { ko: "바탕화면 아이콘", en: "Desktop icons", ja: "デスクトップアイコン" },
+  langLabel: { ko: "언어 선택", en: "Language", ja: "言語" },
+
+  // Window chrome
+  winMinimize: { ko: "최소화", en: "Minimize", ja: "最小化" },
+  winMaximize: { ko: "최대화", en: "Maximize", ja: "最大化" },
+  winRestore: { ko: "이전 크기로", en: "Restore", ja: "元のサイズに戻す" },
+  winClose: { ko: "닫기", en: "Close", ja: "閉じる" },
 
   // About
   aboutTitle: { ko: "IP·콘텐츠를 Roblox 게임으로", en: "Turn IP & content into Roblox games", ja: "IP・コンテンツを Roblox ゲームに" },
@@ -42,7 +57,8 @@ export const ui: Record<string, Record<Lang, string>> = {
   },
   statProjects: { ko: "게임 프로젝트", en: "game projects", ja: "ゲームプロジェクト" },
   statUsers: { ko: "월 Roblox 유저", en: "monthly Roblox users", ja: "月間 Roblox ユーザー" },
-  statFull: { ko: "기획→런칭→운영", en: "concept→launch→ops", ja: "企画→ローンチ→運用" },
+  statTeamValue: { ko: "한 팀", en: "One team", ja: "ワンチーム" },
+  statTeam: { ko: "기획·개발·운영", en: "design·build·operate", ja: "企画・開発・運用" },
   ctaServices: { ko: "서비스 보기 →", en: "View services →", ja: "サービスを見る →" },
   ctaPortfolio: { ko: "포트폴리오 열기", en: "Open portfolio", ja: "ポートフォリオを開く" },
   ctaContact: { ko: "문의하기", en: "Get in touch", ja: "お問い合わせ" },
@@ -76,5 +92,23 @@ export const ui: Record<string, Record<Lang, string>> = {
   statLikes: { ko: "좋아요", en: "Likes", ja: "高評価" },
   statVisits: { ko: "누적 방문", en: "Visits", ja: "累計訪問" },
   playCta: { ko: "Roblox에서 플레이", en: "Play on Roblox", ja: "Roblox でプレイ" },
-  liveLoading: { ko: "라이브 데이터 불러오는 중…", en: "Loading live data…", ja: "ライブデータを読み込み中…" },
-};
+  liveLabel: { ko: "실시간", en: "Live", ja: "リアルタイム" },
+
+  // Case-study pages
+  worksTitle: { ko: "작업물", en: "Work", ja: "実績" },
+  worksLead: {
+    ko: "앵커드가 기획·개발·운영한 Roblox 게임과 생태계 프로젝트입니다.",
+    en: "Roblox games and ecosystem projects Anchored designed, built, and operates.",
+    ja: "Anchored が企画・開発・運用した Roblox ゲームとエコシステムのプロジェクトです。",
+  },
+  backToDesktop: { ko: "← 데스크탑으로", en: "← Back to desktop", ja: "← デスクトップへ" },
+  allWorks: { ko: "전체 작업물", en: "All work", ja: "実績一覧" },
+  related: { ko: "관련 작업물", en: "Related work", ja: "関連する実績" },
+  notFoundTitle: { ko: "페이지를 찾을 수 없습니다", en: "Page not found", ja: "ページが見つかりません" },
+  notFoundDesc: {
+    ko: "주소가 바뀌었거나 삭제된 페이지입니다. 데스크탑에서 다시 찾아보세요.",
+    en: "This page moved or no longer exists. Try finding it from the desktop.",
+    ja: "このページは移動したか削除されました。デスクトップから探してみてください。",
+  },
+  goHome: { ko: "데스크탑 열기", en: "Open the desktop", ja: "デスクトップを開く" },
+} satisfies Record<string, Record<Lang, string>>;

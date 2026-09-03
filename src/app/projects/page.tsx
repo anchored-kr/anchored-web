@@ -1,78 +1,83 @@
-"use client";
-
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { projects, categoryLabels, type ProjectCategory, type Project } from "@/data/projects";
+import type { Metadata } from "next";
+import { caseStudies, folders, statusColor, statusLabel } from "@/data/desktopItems";
+import { isLang, t, ui, htmlLang, type Lang } from "@/data/i18n";
 
-const categories: ("all" | ProjectCategory)[] = ["all", "games", "community", "education", "events", "partnerships"];
-const categoryDisplay: Record<string, string> = { all: "All", ...categoryLabels };
+export const metadata: Metadata = {
+  title: "작업물",
+  description:
+    "앵커드가 기획·개발·운영한 Roblox 게임과 생태계 프로젝트 — Speed Obby, Swarmrot, GOKUI, Telum, Anchored Guild, Anchored School.",
+  alternates: { canonical: "/projects" },
+};
 
-const statusLabels: Record<string, string> = { live: "Live", "in-progress": "In Progress", upcoming: "Upcoming" };
+/** Grouped by the same folders the desktop uses, so both surfaces tell one story. */
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ lang?: string }>;
+}) {
+  const { lang: raw } = await searchParams;
+  const lang: Lang = isLang(raw) ? raw : "ko";
+  const suffix = lang === "ko" ? "" : `?lang=${lang}`;
 
-function Card({ project }: { project: Project }) {
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.3 }}
-    >
-      <Link
-        href={`/projects/${project.slug}`}
-        className="group block p-8 border border-border rounded-2xl hover:border-border-hover hover:bg-white/[0.02] transition-all h-full"
-      >
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-[10px] tracking-[0.2em] uppercase text-muted">
-            {categoryLabels[project.category]}
-          </span>
-          {project.status && (
-            <span className="text-[10px] tracking-wider uppercase text-muted">
-              {statusLabels[project.status]}
-            </span>
-          )}
-        </div>
-        <h3 className="text-lg font-semibold mb-3 group-hover:text-white transition-colors">{project.title}</h3>
-        <p className="text-sm text-muted leading-relaxed">{project.descriptionKo}</p>
-      </Link>
-    </motion.div>
-  );
-}
-
-export default function ProjectsPage() {
-  const [active, setActive] = useState<"all" | ProjectCategory>("all");
-  const filtered = active === "all" ? projects : projects.filter((p) => p.category === active);
+  const groups = folders
+    .map((f) => ({
+      folder: f,
+      items: caseStudies.filter((a) => f.children.includes(a.id)),
+    }))
+    .filter((g) => g.items.length > 0);
 
   return (
-    <div className="pt-32 pb-20">
-      <div className="mx-auto max-w-6xl px-6">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6">Projects</p>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">프로젝트와 활동</h1>
-        </motion.div>
+    <div className="mx-auto max-w-5xl px-6 py-14" lang={htmlLang[lang]}>
+      <header>
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-[#8fc6f5]">
+          Anchored — {t(ui.worksTitle, lang)}
+        </p>
+        <h1 className="mt-3 text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-tight tracking-tight">
+          {t(ui.worksTitle, lang)}
+        </h1>
+        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-white/80">{t(ui.worksLead, lang)}</p>
+      </header>
 
-        <div className="mt-10 flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActive(cat)}
-              className={`px-4 py-2 text-xs tracking-wider uppercase rounded-full transition-all ${
-                active === cat
-                  ? "bg-white text-black"
-                  : "text-muted border border-border hover:border-border-hover"
-              }`}
-            >
-              {categoryDisplay[cat]}
-            </button>
-          ))}
-        </div>
-
-        <motion.div layout className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((p) => <Card key={p.slug} project={p} />)}
-          </AnimatePresence>
-        </motion.div>
+      <div className="mt-12 space-y-12">
+        {groups.map(({ folder, items }) => (
+          <section key={folder.id} aria-labelledby={`g-${folder.id}`}>
+            <h2 id={`g-${folder.id}`} className="flex items-center gap-2 font-mono text-[12px] font-extrabold uppercase tracking-[0.18em] text-white/90">
+              <span aria-hidden="true" className="text-[15px]">{folder.icon}</span>
+              {folder.title}
+            </h2>
+            <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((a) => (
+                <li key={a.id}>
+                  <Link
+                    href={`/projects/${a.slug}${suffix}`}
+                    className="group flex h-full flex-col rounded-[10px] border-[2.5px] border-os-ink bg-os-cream p-5 text-os-ink transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    style={{ boxShadow: "4px 4px 0 0 rgba(8,22,43,0.85)" }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span aria-hidden="true" className="text-[22px]">{a.icon}</span>
+                      <span className="text-[15px] font-extrabold leading-tight">{a.title}</span>
+                      {a.status && (
+                        <span
+                          className="ml-auto shrink-0 rounded border-[1.5px] border-os-ink px-1.5 font-mono text-[8.5px] font-bold text-white"
+                          style={{ background: statusColor[a.status] }}
+                        >
+                          {statusLabel[a.status]}
+                        </span>
+                      )}
+                    </div>
+                    {a.tagline && (
+                      <p className="mt-2.5 text-[13px] leading-relaxed text-os-ink/85">{t(a.tagline, lang)}</p>
+                    )}
+                    <span className="mt-4 font-mono text-[11px] font-bold text-anchor-blue-dark group-hover:underline">
+                      {t(ui.ctaCaseStudy, lang)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
     </div>
   );

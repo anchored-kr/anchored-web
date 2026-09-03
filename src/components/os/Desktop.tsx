@@ -3,16 +3,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apps, appById, folders, folderById } from "@/data/desktopItems";
 import { LangContext } from "./LangContext";
-import { LANGS, t, ui, type Lang } from "@/data/i18n";
+import { LANGS, htmlLang, isLang, t, ui, type Lang } from "@/data/i18n";
 import { DesktopIcon, type DeskEntry } from "./DesktopIcon";
 import { Taskbar } from "./Taskbar";
 import { Window, type WinState } from "./Window";
 import { WindowBody } from "./WindowBody";
 import { FolderBody } from "./FolderBody";
 import { HarborScene } from "./HarborScene";
+import { AnchorLogo } from "@/components/anchor-logo";
+import { createLocalStore, useLocalStore } from "./persist";
 
-const DEFAULT_W = 560;
+const DEFAULT_W = 540;
 const FOLDER_W = 470;
+/** Left edge reserved for the icon columns, so opened windows never cover them. */
+const ICON_GUTTER = 500;
 
 /** What sits on the desktop: system apps as-is, portfolio grouped into folders. */
 const desktopEntries: DeskEntry[] = [
@@ -28,19 +32,57 @@ const desktopEntries: DeskEntry[] = [
   })),
 ];
 
+/** Deterministic icon grid: row 1 system apps, row 2 folders. Computed at module
+ *  scope so the server and the first client render agree (saved positions are
+ *  layered on top by the store, which returns {} until localStorage is read). */
+const defaultIconPos: Record<string, { x: number; y: number }> = (() => {
+  const out: Record<string, { x: number; y: number }> = {};
+  let sys = 0;
+  let fold = 0;
+  for (const en of desktopEntries) {
+    if (en.isFolder) {
+      out[en.id] = { x: 12 + fold * 94, y: 164 };
+      fold += 1;
+    } else {
+      out[en.id] = { x: 12 + sys * 94, y: 68 };
+      sys += 1;
+    }
+  }
+  return out;
+})();
+
+type IconPos = Record<string, { x: number; y: number }>;
+
+const langStore = createLocalStore<Lang>("anchored:lang", "ko", (v) => (isLang(v) ? v : null));
+
 /** Icon-position storage key — bump to force a fresh default layout for everyone. */
-const ICONPOS_KEY = "anchored:iconpos2";
+const iconPosStore = createLocalStore<IconPos>("anchored:iconpos2", {}, (v) => {
+  if (typeof v !== "object" || v == null) return null;
+  const out: IconPos = {};
+  for (const [k, p] of Object.entries(v as Record<string, unknown>)) {
+    const q = p as { x?: unknown; y?: unknown };
+    if (typeof q?.x === "number" && typeof q?.y === "number") out[k] = { x: q.x, y: q.y };
+  }
+  return out;
+});
+
+/** The welcome window, open from the very first render so crawlers and no-JS
+ *  visitors see the pitch, and so nothing has to be opened from an effect. */
+const INITIAL_WINS: WinState[] = [
+  { id: "about", z: 10, x: ICON_GUTTER + 20, y: 76, w: DEFAULT_W, minimized: false, maximized: false },
+];
 
 /** Anchored OS — desktop window manager. Orchestrates state; rendering lives in children. */
 export function Desktop() {
-  const [wins, setWins] = useState<WinState[]>([]);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [wins, setWins] = useState<WinState[]>(INITIAL_WINS);
+  const [activeId, setActiveId] = useState<string | null>("about");
   const [selected, setSelected] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [iconPos, setIconPos] = useState<Record<string, { x: number; y: number }>>({});
-  const [lang, setLang] = useState<Lang>("ko");
   const topZ = useRef(10);
-  const opened = useRef(0);
+  const opened = useRef(1);
+
+  const lang = useLocalStore(langStore);
+  const savedIconPos = useLocalStore(iconPosStore);
+  const iconPos: IconPos = { ...defaultIconPos, ...savedIconPos };
 
   // Lock body scroll while the desktop owns the viewport.
   useEffect(() => {
@@ -49,25 +91,13 @@ export function Desktop() {
     return () => { document.body.style.overflow = prev; };
   }, []);
 
-  // Track viewport size for mobile layout / window placement.
+  // Keep the document language in sync with the toggle, for screen readers,
+  // hyphenation and translation tools.
   useEffect(() => {
-    const fn = () => setIsMobile(window.innerWidth < 768);
-    fn();
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
-  }, []);
+    document.documentElement.lang = htmlLang[lang];
+  }, [lang]);
 
-  // Restore saved language.
-  useEffect(() => {
-    try {
-      const s = localStorage.getItem("anchored:lang");
-      if (s === "ko" || s === "en" || s === "ja") setLang(s);
-    } catch {}
-  }, []);
-  const changeLang = useCallback((l: Lang) => {
-    setLang(l);
-    try { localStorage.setItem("anchored:lang", l); } catch {}
-  }, []);
+  const changeLang = useCallback((l: Lang) => langStore.set(l), []);
 
   const focusWin = useCallback((id: string) => {
     topZ.current += 1;
@@ -86,13 +116,15 @@ export function Desktop() {
         setActiveId(id);
         return ws.map((w) => (w.id === id ? { ...w, z, minimized: false } : w));
       }
-      const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
+      const vw = typeof window !== "undefined" ? window.innerWidth : 1440;
       const base = folderById(id) ? FOLDER_W : DEFAULT_W;
       const w = Math.min(base, vw - 32);
       const step = opened.current % 6;
       opened.current += 1;
-      const x = Math.max(20, vw / 2 - w / 2 - 80 + step * 30);
-      const y = 64 + step * 28;
+      // Start right of the icon columns and cascade; Window clamps both axes in CSS
+      // so a window can never land under the taskbar or off-screen.
+      const x = Math.max(20, Math.min(ICON_GUTTER + 20, vw - w - 20)) + step * 30;
+      const y = 76 + step * 26;
       setActiveId(id);
       return [...ws, { id, z, x, y, w, minimized: false, maximized: false }];
     });
@@ -126,105 +158,68 @@ export function Desktop() {
   }, [wins, activeId, focusWin, minimizeWin]);
 
   const moveIcon = useCallback((id: string, x: number, y: number) => {
-    setIconPos((p) => {
-      const next = { ...p, [id]: { x, y } };
-      try { localStorage.setItem(ICONPOS_KEY, JSON.stringify(next)); } catch {}
-      return next;
-    });
+    iconPosStore.set({ ...iconPosStore.get(), [id]: { x, y } });
   }, []);
-
-  // Lay out desktop icons: two rows at the top-left — row 1 system apps, row 2
-  // folders — free-draggable, restored from localStorage if rearranged. Defaults
-  // always fill in ids the saved layout doesn't know yet. (Mobile keeps the grid.)
-  useEffect(() => {
-    if (isMobile) return;
-    const defaults: Record<string, { x: number; y: number }> = {};
-    let sys = 0;
-    let fold = 0;
-    desktopEntries.forEach((en) => {
-      if (en.isFolder) {
-        defaults[en.id] = { x: 12 + fold * 94, y: 68 + 96 };
-        fold += 1;
-      } else {
-        defaults[en.id] = { x: 12 + sys * 94, y: 68 };
-        sys += 1;
-      }
-    });
-    let saved: Record<string, { x: number; y: number }> = {};
-    try {
-      const s = localStorage.getItem(ICONPOS_KEY);
-      if (s) saved = JSON.parse(s) ?? {};
-    } catch {}
-    setIconPos({ ...defaults, ...saved });
-  }, [isMobile]);
-
-  // Open the welcome window on mount. openApp focuses (not duplicates) if already open,
-  // so this stays correct under React StrictMode's double-invoked effects.
-  useEffect(() => {
-    openApp("about");
-  }, [openApp]);
 
   return (
     <LangContext.Provider value={lang}>
     <div className="anchor-wall fixed inset-0 overflow-hidden font-sans" onPointerDown={() => setSelected(null)}>
-      {/* Pacific backdrop: the whole desktop is open sea — water texture, waves & one sailboat */}
+      {/* Pacific backdrop: the whole desktop is open sea — depth shading, waves & one sailboat */}
       <div className="anchor-sea" />
       <HarborScene />
 
       {/* Top bar */}
-      <div
+      <header
         className="absolute inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-white/10 px-4 backdrop-blur-md"
         style={{
           background: "linear-gradient(180deg, rgba(4,17,36,0.88), rgba(4,17,36,0.45))",
           boxShadow: "0 1px 0 rgba(0,114,206,0.35)",
         }}
       >
-        <button onClick={(e) => { e.stopPropagation(); openApp("about"); }} className="flex items-center gap-2.5">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/B_anchored_signature_h_eng.png`}
-            alt="Anchored"
-            className="h-[24px] w-auto"
-            style={{ filter: "brightness(0) invert(1)" }}
-          />
-          <span className="hidden font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/45 sm:inline">{t(ui.agencyTag, lang)}</span>
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); openApp("about"); }}
+          className="flex items-center gap-2.5 rounded-md px-1 py-1 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          <AnchorLogo className="h-[22px] w-[22px]" />
+          <span className="font-mono text-[15px] font-extrabold uppercase tracking-[0.16em]">Anchored</span>
+          <span className="hidden font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/70 sm:inline">
+            {t(ui.agencyTag, lang)}
+          </span>
         </button>
-        <div className="flex items-center gap-1.5">
+        <nav aria-label="Anchored" className="flex items-center gap-1.5">
           <TopLink label={t(ui.navServices, lang)} onClick={() => openApp("services")} />
           <TopLink label={t(ui.navContact, lang)} onClick={() => openApp("contact")} />
-          <a href="https://github.com/anchored-kr" target="_blank" rel="noopener noreferrer" className="hidden sm:block">
-            <TopLink label="GitHub ↗" />
-          </a>
           <LangToggle lang={lang} onChange={changeLang} />
-        </div>
-      </div>
+        </nav>
+      </header>
 
-      {/* Desktop icons — static grid on mobile, free-draggable on desktop */}
-      {isMobile ? (
-        <div
-          className="absolute inset-x-0 top-[64px] z-10 grid grid-cols-4 gap-1 px-2"
-          onPointerDown={(e) => e.stopPropagation()}
-        >
-          {desktopEntries.map((en) => (
-            <DesktopIcon key={en.id} entry={en} active={selected === en.id} onOpen={openApp} />
-          ))}
-        </div>
-      ) : (
-        <div className="pointer-events-none absolute inset-0 z-10 [&>*]:pointer-events-auto">
-          {desktopEntries.map((en) =>
-            iconPos[en.id] ? (
-              <DesktopIcon
-                key={en.id}
-                entry={en}
-                active={selected === en.id}
-                onOpen={openApp}
-                pos={iconPos[en.id]}
-                onMove={moveIcon}
-              />
-            ) : null
-          )}
-        </div>
-      )}
+      {/* Desktop icons. Both layouts render; CSS picks one, so the first paint is
+          already correct (no post-hydration jump). */}
+      <div
+        className="absolute inset-x-0 top-[64px] z-10 grid grid-cols-4 gap-1 px-2 md:hidden"
+        onPointerDown={(e) => e.stopPropagation()}
+        aria-label={t(ui.desktopIcons, lang)}
+      >
+        {desktopEntries.map((en) => (
+          <DesktopIcon key={en.id} entry={en} active={selected === en.id} onOpen={openApp} />
+        ))}
+      </div>
+      <div
+        className="pointer-events-none absolute inset-0 z-10 hidden md:block [&>*]:pointer-events-auto"
+        aria-label={t(ui.desktopIcons, lang)}
+      >
+        {desktopEntries.map((en) => (
+          <DesktopIcon
+            key={en.id}
+            entry={en}
+            active={selected === en.id}
+            onOpen={openApp}
+            pos={iconPos[en.id]}
+            onMove={moveIcon}
+          />
+        ))}
+      </div>
 
       {/* Windows — isolated stacking context so they never cover the header/taskbar */}
       <div className="pointer-events-none absolute inset-0 z-20" style={{ isolation: "isolate" }}>
@@ -240,7 +235,6 @@ export function Desktop() {
               icon={(app?.icon ?? folder?.icon) as string}
               accent={(app?.accent ?? folder?.accent) as string}
               focused={activeId === w.id}
-              isMobile={isMobile}
               onFocus={focusWin}
               onClose={closeWin}
               onMinimize={minimizeWin}
@@ -267,8 +261,9 @@ export function Desktop() {
 function TopLink({ label, onClick }: { label: string; onClick?: () => void }) {
   return (
     <button
+      type="button"
       onClick={onClick}
-      className="rounded-md px-2 py-1 font-mono text-[11px] font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+      className="rounded-md px-2 py-1 font-mono text-[11px] font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
     >
       {label}
     </button>
@@ -277,14 +272,20 @@ function TopLink({ label, onClick }: { label: string; onClick?: () => void }) {
 
 function LangToggle({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
   return (
-    <div className="ml-1 flex items-center gap-0.5 rounded-md border border-white/15 bg-white/5 p-0.5">
+    <div
+      role="group"
+      aria-label={t(ui.langLabel, lang)}
+      className="ml-1 flex items-center gap-0.5 rounded-md border border-white/15 bg-white/5 p-0.5"
+    >
       {LANGS.map((l) => (
         <button
           key={l.code}
+          type="button"
           onClick={() => onChange(l.code)}
           aria-pressed={lang === l.code}
-          className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-bold transition-colors ${
-            lang === l.code ? "bg-anchor-blue text-white" : "text-white/55 hover:text-white"
+          lang={htmlLang[l.code]}
+          className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-white ${
+            lang === l.code ? "bg-anchor-blue text-white" : "text-white/70 hover:text-white"
           }`}
         >
           {l.code.toUpperCase()}

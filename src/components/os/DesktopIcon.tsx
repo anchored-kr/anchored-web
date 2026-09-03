@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type PointerEvent } from "react";
+import { useRef, type KeyboardEvent, type PointerEvent } from "react";
 import type { AppStatus } from "@/data/desktopItems";
 import { statusLabel, statusColor } from "@/data/desktopItems";
 
@@ -47,10 +47,14 @@ interface DesktopIconProps {
 /**
  * A desktop icon. In the mobile grid it's a plain click-to-open button; on desktop
  * (when `pos`/`onMove` are provided) it's absolutely positioned and drag-to-move,
- * opening only on a click that didn't drag.
+ * opening only on a gesture that didn't drag.
+ *
+ * Keyboard: Enter/Space open the icon. The pointer path suppresses the synthetic
+ * click that follows pointerup so a mouse click never opens twice.
  */
 export function DesktopIcon({ entry, active, onOpen, pos, onMove }: DesktopIconProps) {
   const drag = useRef<{ sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
+  const fromPointer = useRef(false);
   const draggable = !!pos && !!onMove;
 
   const onPointerDown = (e: PointerEvent<HTMLButtonElement>) => {
@@ -58,6 +62,7 @@ export function DesktopIcon({ entry, active, onOpen, pos, onMove }: DesktopIconP
     try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
     drag.current = { sx: e.clientX, sy: e.clientY, ox: pos.x, oy: pos.y, moved: false };
   };
+
   const onPointerMove = (e: PointerEvent<HTMLButtonElement>) => {
     const d = drag.current;
     if (!d || !onMove) return;
@@ -70,22 +75,51 @@ export function DesktopIcon({ entry, active, onOpen, pos, onMove }: DesktopIconP
       onMove(entry.id, nx, ny);
     }
   };
+
   const onPointerUp = (e: PointerEvent<HTMLButtonElement>) => {
     const d = drag.current;
     drag.current = null;
     try { e.currentTarget.releasePointerCapture(e.pointerId); } catch {}
-    if (draggable && d && !d.moved) onOpen(entry.id);
+    if (!draggable || !d) return;
+    fromPointer.current = true;
+    if (!d.moved) onOpen(entry.id);
+  };
+
+  // Fires for mouse clicks (already handled by pointerup) and for keyboard
+  // activation (Enter/Space), which is the only path that needs it here.
+  const onClick = () => {
+    if (fromPointer.current) {
+      fromPointer.current = false;
+      return;
+    }
+    onOpen(entry.id);
+  };
+
+  // Enter is left alone: the browser turns it into a click, which `onClick` handles.
+  // Space is suppressed on keydown only to stop the page scrolling, then opens on
+  // keyup — preventing it on Enter too would cancel the click the button relies on.
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === " ") e.preventDefault();
+  };
+  const onKeyUp = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === " ") {
+      e.preventDefault();
+      onOpen(entry.id);
+    }
   };
 
   return (
     <button
-      onClick={() => { if (!draggable) onOpen(entry.id); }}
+      type="button"
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       title={entry.title}
       style={draggable && pos ? { position: "absolute", left: pos.x, top: pos.y, touchAction: "none", zIndex: active ? 6 : 2 } : undefined}
-      className="group flex w-[84px] flex-col items-center gap-1.5 rounded-lg p-2 text-center outline-none"
+      className="group flex w-[84px] flex-col items-center gap-1.5 rounded-lg p-2 text-center outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-anchor-night"
     >
       {entry.isFolder ? (
         <span
@@ -93,7 +127,7 @@ export function DesktopIcon({ entry, active, onOpen, pos, onMove }: DesktopIconP
           style={{ filter: "drop-shadow(3px 3px 0 rgba(8,22,43,0.85))" }}
         >
           <FolderGlyph className="absolute inset-x-0 top-[3px] h-[46px] w-full" />
-          <span className="relative mt-[10px] text-[17px] leading-none">{entry.icon}</span>
+          <span aria-hidden="true" className="relative mt-[10px] text-[17px] leading-none">{entry.icon}</span>
           {typeof entry.count === "number" && (
             <span className="absolute -bottom-0.5 -right-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full border-[2px] border-os-ink bg-anchor-blue px-0.5 font-mono text-[8.5px] font-bold leading-none text-white">
               {entry.count}
@@ -107,7 +141,7 @@ export function DesktopIcon({ entry, active, onOpen, pos, onMove }: DesktopIconP
           }`}
           style={{ boxShadow: "3px 3px 0 0 rgba(8,22,43,0.85)" }}
         >
-          {entry.icon}
+          <span aria-hidden="true">{entry.icon}</span>
           {entry.status && (
             <span
               className="absolute -right-1.5 -top-1.5 rounded-full border-[2px] border-os-ink px-1 font-mono text-[7px] font-bold leading-[1.5] text-white"
@@ -120,9 +154,9 @@ export function DesktopIcon({ entry, active, onOpen, pos, onMove }: DesktopIconP
       )}
       <span
         className={`max-w-full rounded px-1 font-mono text-[11px] font-semibold leading-tight ${
-          active ? "bg-anchor-blue text-white" : "text-white/95"
+          active ? "bg-anchor-blue text-white" : "text-white"
         }`}
-        style={active ? {} : { textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}
+        style={active ? {} : { textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}
       >
         {entry.title}
       </span>

@@ -245,8 +245,8 @@ export const projectApps: DesktopApp[] = [
 ];
 
 /**
- * Non-game portfolio — hidden from the desktop for now.
- * To bring back, splice these into `projectApps` (or set apps = [...system, ...projectApps, ...otherProjectApps]).
+ * Non-game portfolio. These don't get their own desktop icon — they live inside the
+ * Workshop / Community / Partners folders (see `folders` below) and in the Start menu.
  */
 export const otherProjectApps: DesktopApp[] = [
   {
@@ -564,12 +564,35 @@ export const folders: DeskFolder[] = [
 
 export const folderById = (id: string) => folders.find((f) => f.id === id);
 
+/* ── Derived views (case-study pages, live-stats allowlist) ── */
+
+/** Every app that has a long-form page under /projects/[slug]. */
+export const caseStudies: DesktopApp[] = apps.filter((a) => !!a.slug);
+
+export const caseStudyBySlug = (slug: string) => caseStudies.find((a) => a.slug === slug);
+
+/** The folder an app belongs to — used to group /projects and to label a case study. */
+export const folderOfApp = (id: string) => folders.find((f) => f.children.includes(id));
+
+/**
+ * Place IDs the /api/roblox proxy is allowed to fetch, derived from the catalogue
+ * so the route can never be used as an open proxy. Add `roblox: { placeId }` to an
+ * app above and its window gains the live thumbnail + CCU / likes / visits block.
+ */
+export const allowedPlaceIds: ReadonlySet<number> = new Set(
+  apps.map((a) => a.roblox?.placeId).filter((id): id is number => typeof id === "number")
+);
+
 /* ── Services (rendered inside the Services window) ── */
 
-export const services: { icon: string; title: string; en: string; desc: LText }[] = [
+export const services: { icon: string; title: LText; en: string; desc: LText }[] = [
   {
     icon: "🎮",
-    title: "IP → Roblox Game",
+    title: {
+      ko: "IP → Roblox 게임",
+      en: "IP → Roblox Game",
+      ja: "IP → Roblox ゲーム",
+    },
     en: "Adaptation",
     desc: {
       ko: "보유한 IP·콘텐츠·브랜드를 Roblox에서 플레이되는 게임으로 번역합니다. 기획부터 출시까지 풀 프로덕션.",
@@ -579,7 +602,11 @@ export const services: { icon: string; title: string; en: string; desc: LText }[
   },
   {
     icon: "✨",
-    title: "Original Game IP",
+    title: {
+      ko: "오리지널 게임 IP",
+      en: "Original Game IP",
+      ja: "オリジナルゲーム IP",
+    },
     en: "Incubation",
     desc: {
       ko: "크리에이터·팀과 함께 처음부터 오리지널 게임 IP를 만들고 데뷔시킵니다.",
@@ -589,7 +616,11 @@ export const services: { icon: string; title: string; en: string; desc: LText }[
   },
   {
     icon: "📈",
-    title: "LiveOps & Growth",
+    title: {
+      ko: "라이브옵스 & 그로스",
+      en: "LiveOps & Growth",
+      ja: "ライブオプス & グロース",
+    },
     en: "Operation",
     desc: {
       ko: "출시가 끝이 아닙니다. 데이터 기반 라이브옵스로 리텐션과 성장을 운영합니다.",
@@ -599,7 +630,11 @@ export const services: { icon: string; title: string; en: string; desc: LText }[
   },
   {
     icon: "🎯",
-    title: "Brand Experiences",
+    title: {
+      ko: "브랜드 경험",
+      en: "Brand Experiences",
+      ja: "ブランド体験",
+    },
     en: "Campaign",
     desc: {
       ko: "브랜드 캠페인을 Roblox 네이티브 경험으로. 게임·크리에이터·커뮤니티를 하나로 묶습니다.",
