@@ -12,6 +12,24 @@ import { ProductionStack } from "./Stack";
 
 type View = "list" | "content";
 
+/** Quiet site footer at the end of the main column — includes the Porto Rocha credit. */
+function SiteFooter() {
+  const lang = useLang();
+  const [before, after] = t(ui4.credit, lang).split("{PR}");
+  return (
+    <footer className="flex flex-col gap-1 px-2 pb-4 pt-8 text-[12px] text-v-fg2 sm:flex-row sm:items-center sm:justify-between">
+      <span suppressHydrationWarning>© {new Date().getFullYear()} Anchored · {t(ui4.city, lang)}</span>
+      <span>
+        {before}
+        <a href="https://www.portorocha.com/" target="_blank" rel="noopener noreferrer" className="v4-ul hover:text-v-fg">
+          PORTO ROCHA
+        </a>
+        {after} ↗
+      </span>
+    </footer>
+  );
+}
+
 function Sidebar({ asideRef, view, setView }: { asideRef: React.RefObject<HTMLElement | null>; view: View; setView: (v: View) => void }) {
   const lang = useLang();
   const pathname = usePathname();
@@ -81,7 +99,10 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <V4Root>
       <Sidebar asideRef={asideRef} view={view} setView={setView} />
-      <main className={`px-2 pb-2 lg:ml-[395px] lg:pt-2 ${view === "list" ? "hidden lg:block" : ""}`}>{children}</main>
+      <main className={`px-2 pb-2 lg:ml-[395px] lg:pt-2 ${view === "list" ? "hidden lg:block" : ""}`}>
+        {children}
+        <SiteFooter />
+      </main>
     </V4Root>
   );
 }
