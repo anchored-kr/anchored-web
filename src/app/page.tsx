@@ -1,19 +1,22 @@
-import { V2Shell } from "@/components/v2/V2Shell";
-import { Hero, ProofStrip, WhyDifferent, Model, WhereTeams, Fleet, WhatWeBuild, HowWeWork, SprintCta, Footer } from "@/components/v2/sections";
+import { Shell } from "@/components/v3/Shell";
+import { MainVisual, News, BrandFilm, Message, Purpose, Productions, Creators, WhatWeProduce, Figures, HowWeProduce, Guild, StartProduction, Footer } from "@/components/v3/sections";
 
 export default function Home() {
   return (
-    <V2Shell>
-      <Hero />
-      <ProofStrip />
-      <WhyDifferent />
-      <Model />
-      <WhereTeams />
-      <Fleet />
-      <WhatWeBuild />
-      <HowWeWork />
-      <SprintCta />
+    <Shell>
+      <MainVisual />
+      <News />
+      <BrandFilm />
+      <Message />
+      <Purpose />
+      <Productions />
+      <Creators />
+      <WhatWeProduce />
+      <Figures />
+      <HowWeProduce />
+      <Guild />
+      <StartProduction />
       <Footer />
-    </V2Shell>
+    </Shell>
   );
 }

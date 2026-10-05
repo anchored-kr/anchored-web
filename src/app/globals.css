@@ -31,6 +31,12 @@
 
   --breakpoint-xs: 400px;
 
+  /* ── v3 Kodansha-grammar palette ── */
+  --color-k-ink: #2a2a2a;
+  --color-k-dark: #1b1b1b;
+  --color-k-off: #f4f4f1;
+  --color-k-blue: #0072ce;
+
   /* ── v2 editorial palette ── */
   --color-paper: #f5f3ee;
   --color-paper-2: #ebe8e1;
@@ -221,8 +227,8 @@ body {
 }
 
 body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
+  background: #ffffff;
+  color: #2a2a2a;
   letter-spacing: -0.006em;
 }
 ::selection { background: rgb(42 120 214 / 0.18); color: inherit; }
@@ -244,3 +250,19 @@ body {
 .bar-right { transform-origin: left; animation: bar-right 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes bar-right { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) { .line-draw, .bar-right { animation: none; stroke-dashoffset: 0; } }
+
+/* ══════════════════════════════════════════════════════════════
+   v3 — Kodansha-grammar editorial: white, near-black ink, 1px/2px rules,
+   big grotesk section titles, outlined box links, ghost titles.
+   ══════════════════════════════════════════════════════════════ */
+.k-rule-2 { border-top: 2px solid var(--color-k-ink); }
+.k-rule-1 { border-top: 1px solid var(--color-k-ink); }
+.k-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(34px, 4.2vw, 58px); letter-spacing: -0.015em; line-height: 1; }
+.k-ghost { font-family: var(--font-display); font-weight: 800; left: -0.04em; font-size: clamp(96px, 16vw, 230px); line-height: 1; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1px rgba(42, 42, 42, 0.16); }
+.k-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.03em; line-height: 0.95; }
+.a-slide { opacity: 0; animation: reel 18s infinite; }
+.a-slide:nth-child(3) { animation-delay: 6s; }
+.a-slide:nth-child(4) { animation-delay: 12s; }
+@media (prefers-reduced-motion: reduce) { .a-slide { animation: none; } .a-slide:nth-child(2) { opacity: 1; } }
+.k-duotone { filter: grayscale(1) contrast(1.05); }
+.k-duotone-tint { background: var(--color-k-blue); mix-blend-mode: multiply; }
