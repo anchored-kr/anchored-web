@@ -164,3 +164,90 @@ export const footer = {
   creatorsLabel: { ko: "크리에이터에게", en: "For creators", ja: "クリエイターへ" },
   clientsLabel: { ko: "고객에게", en: "For clients", ja: "クライアントへ" },
 };
+
+/* ── Visual materials: labels + clearly-marked sample data ── */
+
+export const viz = {
+  sample: { ko: "샘플 데이터", en: "Sample data", ja: "サンプルデータ" },
+  example: { ko: "예시", en: "Example", ja: "例" },
+  pipelineTitle: { ko: "크리에이터 파이프라인", en: "Creator pipeline", ja: "クリエイターパイプライン" },
+  radarTitle: { ko: "성장 지수 5축 (팀 검증 기준)", en: "Growth Index, 5 axes (how we validate teams)", ja: "Growth Index 5軸（チーム検証基準）" },
+  thisTeam: { ko: "이 팀", en: "This team", ja: "このチーム" },
+  fleetAvg: { ko: "플릿 평균", en: "Fleet average", ja: "Fleet 平均" },
+  reportTitle: { ko: "주간 리포트", en: "Weekly report", ja: "週次レポート" },
+  reportSub: { ko: "고객 상황판에서 보는 화면", en: "What you see on the client dashboard", ja: "クライアントダッシュボードで見る画面" },
+  milestones: { ko: "마일스톤", en: "Milestones", ja: "マイルストーン" },
+  nextActions: { ko: "다음 액션", en: "Next actions", ja: "次のアクション" },
+  ccu: { ko: "동접", en: "Playing now", ja: "同時接続" },
+  likes: { ko: "좋아요", en: "Like ratio", ja: "高評価率" },
+  d7: { ko: "D7 리텐션", en: "D7 retention", ja: "D7 リテンション" },
+  onTrack: { ko: "일정 정상", en: "On schedule", ja: "予定どおり" },
+  risk: { ko: "리스크 1건", en: "1 risk", ja: "リスク 1件" },
+  timelineTitle: { ko: "프로젝트 타임라인", en: "Project timeline", ja: "プロジェクトのタイムライン" },
+  weeks: { ko: "주", en: "wk", ja: "週" },
+  deliverables: { ko: "스프린트 산출물", en: "Sprint deliverables", ja: "スプリント成果物" },
+  compareTitle: { ko: "무엇이 다른가", en: "What's different", ja: "何が違うのか" },
+  colA: { ko: "일반 외주", en: "Typical outsourcing", ja: "一般的な外注" },
+  colB: { ko: "앵커드", en: "Anchored", ja: "Anchored" },
+  seats: { ko: "동시 진행 제한", en: "Concurrent cap", ja: "同時進行の上限" },
+  concept: { ko: "개념도", en: "Illustrative", ja: "概念図" },
+  schematic: { ko: "양 끝만 실제 수치", en: "Only the ends are real counts", ja: "両端のみ実数" },
+  lifecycleTitle: { ko: "출시 이후의 궤적", en: "What happens after launch", ja: "ローンチ後の軌跡" },
+  curveA: { ko: "납품하고 끝", en: "Deliver & stop", ja: "納品して終わり" },
+  curveB: { ko: "운영하며 성장", en: "Operate & grow", ja: "運営しながら成長" },
+  launch: { ko: "LAUNCH", en: "LAUNCH", ja: "LAUNCH" },
+  update: { ko: "UPDATE", en: "UPDATE", ja: "UPDATE" },
+  week: { ko: "WEEK 12", en: "WEEK 12", ja: "WEEK 12" },
+  proof: { ko: "숫자로 보는 앵커드", en: "Anchored in numbers", ja: "数字で見る Anchored" },
+  teamsCount: { ko: "팀 {n}", en: "{n} teams", ja: "{n} チーム" },
+  deliverableItems: [
+    { ko: "팀 제안서", en: "Team proposal", ja: "チーム提案書" },
+    { ko: "컨셉 & 방향", en: "Concept & direction", ja: "コンセプトと方向性" },
+    { ko: "제작 계획 & 일정", en: "Production plan & schedule", ja: "制作計画とスケジュール" },
+  ],
+};
+
+export const vizData = {
+  /** funnel: only the two ends are real numbers; middle stages are unlabeled on purpose */
+  funnel: [
+    { label: { ko: "앵커드 길드", en: "Anchored Guild", ja: "Anchored Guild" }, width: 1, value: "723" },
+    { label: { ko: "데모데이 발표", en: "Demo Day", ja: "Demo Day 発表" }, width: 0.55 },
+    { label: { ko: "활동 관찰", en: "Observation", ja: "活動の観察" }, width: 0.32 },
+    { label: { ko: "평가", en: "Assessment", ja: "評価" }, width: 0.16 },
+    { label: { ko: "플릿 선발", en: "Fleet", ja: "Fleet 選抜" }, width: 0.06, value: "4" },
+  ],
+  radarAxes: ["CODE", "BUILD", "SYSTEM", "TEAM", "PLATFORM"],
+  radarTeam: [4, 5, 3, 4, 4],
+  radarFleet: [3.4, 3.8, 3.1, 3.6, 3.3],
+  /** sample weekly report */
+  report: {
+    milestones: [
+      { label: { ko: "프로토타입", en: "Prototype", ja: "プロトタイプ" }, ratio: 1, tone: "good" as const },
+      { label: { ko: "알파 빌드", en: "Alpha build", ja: "アルファビルド" }, ratio: 0.65, tone: "accent" as const },
+      { label: { ko: "비공개 테스트", en: "Closed test", ja: "クローズドテスト" }, ratio: 0.1, tone: "accent" as const },
+    ],
+    ccuSpark: [38, 42, 40, 51, 47, 55, 61, 58, 66, 72, 69, 78],
+    ccuNow: "78",
+    likes: "92%",
+    d7: "18%",
+    actions: [
+      { ko: "서버 권한 마이그레이션 완료 → 성능 측정", en: "Finish server-authority migration → measure", ja: "サーバー権限の移行完了 → 計測" },
+      { ko: "길드 테스터 40명 비공개 테스트 세션", en: "Closed test with 40 guild testers", ja: "ギルドテスター40名でクローズドテスト" },
+      { ko: "썸네일 A/B 3안 커뮤니티 투표", en: "Community vote on 3 thumbnail variants", ja: "サムネイル3案のコミュニティ投票" },
+    ],
+  },
+  timeline: [
+    { label: { ko: "Production Sprint", en: "Production Sprint", ja: "Production Sprint" }, start: 0, end: 2 },
+    { label: { ko: "프리프로덕션", en: "Pre-production", ja: "プリプロダクション" }, start: 2, end: 6 },
+    { label: { ko: "프로덕션", en: "Production", ja: "プロダクション" }, start: 6, end: 18 },
+    { label: { ko: "런칭", en: "Launch", ja: "ローンチ" }, start: 18, end: 20 },
+    { label: { ko: "라이브옵스", en: "LiveOps", ja: "ライブオプス" }, start: 20, end: 30, ongoing: true },
+  ],
+  timelineTotal: 30,
+  compare: [
+    { label: { ko: "끝나는 시점", en: "Where it ends", ja: "終わる時点" }, a: { ko: "납품", en: "Delivery", ja: "納品" }, b: { ko: "출시 이후 운영까지", en: "Through live operations", ja: "ローンチ後の運営まで" } },
+    { label: { ko: "팀", en: "Team", ja: "チーム" }, a: { ko: "그때그때 모은 외주 인력", en: "Ad-hoc contractors", ja: "都度集めた外注" }, b: { ko: "길드에서 검증한 네이티브 팀", en: "Guild-validated native team", ja: "Guild で検証したネイティブチーム" } },
+    { label: { ko: "진행 가시성", en: "Visibility", ja: "進捗の可視性" }, a: { ko: "중간 보고 몇 번", en: "Occasional updates", ja: "たまの報告" }, b: { ko: "상황판 · 주간 리포트 · 월간 리뷰", en: "Dashboard · weekly · monthly", ja: "ダッシュボード・週次・月次" } },
+    { label: { ko: "연속성", en: "Continuity", ja: "継続性" }, a: { ko: "담당자 이탈 시 중단", en: "Stops when a dev leaves", ja: "担当者離脱で停止" }, b: { ko: "앵커드가 유지 (소스·권한·백업)", en: "Anchored keeps it running", ja: "Anchored が維持" } },
+  ],
+};

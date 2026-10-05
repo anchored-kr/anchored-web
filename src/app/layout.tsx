@@ -37,7 +37,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </head>
-      <body className="min-h-full bg-paper text-carbon">{children}</body>
+      <body className="min-h-full bg-canvas text-ink">{children}</body>
     </html>
   );
 }

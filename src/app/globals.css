@@ -8,7 +8,6 @@
   --color-primary-deep: #002B54;
   --color-primary-subtle: rgba(0,114,206,0.12);
   --color-on-primary: #ffffff;
-  --color-ink: #101114;
   --color-body: #686b82;
   --color-muted: #9497a9;
   --color-border: #dedee5;
@@ -37,7 +36,6 @@
   --color-paper-2: #ebe8e1;
   --color-carbon: #0b0b0b;
   --color-stone: #8a877f;
-  --color-line: rgba(11, 11, 11, 0.12);
 
   --font-sans: "Pretendard Variable", var(--font-inter-tight), system-ui, sans-serif;
   --font-display: "Pretendard Variable", var(--font-inter-tight), system-ui, sans-serif;
@@ -54,15 +52,8 @@ html {
 }
 
 body {
-  background: #f5f3ee;
-  color: #0b0b0b;
   font-family: var(--font-sans);
   font-feature-settings: "ss01", "cv11";
-}
-
-::selection {
-  background: var(--color-primary);
-  color: #fff;
 }
 
 /* ── Anchored OS wallpaper: open ocean ── */
@@ -179,3 +170,77 @@ body {
   .reel-slide, .reel-slide img { animation: none; }
   .reel-slide:first-child { opacity: 1; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   Finance theme (ported from anchored-kr/anchored-finance globals.css)
+   — cool-gray canvas, white cards, blue accent, status colors.
+   ══════════════════════════════════════════════════════════════ */
+@theme inline {
+  --color-canvas: #e3e4e8;
+  --color-canvas-deep: #d8dadf;
+  --color-subtle: #f5f6f8;
+
+  --color-ink: #17181c;
+  --color-ink-2: #53565e;
+  --color-ink-3: #868991;
+  --color-ink-4: #b3b6bd;
+
+  --color-line: #ecedf0;
+  --color-line-2: #dcdee3;
+
+  --color-accent: #2a78d6;
+  --color-accent-strong: #1c5cab;
+  --color-accent-soft: #eaf2fd;
+
+  --color-good: #0ca30c;
+  --color-good-ink: #006300;
+  --color-good-soft: #e9f6e9;
+  --color-warning: #fab219;
+  --color-warning-ink: #7a5200;
+  --color-warning-soft: #fff5db;
+  --color-serious: #ec835a;
+  --color-critical: #d03b3b;
+  --color-critical-ink: #a32222;
+  --color-critical-soft: #fbeaea;
+
+  --shadow-card: 0 1px 2px rgb(23 24 28 / 0.05), 0 0 0 1px rgb(23 24 28 / 0.035);
+  --shadow-raised: 0 6px 18px rgb(23 24 28 / 0.09), 0 0 0 1px rgb(23 24 28 / 0.05);
+  --shadow-pop: 0 18px 44px rgb(23 24 28 / 0.18), 0 0 0 1px rgb(23 24 28 / 0.06);
+
+  --radius-card: 14px;
+
+  --animate-rise: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade: fade 0.45s ease both;
+  --animate-pop: pop 0.18s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-pulse-dot: pulse-dot 2.2s ease-in-out infinite;
+
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgb(12 163 12 / 0.45); } 50% { box-shadow: 0 0 0 5px rgb(12 163 12 / 0); } }
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  letter-spacing: -0.006em;
+}
+::selection { background: rgb(42 120 214 / 0.18); color: inherit; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 6px; }
+
+/* card surfaces */
+.card { background: var(--color-surface); border-radius: var(--radius-card); box-shadow: var(--shadow-card); }
+.card-raised { background: var(--color-surface); border-radius: var(--radius-card); box-shadow: var(--shadow-raised); }
+.panel { background: var(--color-subtle); border-radius: 12px; box-shadow: inset 0 0 0 1px var(--color-line); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* v2 meta/rule re-tuned for the Finance palette */
+.meta { color: var(--color-ink-3); }
+.rule { border-top: 1px solid var(--color-line); }
+
+/* chart line draw-in */
+.line-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: line-draw 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s forwards; }
+@keyframes line-draw { to { stroke-dashoffset: 0; } }
+.bar-right { transform-origin: left; animation: bar-right 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes bar-right { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .line-draw, .bar-right { animation: none; stroke-dashoffset: 0; } }
