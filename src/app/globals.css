@@ -31,6 +31,17 @@
 
   --breakpoint-xs: 400px;
 
+  /* ── v4 Porto Rocha grammar (theme-switchable; values live on :root / [data-v4theme]) ── */
+  --color-v-bg: var(--v4-bg);
+  --color-v-fg: var(--v4-fg);
+  --color-v-fg2: var(--v4-fg2);
+  --color-v-card: var(--v4-card);
+  --color-v-line: var(--v4-line);
+  --color-v-pill: var(--v4-pill);
+  --color-v-track: var(--v4-track);
+  --color-v-knob: var(--v4-knob);
+  --font-v4: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
   /* ── v3 Kodansha-grammar palette ── */
   --color-k-ink: #2a2a2a;
   --color-k-dark: #1b1b1b;
@@ -266,3 +277,48 @@ body {
 @media (prefers-reduced-motion: reduce) { .a-slide { animation: none; } .a-slide:nth-child(2) { opacity: 1; } }
 .k-duotone { filter: grayscale(1) contrast(1.05); }
 .k-duotone-tint { background: var(--color-k-blue); mix-blend-mode: multiply; }
+
+/* ══════════════════════════════════════════════════════════════
+   v4 — Porto Rocha grammar: black canvas, #1a1a1a cards (radius 10 / 8),
+   off-white ink with 50% secondary, pills, iOS toggle, stacked sidebar cards.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --v4-bg: #000000;
+  --v4-fg: #e2e6e3;
+  --v4-fg2: rgba(225, 229, 226, 0.5);
+  --v4-card: #1a1a1a;
+  --v4-line: rgba(225, 229, 226, 0.14);
+  --v4-pill: rgba(225, 229, 226, 0.1);
+  --v4-track: rgba(255, 255, 255, 0.12);
+  --v4-knob: #3a3b3b;
+}
+html[data-v4theme="light"] {
+  --v4-bg: #ffffff;
+  --v4-fg: #111111;
+  --v4-fg2: rgba(17, 17, 17, 0.5);
+  --v4-card: #f2f2f2;
+  --v4-line: rgba(17, 17, 17, 0.1);
+  --v4-pill: rgba(17, 17, 17, 0.06);
+  --v4-track: #e3e3e3;
+  --v4-knob: #ffffff;
+  color-scheme: light;
+}
+html[data-v4theme="dark"] { color-scheme: dark; }
+html:has(.v4), html:has(.v4) body { background: var(--v4-bg); }
+html:has(.v4) body { color: var(--v4-fg); letter-spacing: 0; }
+.v4 { font-family: var(--font-v4); font-size: 14px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
+.v4 ::selection { background: rgba(0, 114, 206, 0.35); }
+html[lang="ko"] .v4 { word-break: keep-all; overflow-wrap: anywhere; }
+.v4-title { font-size: 23px; line-height: 1.2; letter-spacing: 0.005em; font-weight: 400; }
+.v4-logo { filter: invert(1) brightness(0.9); }
+html[data-v4theme="light"] .v4-logo { filter: none; }
+.v4-noscroll { scrollbar-width: none; }
+.v4-noscroll::-webkit-scrollbar { display: none; }
+.v4-stack-card { transform-origin: 50% 0%; will-change: transform, opacity; }
+.v4-ul { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--v4-fg2); }
+.v4-ul:hover { text-decoration-color: var(--v4-fg); }
+.v4-fade { animation: v4fade 0.5s ease both; }
+@keyframes v4fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .v4-fade { animation: none; }
+}

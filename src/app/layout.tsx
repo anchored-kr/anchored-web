@@ -29,8 +29,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${interTight.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="ko" className={`${interTight.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
+        {/* v4 theme (dark default) before first paint — only pages with a .v4 root read it */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "(function(){try{var t=localStorage.getItem('anchored:theme');document.documentElement.setAttribute('data-v4theme',t==='light'?'light':'dark')}catch(e){document.documentElement.setAttribute('data-v4theme','dark')}})()",
+          }}
+        />
         {/* Pretendard Variable — Korean display/body face (dynamic subset) */}
         <link
           rel="stylesheet"

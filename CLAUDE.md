@@ -1,32 +1,35 @@
 @AGENTS.md
 
-# Anchored OS — project overview
+# Anchored web — project overview
 
-This site is **Anchored OS**: the homepage for Anchored, a Roblox IP agency
-("we turn IP & content into Roblox games"), rendered as a retro desktop OS
-(PostHog-inspired) — wallpaper with draggable portfolio icons, windows, a Start
-menu, and a taskbar.
+The homepage for Anchored, a **Roblox-native production company** (Seoul). The current
+design (branch `v4-portorocha`) follows Porto Rocha's site grammar: a fixed left sidebar
+(wordmark, live Seoul clock, iOS-style stacked project cards) and a main column (hero
+media, "studio updates" masonry feed), dark by default with a light-mode switch, KO/EN/JA.
 
 ## Stack
-- Next.js 16 (App Router, `output: "export"` — fully static), React 19, Tailwind v4, framer-motion.
+- Next.js 16 (App Router; serverful because of `/api/roblox`), React 19, Tailwind v4, framer-motion.
 - Per AGENTS.md, read `node_modules/next/dist/docs/` before using unfamiliar Next APIs.
 
 ## Structure
-- `src/components/os/` — the desktop UI:
-  - `Desktop.tsx` — orchestrator: window manager (open/focus/minimize/maximize/drag,
-    z-order) + icon layout. Icons are free-draggable on desktop and a static grid on
-    mobile; positions persist in `localStorage["anchored:iconpos"]`.
-  - `Window.tsx` (draggable window chrome), `DesktopIcon.tsx` (icon + drag),
-    `Taskbar.tsx` (Start menu + taskbar), `WindowBody.tsx` (per-app content).
-- `src/data/desktopItems.ts` — all desktop content (system apps, portfolio projects,
-  events, services, socials) **and `folders`** (Games/Workshop/Event/Community/Partners
-  groupings shown as desktop folder tiles + Start-menu submenus). **Edit copy /
-  portfolio here.** `FolderBody.tsx` renders folder windows; `HarborScene.tsx` +
-  `.anchor-sea`/`.harbor-*` CSS draw the Pacific backdrop (waves + sailboat).
-- `src/app/` — `page.tsx` renders `<Desktop/>`; `projects/` holds long-form case-study
-  pages under their own dark layout; `icon.svg` is the favicon.
-- Brand: navy `#0c2b54` / `#003A70`, blue `#0072CE`. Anchor marks in `public/`:
-  `W_anchored_symbol.png` (white), `C_anchored_signature_h_eng.png` (navy wordmark).
+- `src/app/(site)/` — v4 pages inside the sidebar shell: `/` (hero + feed), `/about`,
+  `/projects/[slug]` (12 productions, SSG); `/projects` redirects to `/all`.
+- `src/app/all/` — full-screen "Show all projects" index with search.
+- `src/components/v4/` — `Shell` (sidebar + main, mobile list/content views), `Stack`
+  (stacked sidebar cards), `controls` (pill, KO/EN/JA, theme switch, clock), `icons`
+  (generated app-icon glyphs + posters), `HomeView` / `AboutView` / `ProjectView` / `AllView`.
+- `src/data/v4.ts` — productions (icon colors, captures), feed items, about copy.
+  Production detail copy (tagline/summary/role/bullets/meta, ko/en/ja) comes from
+  `src/data/desktopItems.ts`; positioning copy from `src/data/v2.ts`.
+- Theme: `<html data-v4theme="dark|light">` set before paint by the inline script in the
+  root layout; colors are CSS vars (`--v4-*`) exposed as `bg-v-*` / `text-v-*` utilities.
+  Tailwind v4 only generates utilities for tokens in the **first** `@theme` block of
+  `globals.css`.
+- Archived variants: `/os` (retro desktop OS, `src/components/os/`), `/v2` (Finance-theme
+  cards), `/v3` (Kodansha-style editorial).
+- Brand: blue `#0072CE`; marks in `public/` (`B_` black / `C_` navy signature, `W_` white symbol).
+- Images: Anchored Guild Roblox captures are `rbxcdn` 180-day URLs — replace with
+  self-hosted files before they expire.
 
 ## Deploy & domain
 - **Live: https://anchored.kr** → Vercel team `anchored`, project `anchored-web`.
