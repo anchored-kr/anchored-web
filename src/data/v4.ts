@@ -38,6 +38,8 @@ export const ui4 = {
   next: { ko: "다음 프로젝트", en: "Next project", ja: "次のプロジェクト" },
   start: { ko: "프로젝트 시작하기", en: "Start a project", ja: "プロジェクトを始める" },
   captureNote: { ko: "게임 캡처 준비 중", en: "Captures coming soon", ja: "キャプチャ準備中" },
+  /** small credit in the site footer; {PR} becomes the link */
+  credit: { ko: "이 사이트는 {PR}에서 영감을 받아 만들었습니다", en: "This site was inspired by {PR}", ja: "このサイトは {PR} に着想を得て制作しました" },
 };
 
 export const statusText = {
