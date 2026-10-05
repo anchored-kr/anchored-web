@@ -1,5 +1,19 @@
-import { Desktop } from "@/components/os/Desktop";
+import { V2Shell } from "@/components/v2/V2Shell";
+import { Hero, Reel, WhyDifferent, Model, WhereTeams, Fleet, WhatWeBuild, HowWeWork, SprintCta, Footer } from "@/components/v2/sections";
 
 export default function Home() {
-  return <Desktop />;
+  return (
+    <V2Shell>
+      <Hero />
+      <Reel />
+      <WhyDifferent />
+      <Model />
+      <WhereTeams />
+      <Fleet />
+      <WhatWeBuild />
+      <HowWeWork />
+      <SprintCta />
+      <Footer />
+    </V2Shell>
+  );
 }
