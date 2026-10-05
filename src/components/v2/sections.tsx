@@ -69,6 +69,7 @@ export function Hero() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="md:col-span-6 lg:col-span-5">
           <p className="text-[18px] leading-[1.5] text-carbon md:text-[20px]">{t(hero.sub, lang)}</p>
           <p className="mt-5 text-[15px] leading-[1.6] text-carbon/65">{t(hero.defense, lang)}</p>
+          <p className="mt-6 font-display text-[16px] font-semibold tracking-tight text-anchor-blue">{t(hero.accountable, lang)}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.6 }} className="flex flex-wrap items-center gap-4 md:col-span-6 md:justify-end lg:col-span-7">
           <a href="#sprint" className="rounded-full bg-carbon px-6 py-3.5 text-[14px] font-semibold text-paper transition-colors hover:bg-anchor-blue">
@@ -186,7 +187,7 @@ export function WhereTeams() {
       <div className="grid gap-12 md:grid-cols-12">
         <Reveal className="md:col-span-6">
           <Label text={t(where.label, lang)} />
-          <h2 className="display-tight mt-6 font-display text-[clamp(36px,4.6vw,64px)] font-semibold">{t(where.headline, lang)}</h2>
+          <h2 className="display-tight mt-6 font-display text-[clamp(36px,4.6vw,64px)] font-semibold"><Lines text={t(where.headline, lang)} /></h2>
           <p className="mt-8 text-[17px] leading-[1.65] text-carbon/80 md:text-[19px]">{t(where.body, lang)}</p>
         </Reveal>
         <Reveal delay={0.1} className="md:col-span-5 md:col-start-8">
@@ -198,10 +199,10 @@ export function WhereTeams() {
               </li>
             ))}
           </ol>
-          <div className="mt-12 grid grid-cols-3 gap-6">
+          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10">
             {where.stats.map((s) => (
               <div key={s.value}>
-                <p className="font-display text-[40px] font-semibold tracking-tight md:text-[52px]">{s.value}</p>
+                <p className="font-display text-[36px] font-semibold tracking-tight md:text-[44px]">{s.value}</p>
                 <p className="meta mt-1 text-stone">{t(s.label, lang)}</p>
               </div>
             ))}
@@ -237,7 +238,16 @@ function TeamCard({ team, index }: { team: FleetTeam; index: number }) {
         <p className="meta text-stone">{t(team.genre, lang)}</p>
       </div>
       <p className="mt-2 text-[14px] text-carbon/70">{team.strengths.map((s) => t(s, lang)).join(" · ")}</p>
-      <p className="meta mt-3 text-stone">{t(team.experience, lang)}</p>
+      <div className="mt-3 flex items-center justify-between">
+        <p className="meta text-stone">
+          {[team.creators != null ? t(fleet.creatorsLabel, lang).replace("{n}", String(team.creators)) : null, team.base, t(team.experience, lang)].filter(Boolean).join(" · ")}
+        </p>
+        {team.slug && (
+          <a href={`/projects/${team.slug}`} className="meta text-carbon underline underline-offset-[5px] decoration-line transition-colors hover:text-anchor-blue">
+            {t(fleet.view, lang)}
+          </a>
+        )}
+      </div>
     </Reveal>
   );
 }
@@ -251,6 +261,7 @@ export function Fleet() {
         <h2 className="display-tight mt-6 font-display text-[clamp(36px,5vw,72px)] font-semibold">
           <Lines text={t(fleet.headline, lang)} />
         </h2>
+        <p className="mt-6 text-[17px] text-carbon/65 md:text-[19px]">{t(fleet.sub, lang)}</p>
       </Reveal>
       <div className="mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2 md:items-start">
         {fleet.teams.map((team, i) => (

@@ -22,6 +22,7 @@ export const hero = {
     en: "We don't just introduce creators. We select the team, shape the product, manage production, and stay through live operations.",
     ja: "クリエイターを紹介するだけの会社ではありません。チームを選び、プロダクトを磨き、制作を管理し、ライブ運営まで共に残ります。",
   },
+  accountable: { ko: "프로젝트의 단일 책임자는 앵커드입니다.", en: "One project. One accountable production partner.", ja: "プロジェクトの単一責任者は Anchored です。" },
   primary: { ko: "Production Sprint 시작하기", en: "Start a Production Sprint", ja: "Production Sprint を始める" },
   secondary: { ko: "앵커드 모델 보기", en: "See the Anchored model", ja: "Anchored モデルを見る" },
 } satisfies Record<string, LText>;
@@ -37,9 +38,9 @@ export const why = {
   label: { ko: "WHY ROBLOX IS DIFFERENT", en: "WHY ROBLOX IS DIFFERENT", ja: "WHY ROBLOX IS DIFFERENT" },
   headline: { ko: "로블록스는 다릅니다.", en: "Roblox is not just another game platform.", ja: "Roblox は、ただのゲームプラットフォームではありません。" },
   body1: {
-    ko: "로블록스는 또 하나의 게임 플랫폼이 아닙니다. 문화, 반복 속도, 플레이어의 기대, 유통 방식이 다릅니다.",
-    en: "Its culture, iteration speed, player expectations, and distribution dynamics are different.",
-    ja: "文化、反復の速度、プレイヤーの期待、流通の力学が異なります。",
+    ko: "로블록스는 게임을 만들어 납품하고 끝나는 플랫폼이 아닙니다. 출시 이후 플레이어를 관찰하고, 업데이트하고, 다시 성장시키는 과정까지가 제품입니다.",
+    en: "Roblox isn't a platform where you build a game, deliver it, and you're done. Watching players after launch, updating, and growing again — that process is the product.",
+    ja: "Roblox はゲームをつくって納品して終わるプラットフォームではありません。ローンチ後にプレイヤーを観察し、更新し、再び成長させる過程までがプロダクトです。",
   },
   body2: {
     ko: "광고는 첫 방문을 만들 수 있습니다. 그 다음을 결정하는 것은 리텐션, 참여, 그리고 끊임없는 개선입니다.",
@@ -71,7 +72,7 @@ export const model = {
 
 export const where = {
   label: { ko: "WHERE THE TEAMS COME FROM", en: "WHERE THE TEAMS COME FROM", ja: "WHERE THE TEAMS COME FROM" },
-  headline: { ko: "팀은 어디서 오는가", en: "Where the teams come from", ja: "チームはどこから来るのか" },
+  headline: { ko: "팀을 로블록스 크리에이터\n생태계 안에서 만듭니다.", en: "We build our teams from inside\nthe Roblox creator ecosystem.", ja: "チームは Roblox クリエイターの\nエコシステムの内側からつくります。" },
   body: {
     ko: "우리는 프로젝트가 생길 때마다 인터넷에서 개발자를 검색해 임시로 붙이지 않습니다. 한국 로블록스 크리에이터 커뮤니티 앵커드 길드에서 사람들이 실제로 만드는 것을 보고, 월간 데모데이에서 발표를 듣고, 시간을 두고 활동을 관찰한 뒤, 검증된 팀만 플릿에 선발합니다.",
     en: "We don't search the internet for developers and attach them to a project ad hoc. In the Anchored Guild — Korea's Roblox creator community — we watch what people actually build, hear them present at monthly Demo Day, observe their work over time, and select only validated teams into the Fleet.",
@@ -85,14 +86,18 @@ export const where = {
     { ko: "플릿 선발", en: "Fleet selection", ja: "Fleet 選抜" },
   ] as LText[],
   stats: [
-    { value: "723", label: { ko: "길드 공식 그룹 멤버", en: "official group members", ja: "公式グループ メンバー" } },
-    { value: "1/mo", label: { ko: "데모데이", en: "Demo Day", ja: "Demo Day" } },
-    { value: "4", label: { ko: "플릿 팀", en: "Fleet teams", ja: "Fleet チーム" } },
+    { value: "723", label: { ko: "크리에이터 커뮤니티 · 공식 그룹", en: "creators in community · official group", ja: "クリエイターコミュニティ・公式グループ" } },
+    { value: "Monthly", label: { ko: "크리에이터 데모데이", en: "creator Demo Day", ja: "クリエイター Demo Day" } },
+    { value: "4", label: { ko: "723명 중 선별된 플릿 팀", en: "Fleet teams selected from 700+", ja: "700+ から選抜した Fleet チーム" } },
+    { value: "Full-cycle", label: { ko: "기획 → 출시 → 라이브옵스", en: "concept → launch → LiveOps", ja: "企画 → ローンチ → ライブオプス" } },
   ],
 };
 
 export interface FleetTeam {
   name: string;
+  slug?: string;
+  creators?: number;
+  base?: string;
   genre: LText;
   status: "LIVE" | "IN DEV";
   strengths: LText[];
@@ -103,11 +108,14 @@ export interface FleetTeam {
 export const fleet = {
   label: { ko: "SELECTED CREATOR ROSTER", en: "SELECTED CREATOR ROSTER", ja: "SELECTED CREATOR ROSTER" },
   headline: { ko: "선별된 팀과 함께합니다.\n열린 마켓이 아닙니다.", en: "Selected teams,\nnot an open marketplace.", ja: "選抜されたチームと。\nオープンな市場ではありません。" },
+  sub: { ko: "로스터는 일부러 작게 유지합니다.", en: "We keep the roster small on purpose.", ja: "ロスターは意図的に小さく保っています。" },
+  creatorsLabel: { ko: "크리에이터 {n}명", en: "{n} creators", ja: "クリエイター{n}名" },
+  view: { ko: "자세히 →", en: "View →", ja: "詳しく →" },
   teams: [
-    { name: "Speed Obby", genre: { ko: "타임어택 오비", en: "Time-attack obby", ja: "タイムアタックオビー" }, status: "LIVE", strengths: [{ ko: "라이브옵스", en: "LiveOps", ja: "ライブオプス" }, { ko: "데이터 기반 난이도 튜닝", en: "Data-driven difficulty tuning", ja: "データ駆動の難易度調整" }], experience: { ko: "출시 · 운영 중", en: "Shipped · in operation", ja: "リリース済み・運営中" } },
-    { name: "Swarmrot", genre: { ko: "전략 PvP", en: "Strategy PvP", ja: "戦略 PvP" }, status: "IN DEV", strengths: [{ ko: "인터넷 밈 IP", en: "Internet-meme IP", ja: "ネットミーム IP" }, { ko: "대규모 전투 설계", en: "Large-scale combat design", ja: "大規模戦闘の設計" }], experience: { ko: "개발 중", en: "In development", ja: "開発中" } },
-    { name: "GOKUI", genre: { ko: "협동 액션", en: "Co-op action", ja: "協力アクション" }, status: "IN DEV", strengths: [{ ko: "오리지널 세계관·캐릭터", en: "Original world & characters", ja: "オリジナル世界観・キャラクター" }, { ko: "협동 전투", en: "Co-op combat", ja: "協力戦闘" }], experience: { ko: "개발 중", en: "In development", ja: "開発中" } },
-    { name: "Telum", genre: { ko: "PvP 전투", en: "PvP combat", ja: "PvP 戦闘" }, status: "IN DEV", strengths: [{ ko: "무기·지형 전투", en: "Weapon & terrain combat", ja: "武器・地形戦闘" }, { ko: "밸런싱", en: "Balancing", ja: "バランス調整" }], experience: { ko: "개발 중", en: "In development", ja: "開発中" } },
+    { name: "Speed Obby", slug: "speed-obby", creators: 4, base: "KR", genre: { ko: "타임어택 오비", en: "Time-attack obby", ja: "タイムアタックオビー" }, status: "LIVE", strengths: [{ ko: "라이브옵스", en: "LiveOps", ja: "ライブオプス" }, { ko: "데이터 기반 난이도 튜닝", en: "Data-driven difficulty tuning", ja: "データ駆動の難易度調整" }], experience: { ko: "출시 · 운영 중", en: "Shipped · in operation", ja: "リリース済み・運営中" } },
+    { name: "Swarmrot", slug: "swarmrot", creators: 5, base: "KR", genre: { ko: "전략 PvP", en: "Strategy PvP", ja: "戦略 PvP" }, status: "IN DEV", strengths: [{ ko: "인터넷 밈 IP", en: "Internet-meme IP", ja: "ネットミーム IP" }, { ko: "대규모 전투 설계", en: "Large-scale combat design", ja: "大規模戦闘の設計" }], experience: { ko: "개발 중", en: "In development", ja: "開発中" } },
+    { name: "GOKUI", slug: "gokui", creators: 4, base: "KR", genre: { ko: "협동 액션", en: "Co-op action", ja: "協力アクション" }, status: "IN DEV", strengths: [{ ko: "오리지널 세계관·캐릭터", en: "Original world & characters", ja: "オリジナル世界観・キャラクター" }, { ko: "협동 전투", en: "Co-op combat", ja: "協力戦闘" }], experience: { ko: "개발 중", en: "In development", ja: "開発中" } },
+    { name: "Telum", slug: "telum", creators: 3, base: "KR", genre: { ko: "PvP 전투", en: "PvP combat", ja: "PvP 戦闘" }, status: "IN DEV", strengths: [{ ko: "무기·지형 전투", en: "Weapon & terrain combat", ja: "武器・地形戦闘" }, { ko: "밸런싱", en: "Balancing", ja: "バランス調整" }], experience: { ko: "개발 중", en: "In development", ja: "開発中" } },
   ] as FleetTeam[],
   pending: { ko: "캡처 준비 중", en: "Capture pending", ja: "キャプチャ準備中" },
 };
