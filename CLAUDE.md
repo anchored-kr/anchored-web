@@ -2,8 +2,8 @@
 
 # Anchored web — project overview
 
-The homepage for Anchored, a **Roblox-native production company** (Seoul). The current
-design (branch `v4-portorocha`) follows Porto Rocha's site grammar: a fixed left sidebar
+The homepage for Anchored, a **Roblox-native production company** (Seoul). The live
+design (v4, since 2026-10-05) follows Porto Rocha's site grammar: a fixed left sidebar
 (wordmark, live Seoul clock, iOS-style stacked project cards) and a main column (hero
 media, "studio updates" masonry feed), dark by default with a light-mode switch, KO/EN/JA.
 
@@ -26,7 +26,7 @@ media, "studio updates" masonry feed), dark by default with a light-mode switch,
   Tailwind v4 only generates utilities for tokens in the **first** `@theme` block of
   `globals.css`.
 - Archived variants: `/os` (retro desktop OS, `src/components/os/`), `/v2` (Finance-theme
-  cards), `/v3` (Kodansha-style editorial).
+  cards), `/v3` (Kodansha-style editorial); `/v2` and `/v3` are `noindex` drafts.
 - Brand: blue `#0072CE`; marks in `public/` (`B_` black / `C_` navy signature, `W_` white symbol).
 - Images: Anchored Guild Roblox captures are `rbxcdn` 180-day URLs — replace with
   self-hosted files before they expire.
