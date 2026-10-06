@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Anchored — Roblox-native production company",
   description:
-    "Anchored finds creators native to Roblox, assembles the right team, and stays responsible from concept to live operations.",
+    "Anchored takes responsibility for Roblox production: we decide what to build, assemble the right team, build, launch and run it until it works — one accountable partner, Seoul.",
   openGraph: {
     title: "Anchored — Roblox-native production company",
     description:
-      "Build with creators native to Roblox. We select the team, shape the product, manage production, and stay through live operations.",
+      "We take responsibility for Roblox production — concept, team, production, launch and LiveOps, with one accountable partner. People may change; the project carries on.",
     type: "website",
     locale: "ko_KR",
     url: "https://anchored.kr",

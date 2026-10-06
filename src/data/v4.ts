@@ -1,7 +1,8 @@
 /**
  * v4 — Porto Rocha grammar: a fixed sidebar (wordmark, live Seoul clock, About card,
  * stacked production cards) + a main column (hero media, studio-updates feed).
- * Production detail copy is reused from desktopItems (ko/en/ja); positioning copy from v2.
+ * Production detail copy is reused from desktopItems (ko/en/ja). Positioning (2026-10-06) is
+ * accountability-led: judgment + production system + responsibility; the creator network is infrastructure.
  */
 import type { LText } from "./i18n";
 import { appById, type DesktopApp } from "./desktopItems";
@@ -21,9 +22,9 @@ export const ui4 = {
   showAll: { ko: "모든 프로젝트 보기", en: "Show all projects", ja: "すべてのプロジェクト" },
   about: { ko: "앵커드 소개", en: "About us", ja: "Anchored について" },
   aboutText: {
-    ko: "앵커드는 로블록스 네이티브 크리에이터와 함께 게임을 만들고 운영하는 프로덕션 컴퍼니입니다. 서울.",
-    en: "Anchored is a Roblox-native production company that builds and runs games with creators native to Roblox. Seoul.",
-    ja: "Anchored は、Roblox ネイティブなクリエイターとゲームをつくり、運営するプロダクションカンパニーです。ソウル。",
+    ko: "앵커드는 로블록스 프로젝트를 끝까지 책임지는 프로덕션 컴퍼니입니다. 무엇을 만들지 정하는 일부터 출시 후 운영까지. 서울.",
+    en: "Anchored is a production company that takes responsibility for Roblox projects — from deciding what to build to running it after launch. Seoul.",
+    ja: "Anchored は、Roblox プロジェクトに最後まで責任を持つプロダクションカンパニーです。何をつくるかの決定から、ローンチ後の運営まで。ソウル。",
   },
   updates: { ko: "스튜디오 소식", en: "Studio updates", ja: "スタジオニュース" },
   showLess: { ko: "접기", en: "Show less", ja: "閉じる" },
@@ -83,15 +84,132 @@ export const productions: Production[] = [
 ];
 export const productionBySlug = (slug: string) => productions.find((p) => p.slug === slug);
 
+/* ── Accountability-led positioning (2026-10-06): we sell judgment + a production system + accountability,
+   not people. Creator network = infrastructure (talent supply, intelligence, scouting). ── */
+export const strategy = {
+  slogan: ["We take", "responsibility", "for Roblox", "production."],
+  questionsLabel: { ko: "책임", en: "Accountability", ja: "責任" },
+  questionsTitle: { ko: "이 질문들은 이제 앵커드의 일입니다", en: "These questions become Anchored's job", ja: "これらの問いは、Anchored の仕事になります" },
+  questionsLead: { ko: "개발자를 구하는 일은 점점 쉬워집니다. 어려운 건 그다음입니다.", en: "Finding a developer keeps getting easier. What comes after doesn't.", ja: "開発者を見つけることは、どんどん簡単になります。難しいのはその先です。" },
+  questions: [
+    { ko: "이 개발자가 정말 잘하는가?", en: "Is this developer actually good?", ja: "この開発者は本当に優秀か？" },
+    { ko: "로블록스 유저를 이해하는가?", en: "Do they understand Roblox players?", ja: "Roblox のユーザーを理解しているか？" },
+    { ko: "3개월 뒤에도 남아 있을까?", en: "Will they still be here in three months?", ja: "3か月後もいてくれるだろうか？" },
+    { ko: "일정이 늦으면 누가 책임지나?", en: "Who's accountable when the schedule slips?", ja: "スケジュールが遅れたら誰が責任を取るのか？" },
+    { ko: "개발자가 나가면 누가 인수인계하나?", en: "Who takes over when someone leaves?", ja: "開発者が抜けたら誰が引き継ぐのか？" },
+    { ko: "출시 후 D1이 15%라면 누가 고치나?", en: "D1 retention is 15% after launch — who fixes it?", ja: "ローンチ後の D1 が15%なら誰が直すのか？" },
+    { ko: "트렌드가 바뀌면 누가 방향을 바꾸나?", en: "The trend shifts — who changes direction?", ja: "トレンドが変わったら誰が方向を変えるのか？" },
+    { ko: "IP를 잘못 써서 문제가 생기면 누가 책임지나?", en: "The IP gets misused — who answers for it?", ja: "IP の扱いで問題が起きたら誰が責任を負うのか？" },
+  ] as LText[],
+  questionsClose: { ko: "앵커드에 맡기면, 이 모든 질문의 답은 앵커드입니다.", en: "Hand it to Anchored, and the answer to every one of them is Anchored.", ja: "Anchored に任せれば、すべての問いの答えは Anchored です。" },
+
+  shiftLabel: { ko: "AI 이후", en: "After AI", ja: "AI 以後" },
+  shiftTitle: { ko: "실행은 싸지고, 판단은 비싸집니다", en: "Execution gets cheaper. Judgment gets scarcer.", ja: "実行は安くなり、判断は高くなる" },
+  shiftBody: {
+    ko: "AI가 제작의 문턱을 낮출수록 무엇을 만들지, 누구와 만들지, 출시 후 무엇을 고칠지가 성패를 가릅니다. AI는 앵커드를 대체하지 않고, 앵커드의 원가를 낮춥니다.",
+    en: "As AI lowers the cost of making, what to build, who to build it with and what to fix after launch decide the outcome. AI doesn't replace Anchored — it lowers our cost of production.",
+    ja: "AI が制作のハードルを下げるほど、何をつくるか、誰とつくるか、ローンチ後に何を直すかが勝敗を分けます。AI は Anchored を置き換えるのではなく、Anchored の原価を下げます。",
+  },
+  cheaperLabel: { ko: "싸지는 것", en: "Getting cheaper", ja: "安くなるもの" },
+  pricierLabel: { ko: "비싸지는 것", en: "Getting scarcer", ja: "高くなるもの" },
+  cheaper: [
+    { label: { ko: "Luau 코딩", en: "Luau coding", ja: "Luau コーディング" }, n: 1 },
+    { label: { ko: "3D 모델링", en: "3D modeling", ja: "3D モデリング" }, n: 1 },
+    { label: { ko: "UI 제작", en: "UI production", ja: "UI 制作" }, n: 1 },
+    { label: { ko: "프로토타입", en: "Prototyping", ja: "プロトタイプ" }, n: 2 },
+    { label: { ko: "단순 PM", en: "Basic project management", ja: "単純な PM" }, n: 1 },
+    { label: { ko: "개발자 찾기", en: "Finding developers", ja: "開発者探し" }, n: 1 },
+  ] as { label: LText; n: number }[],
+  pricier: [
+    { label: { ko: "좋은 개발자 판별", en: "Telling who's good", ja: "優れた開発者の見極め" }, n: 1 },
+    { label: { ko: "게임 콘셉트 판단", en: "Judging the concept", ja: "ゲームコンセプトの判断" }, n: 2 },
+    { label: { ko: "적합한 팀 구성", en: "Composing the right team", ja: "適切なチーム編成" }, n: 1 },
+    { label: { ko: "프로젝트 책임", en: "Owning the project", ja: "プロジェクトの責任" }, n: 2 },
+    { label: { ko: "출시 후 개선 판단", en: "Post-launch decisions", ja: "ローンチ後の改善判断" }, n: 2 },
+    { label: { ko: "성공 경험과 데이터", en: "Track record & data", ja: "成功経験とデータ" }, n: 3 },
+  ] as { label: LText; n: number }[],
+
+  lifecycleLabel: { ko: "제작 방식", en: "How we produce", ja: "制作の進め方" },
+  lifecycleTitle: { ko: "게임을 만드는 회사가 아니라, 게임이 살아남게 하는 회사", en: "Not a company that makes games — one that keeps them alive", ja: "ゲームをつくる会社ではなく、ゲームを生き残らせる会社" },
+  lifecycleBody: {
+    ko: "매일 새 게임이 나오는 플랫폼에서 출시는 중간 지점일 뿐입니다. 숫자가 나올 때까지 고치고 키웁니다.",
+    en: "On a platform where new games ship every day, launch is only the halfway point. We keep fixing and growing until the numbers come.",
+    ja: "毎日新しいゲームが出るプラットフォームでは、ローンチは折り返し地点にすぎません。数字が出るまで直し、育て続けます。",
+  },
+  lifecycle: [
+    { en: "Concept", desc: { ko: "무엇을 만들지 정합니다. 수요와 장르, IP와의 궁합을 봅니다.", en: "Decide what to build — demand, genre and fit with the IP.", ja: "何をつくるかを決めます。需要とジャンル、IP との相性を見ます。" } },
+    { en: "Prototype", desc: { ko: "핵심 재미를 가장 빠르게 확인합니다.", en: "Prove the core fun as fast as possible.", ja: "コアの面白さを最速で確かめます。" } },
+    { en: "Test", desc: { ko: "길드 테스터와 실제 플레이어에게 먼저 보여줍니다.", en: "Put it in front of guild testers and real players first.", ja: "ギルドのテスターと実際のプレイヤーに先に見せます。" } },
+    { en: "Production", desc: { ko: "프로젝트에 맞는 팀을 꾸려 제작합니다. 일정·품질·기술 기준은 앵커드가 관리합니다.", en: "Assemble the team this project needs and build. Anchored owns schedule, quality and technical standards.", ja: "プロジェクトに合うチームを編成して制作します。スケジュール・品質・技術基準は Anchored が管理します。" } },
+    { en: "Launch", desc: { ko: "출시와 첫 유입을 설계합니다.", en: "Plan the release and the first wave of players.", ja: "リリースと最初の流入を設計します。" } },
+    { en: "Analytics", desc: { ko: "리텐션과 이탈 지점을 데이터로 읽습니다.", en: "Read retention and drop-off in the data.", ja: "リテンションと離脱ポイントをデータで読みます。" } },
+    { en: "LiveOps", desc: { ko: "업데이트, 이벤트, 시즌으로 돌아올 이유를 만듭니다.", en: "Give players reasons to return — updates, events, seasons.", ja: "アップデート、イベント、シーズンで戻ってくる理由をつくります。" } },
+    { en: "Revamp", desc: { ko: "숫자가 나쁘면 고칩니다. 루프와 난이도, 필요하면 방향까지.", en: "If the numbers are bad, fix it — loops, difficulty, even direction.", ja: "数字が悪ければ直します。ループや難易度、必要なら方向性まで。" } },
+    { en: "Scale", desc: { ko: "되는 게임은 더 키웁니다.", en: "Grow what works.", ja: "うまくいくゲームはさらに伸ばします。" } },
+  ],
+  launchIndex: 4,
+  launchNote: { ko: "출시는 중간 지점", en: "Launch is the halfway point", ja: "ローンチは折り返し地点" },
+
+  filmLabel: { ko: "프로덕션 컴퍼니", en: "Production company", ja: "プロダクションカンパニー" },
+  filmTitle: { ko: "영화 제작사처럼 일합니다", en: "We work like a film production company", ja: "映画の制作会社のように働きます" },
+  filmBody: {
+    ko: "영화 제작사는 모든 배우와 스태프를 정직원으로 두지 않습니다. 작품마다 감독과 배우, VFX를 꾸리지만 영화는 제작사의 이름으로 나갑니다. 앵커드도 게임마다 팀을 꾸리고, 결과는 앵커드가 책임집니다.",
+    en: "A production company doesn't keep every actor and crew member on staff. It assembles a director, cast and VFX for each film — and the film still carries its name. Anchored assembles a team for each game and answers for the result.",
+    ja: "映画の制作会社は、すべての俳優やスタッフを社員として抱えてはいません。作品ごとに監督やキャスト、VFX を編成しても、映画は制作会社の名前で世に出ます。Anchored もゲームごとにチームを編成し、結果に責任を持ちます。",
+  },
+  org: [
+    { ko: "앵커드", en: "Anchored", ja: "Anchored" },
+    { ko: "게임 디렉터 · 프로듀서", en: "Game director · Producer", ja: "ゲームディレクター・プロデューサー" },
+    { ko: "로블록스 네이티브 크리에이터", en: "Roblox-native creators", ja: "Roblox ネイティブなクリエイター" },
+  ] as LText[],
+  orgCrew: [
+    { ko: "AI", en: "AI", ja: "AI" },
+    { ko: "개발", en: "Developers", ja: "開発" },
+    { ko: "아트", en: "Artists", ja: "アート" },
+    { ko: "UI", en: "UI", ja: "UI" },
+    { ko: "VFX", en: "VFX", ja: "VFX" },
+  ] as LText[],
+  orgNote: { ko: "팀 구성은 게임마다 달라집니다", en: "The team changes with every game", ja: "チーム編成はゲームごとに変わります" },
+
+  optionsLabel: { ko: "포지셔닝", en: "Positioning", ja: "ポジショニング" },
+  optionsTitle: { ko: "다섯 번째 선택지", en: "The fifth option", ja: "5つ目の選択肢" },
+  optionsBody: { ko: "로블록스 게임을 만들고 싶은 고객 앞에는 이런 선택지가 있습니다.", en: "If you want a Roblox game made, these are your options.", ja: "Roblox のゲームをつくりたいとき、選択肢はこうなります。" },
+  options: [
+    { who: { ko: "전통 에이전시", en: "Traditional agency", ja: "従来の代理店" }, says: { ko: "“로블록스 캠페인 만들어드릴게요.”", en: "“We'll make you a Roblox campaign.”", ja: "「Roblox キャンペーンをつくります。」" } },
+    { who: { ko: "로블록스 스튜디오", en: "Roblox studio", ja: "Roblox スタジオ" }, says: { ko: "“게임 만들어드릴게요.”", en: "“We'll build you a game.”", ja: "「ゲームをつくります。」" } },
+    { who: { ko: "크리에이터", en: "Creator", ja: "クリエイター" }, says: { ko: "“제가 만들어드릴게요.”", en: "“I'll build it for you.”", ja: "「僕がつくります。」" } },
+    { who: { ko: "AI", en: "AI", ja: "AI" }, says: { ko: "“직접 만드세요.”", en: "“Build it yourself.”", ja: "「自分でつくってください。」" } },
+    { who: { ko: "앵커드", en: "Anchored", ja: "Anchored" }, says: { ko: "무엇을 만들지 정하고, 가장 맞는 팀을 꾸리고, 만들고, 출시하고, 성과가 날 때까지 운영합니다.", en: "We decide what to build, assemble the best team, build it, launch it, and run it until it works.", ja: "何をつくるかを決め、最適なチームを編成し、つくり、ローンチし、成果が出るまで運営します。" } },
+  ],
+
+  recordLabel: { ko: "기록", en: "Track record", ja: "記録" },
+  recordTitle: { ko: "프로젝트를 할수록 판단이 정확해집니다", en: "Every project sharpens our judgment", ja: "プロジェクトを重ねるほど、判断は正確になります" },
+  recordBody: {
+    ko: "누가 어떤 장르에 강한지, 일정과 소통은 어땠는지, AI를 얼마나 잘 쓰는지. 프로젝트마다 기록이 쌓이고, 쌓일수록 어떤 조합의 성공 확률이 높은지 알게 됩니다.",
+    en: "Who's strong in which genre, how they handled deadlines and communication, how well they use AI — every project adds to the record, and the record shows which team gives a project its best odds.",
+    ja: "誰がどのジャンルに強いか、スケジュールやコミュニケーションはどうだったか、AI をどれだけ使いこなすか。プロジェクトごとに記録が積み重なり、どの組み合わせが成功しやすいかが見えてきます。",
+  },
+  record: [
+    { head: { ko: "기록", en: "Record", ja: "記録" }, text: { ko: "장르 강점 · 일정 신뢰도 · 소통 · AI 활용", en: "Genre strengths · deadline reliability · communication · AI use", ja: "ジャンルの強み・納期の信頼性・コミュニケーション・AI 活用" } },
+    { head: { ko: "판단", en: "Judge", ja: "判断" }, text: { ko: "이 프로젝트에는 이 조합", en: "This project, this team", ja: "このプロジェクトには、この組み合わせ" } },
+    { head: { ko: "제안", en: "Propose", ja: "提案" }, text: { ko: "Brief → 컨셉 · 예산 · 팀 · 일정 · 벤치마크", en: "Brief → concept · budget · team · timeline · benchmarks", ja: "Brief → コンセプト・予算・チーム・スケジュール・ベンチマーク" } },
+  ] as { head: LText; text: LText }[],
+};
+
 /* ── Home feed (Studio updates) ── */
 export type FeedMedia =
   | { kind: "image"; src: string; caption: string }
   | { kind: "icons"; slugs: string[] }
   | { kind: "poster"; slug: string }
   | { kind: "brand" }
-  | { kind: "steps" }
   | { kind: "words" }
-  | { kind: "cta" };
+  | { kind: "cta" }
+  | { kind: "checklist" }
+  | { kind: "shift" }
+  | { kind: "lifecycle" }
+  | { kind: "org" }
+  | { kind: "options" }
+  | { kind: "record" };
 
 export interface FeedItem {
   label: LText | string;
@@ -103,60 +221,92 @@ export interface FeedItem {
 
 export const feed: FeedItem[] = [
   {
-    label: "2026.10",
-    title: { ko: "앵커드 홈페이지를 새로 열었습니다", en: "Anchored has a new home", ja: "Anchored のウェブサイトを刷新しました" },
-    body: { ko: "로블록스 네이티브 프로덕션 컴퍼니로서의 앵커드를 소개합니다. 작품, 크리에이터, 일하는 방식을 한곳에 모았습니다.", en: "Introducing Anchored as a Roblox-native production company — our productions, our creators and how we work, in one place.", ja: "Roblox ネイティブなプロダクションカンパニーとしての Anchored を紹介します。作品、クリエイター、働き方をひとつにまとめました。" },
-    media: { kind: "brand" },
-    href: "/about",
-  },
-  {
-    label: { ko: "제작 중", en: "In production", ja: "制作中" },
-    title: { ko: "플릿 세 팀이 신작을 만들고 있습니다", en: "Three Fleet teams are in production", ja: "Fleet の3チームが新作を制作中です" },
-    body: { ko: "GOKUI · Swarmrot · Telum. 앵커드 길드에서 선발한 팀들이 앵커드 프로듀서와 함께 제작하고 있습니다.", en: "GOKUI · Swarmrot · Telum — teams selected from the Anchored Guild, producing with an Anchored producer.", ja: "GOKUI · Swarmrot · Telum。Anchored Guild から選抜されたチームが、Anchored のプロデューサーと共に制作しています。" },
-    media: { kind: "icons", slugs: ["gokui", "swarmrot", "telum"] },
-    href: "/all",
-  },
-  {
-    label: { ko: "운영 중", en: "Live", ja: "運営中" },
-    title: { ko: "Speed Obby, 출시 후 운영 중", en: "Speed Obby is live", ja: "Speed Obby、リリース後も運営中" },
-    body: { ko: "기록으로 경쟁하는 타임어택 오비. 리텐션과 스테이지 난이도를 데이터로 검증하며 라이브옵스로 운영합니다.", en: "A record-chasing time-attack obby, run as LiveOps — retention and stage difficulty validated with play data.", ja: "記録で競うタイムアタックオビー。リテンションと難易度をデータで検証しながらライブオプスで運営しています。" },
-    media: { kind: "poster", slug: "speed-obby" },
-    href: "/projects/speed-obby",
-  },
-  {
-    label: { ko: "매월", en: "Monthly", ja: "毎月" },
-    title: { ko: "앵커드 길드 데모데이", en: "Anchored Guild Demo Day", ja: "Anchored Guild Demo Day" },
-    body: { ko: "매달 크리에이터들이 지금 만들고 있는 것을 발표하고 피드백을 받습니다. 플릿은 이 무대에서 시작됩니다.", en: "Every month, creators present what they're building and get feedback. The Fleet starts on this stage.", ja: "毎月、クリエイターがいまつくっているものを発表し、フィードバックを受けます。Fleet はこの舞台から始まります。" },
-    media: { kind: "image", ...captures.hall2 },
-    href: "/projects/anchored-demo-day",
-  },
-  {
     label: { ko: "메시지", en: "Message", ja: "メッセージ" },
-    title: { ko: "로블록스 안에서 자란 팀과 만듭니다", en: "We build with creators native to Roblox", ja: "Roblox の中で育ったチームとつくります" },
-    body: { ko: "좋은 로블록스 게임은 납품으로 끝나지 않습니다. 플레이어를 이해하고, 빠르게 배우고, 계속 변하는 과정까지가 제품입니다. 앵커드는 그 환경 안에서 자란 크리에이터를 찾고, 팀을 조립하고, 끝까지 프로듀싱합니다.", en: "A good Roblox game doesn't end at delivery — understanding players, learning fast and changing constantly is the product. Anchored finds the creators who grew up in that environment, assembles the team, and produces all the way through.", ja: "良い Roblox ゲームは納品で終わりません。プレイヤーを理解し、速く学び、変わり続けるプロセスまでが製品です。Anchored はその環境で育ったクリエイターを見つけ、チームを編成し、最後までプロデュースします。" },
+    title: { ko: "로블록스 프로젝트, 앵커드가 책임집니다", en: "We take responsibility for Roblox production", ja: "Roblox プロジェクトは、Anchored が責任を持ちます" },
+    body: {
+      ko: "무엇을 만들지 정하고, 가장 맞는 팀을 꾸리고, 만들고, 출시하고, 성과가 날 때까지 운영합니다. 프로젝트의 단일 책임자는 앵커드이고, 사람이 바뀌어도 프로젝트는 계속됩니다.",
+      en: "We decide what to build, assemble the best team, build it, launch it and run it until it works. Anchored is the single accountable party — people may change, the project carries on.",
+      ja: "何をつくるかを決め、最適なチームを編成し、つくり、ローンチし、成果が出るまで運営します。プロジェクトの単一責任者は Anchored。人が入れ替わっても、プロジェクトは続きます。",
+    },
     media: { kind: "words" },
     href: "/about",
   },
   {
+    label: strategy.questionsLabel,
+    title: strategy.questionsTitle,
+    body: strategy.questionsLead,
+    media: { kind: "checklist" },
+    href: "/about#accountability",
+  },
+  {
+    label: { ko: "제작 중", en: "In production", ja: "制作中" },
+    title: { ko: "앵커드가 책임지는 세 프로젝트가 제작 중입니다", en: "Three Anchored productions are underway", ja: "Anchored が責任を持つ3つのプロジェクトが制作中です" },
+    body: { ko: "GOKUI · Swarmrot · Telum. 프로젝트마다 맞는 팀을 꾸리고, 앵커드 프로듀서가 끝까지 붙습니다.", en: "GOKUI · Swarmrot · Telum — each with a team assembled for it and an Anchored producer through to the end.", ja: "GOKUI · Swarmrot · Telum。プロジェクトごとにチームを編成し、Anchored のプロデューサーが最後まで伴走します。" },
+    media: { kind: "icons", slugs: ["gokui", "swarmrot", "telum"] },
+    href: "/all",
+  },
+  {
+    label: strategy.shiftLabel,
+    title: strategy.shiftTitle,
+    body: strategy.shiftBody,
+    media: { kind: "shift" },
+    href: "/about#ai",
+  },
+  {
+    label: strategy.lifecycleLabel,
+    title: strategy.lifecycleTitle,
+    body: strategy.lifecycleBody,
+    media: { kind: "lifecycle" },
+    href: "/about#how",
+  },
+  {
+    label: { ko: "운영 중", en: "Live", ja: "運営中" },
+    title: { ko: "Speed Obby — 출시 후가 본편입니다", en: "Speed Obby — launch is where the work starts", ja: "Speed Obby — ローンチ後が本番です" },
+    body: { ko: "기록으로 경쟁하는 타임어택 오비. 리텐션과 난이도를 데이터로 읽고, 이벤트와 시즌으로 계속 고칩니다.", en: "A record-chasing time-attack obby. We read retention and difficulty in the data and keep improving it with events and seasons.", ja: "記録で競うタイムアタックオビー。リテンションと難易度をデータで読み、イベントとシーズンで改善を続けています。" },
+    media: { kind: "poster", slug: "speed-obby" },
+    href: "/projects/speed-obby",
+  },
+  {
+    label: strategy.optionsLabel,
+    title: strategy.optionsTitle,
+    body: strategy.optionsBody,
+    media: { kind: "options" },
+    href: "/about#positioning",
+  },
+  {
+    label: strategy.filmLabel,
+    title: strategy.filmTitle,
+    body: strategy.filmBody,
+    media: { kind: "org" },
+    href: "/about#positioning",
+  },
+  {
+    label: strategy.recordLabel,
+    title: strategy.recordTitle,
+    body: strategy.recordBody,
+    media: { kind: "record" },
+    href: "/about#record",
+  },
+  {
+    label: "Production Sprint",
+    title: { ko: "Brief를 주시면, 무엇을 어떻게 만들지 제안합니다", en: "Give us a brief. We'll tell you what to build and how.", ja: "ブリーフをいただければ、何をどうつくるかを提案します" },
+    body: { ko: "컨셉, 예산, 팀, 일정, 벤치마크를 제안합니다. 본 제작으로 이어지면 스프린트 비용은 제작비에서 차감합니다.", en: "Concept, budget, team, timeline and benchmarks. If it proceeds to production, the sprint fee is credited.", ja: "コンセプト、予算、チーム、スケジュール、ベンチマークを提案します。本制作に進む場合、スプリント費用は制作費から差し引きます。" },
+    media: { kind: "cta" },
+    href: "mailto:contact@anchored.kr?subject=Production%20Sprint",
+  },
+  {
     label: "Anchored Guild",
-    title: { ko: "723명의 크리에이터가 모인 곳", en: "723 creators, one community", ja: "723人のクリエイターが集まる場所" },
-    body: { ko: "한국 로블록스 크리에이터 커뮤니티. 사람들이 실제로 만드는 것을 보고, 시간을 두고 활동을 관찰합니다. 우리가 함께 일하는 모든 팀은 이 안에서 나옵니다.", en: "Korea's Roblox creator community. We watch what people actually build and observe their work over time — every team we work with comes from inside it.", ja: "韓国の Roblox クリエイターコミュニティ。実際につくるものを見て、時間をかけて活動を観察します。私たちが共に働くチームはすべてこの中から生まれます。" },
+    title: { ko: "인재 공급망이자 정보망", en: "Talent supply and intelligence network", ja: "人材の供給網であり、情報網" },
+    body: { ko: "723명의 한국 로블록스 크리에이터 커뮤니티. 실제로 만드는 사람들을 시간을 두고 보고, 로블록스의 변화를 가장 먼저 듣습니다. 커뮤니티는 앵커드의 상품이 아니라 인프라입니다.", en: "Korea's Roblox creator community, 723 strong. We watch people actually build over time and hear about Roblox's shifts first. The community isn't our product — it's our infrastructure.", ja: "723人の韓国 Roblox クリエイターコミュニティ。実際につくる人を時間をかけて見ており、Roblox の変化をいち早く耳にします。コミュニティは Anchored の商品ではなく、インフラです。" },
     media: { kind: "image", ...captures.hall },
     href: "/projects/anchored-guild",
   },
   {
-    label: { ko: "제작 방식", en: "How we produce", ja: "制作の進め方" },
-    title: { ko: "발굴에서 운영까지, 다섯 단계", en: "Five steps, from finding to operating", ja: "発掘から運営まで、5つのステップ" },
-    body: model.continuity,
-    media: { kind: "steps" },
-    href: "/about#how",
-  },
-  {
-    label: "Production Sprint",
-    title: sprint.headline,
-    body: { ko: "팀, 컨셉, 제작 계획을 제안합니다. 본 제작으로 이어지면 스프린트 비용은 제작비에서 차감합니다.", en: "We'll propose the team, concept and production plan. If it proceeds to production, the sprint fee is credited.", ja: "チーム、コンセプト、制作計画を提案します。本制作に進む場合、スプリント費用は制作費から差し引きます。" },
-    media: { kind: "cta" },
-    href: "mailto:contact@anchored.kr?subject=Production%20Sprint",
+    label: { ko: "매월", en: "Monthly", ja: "毎月" },
+    title: { ko: "매달, 크리에이터를 결과물로 봅니다", en: "Every month, we judge creators by what they ship", ja: "毎月、クリエイターを成果物で見ます" },
+    body: { ko: "앵커드 길드 데모데이에서 크리에이터들이 지금 만드는 것을 발표합니다. 이력서가 아니라 결과물로 판단합니다.", en: "At Anchored Guild Demo Day, creators present what they're building now. We judge by the work, not the résumé.", ja: "Anchored Guild の Demo Day で、クリエイターがいまつくっているものを発表します。履歴書ではなく成果物で判断します。" },
+    media: { kind: "image", ...captures.hall2 },
+    href: "/projects/anchored-demo-day",
   },
   {
     label: { ko: "브랜드 & 커뮤니티", en: "Brand & community", ja: "ブランド & コミュニティ" },
@@ -166,25 +316,11 @@ export const feed: FeedItem[] = [
     href: "/projects/brand-campaigns",
   },
   {
-    label: "2026",
-    title: { ko: "Korea Roblox Developer Meetup", en: "Korea Roblox Developer Meetup", ja: "Korea Roblox Developer Meetup" },
-    body: { ko: "한국 로블록스 생태계의 크리에이터·스튜디오·플랫폼·파트너를 잇는 오프라인 밋업을 준비하고 있습니다.", en: "An offline meetup connecting creators, studios, platforms and partners in Korea's Roblox ecosystem — in preparation.", ja: "韓国 Roblox エコシステムのクリエイター・スタジオ・プラットフォーム・パートナーをつなぐオフラインミートアップを準備中です。" },
-    media: { kind: "poster", slug: "korea-roblox-developer-meetup-2026" },
-    href: "/projects/korea-roblox-developer-meetup-2026",
-  },
-  {
     label: { ko: "성장 지수", en: "Growth Index", ja: "Growth Index" },
-    title: { ko: "크리에이터의 성장을 다섯 축으로 봅니다", en: "We read creator growth on five axes", ja: "クリエイターの成長を5つの軸で見ます" },
-    body: { ko: "CODE · BUILD · SYSTEM · TEAM · PLATFORM. 누구와 어떻게 일할지를 감이 아니라 기준으로 판단합니다.", en: "CODE · BUILD · SYSTEM · TEAM · PLATFORM — deciding who to work with, and how, by a standard rather than a hunch.", ja: "CODE · BUILD · SYSTEM · TEAM · PLATFORM。誰とどう働くかを、勘ではなく基準で判断します。" },
+    title: { ko: "누가 잘하는지 판별하는 기준", en: "A standard for telling who's actually good", ja: "誰が優れているかを見極める基準" },
+    body: { ko: "CODE · BUILD · SYSTEM · TEAM · PLATFORM. 사람을 아는 것보다, 누가 무엇을 잘하는지 판별하는 기준이 중요합니다.", en: "CODE · BUILD · SYSTEM · TEAM · PLATFORM — knowing people matters less than knowing who's good at what.", ja: "CODE · BUILD · SYSTEM · TEAM · PLATFORM。人を知っていることより、誰が何に強いかを見極める基準が大切です。" },
     media: { kind: "poster", slug: "creator-growth-index" },
     href: "/projects/creator-growth-index",
-  },
-  {
-    label: "Winter 2026",
-    title: { ko: "Anchored School 윈터 캠프", en: "Anchored School Winter Camp", ja: "Anchored School ウィンターキャンプ" },
-    body: { ko: "가능성 있는 신진 크리에이터를 ‘게임을 끝까지 출시하는 실력’으로 키우는 인큐베이션 프로그램을 준비하고 있습니다.", en: "An incubation program turning promising new creators into people who ship — in preparation.", ja: "可能性のある新人クリエイターを「最後までリリースする力」へ育てるインキュベーションプログラムを準備中です。" },
-    media: { kind: "poster", slug: "winter-roblox-camp-2026" },
-    href: "/projects/winter-roblox-camp-2026",
   },
 ];
 
@@ -193,8 +329,8 @@ export const about4 = {
   studioLabel: { ko: "우리 스튜디오", en: "Our Studio", ja: "私たちのスタジオ" },
   studio: [
     { ko: "앵커드는 서울의 로블록스 네이티브 프로덕션 컴퍼니입니다.", en: "Anchored is a Roblox-native production company based in Seoul.", ja: "Anchored は、ソウルを拠点とする Roblox ネイティブなプロダクションカンパニーです。" },
-    { ko: "로블록스 안에서 자란 크리에이터를 찾고, 프로젝트에 맞는 팀을 조립하고, 기획부터 출시 이후 운영까지 책임집니다.", en: "We find creators native to Roblox, assemble the right team for each project, and stay responsible from concept through live operations.", ja: "Roblox の中で育ったクリエイターを見つけ、プロジェクトに合うチームを編成し、企画からローンチ後の運営まで責任を持ちます。" },
-    { ko: "프로젝트의 단일 책임자는 앵커드입니다. 연속성은 개인 계약자가 아니라 앵커드에 있습니다.", en: "One project, one accountable production partner. Continuity stays with Anchored — not with an individual contractor.", ja: "プロジェクトの単一責任者は Anchored です。継続性は個人契約者ではなく Anchored にあります。" },
+    { ko: "우리는 로블록스 프로젝트를 책임집니다. 무엇을 만들지 정하고, 가장 맞는 팀을 꾸리고, 만들고, 출시하고, 성과가 날 때까지 운영합니다.", en: "We take responsibility for Roblox projects. We decide what to build, assemble the best team, build it, launch it, and run it until it works.", ja: "私たちは Roblox プロジェクトに責任を持ちます。何をつくるかを決め、最適なチームを編成し、つくり、ローンチし、成果が出るまで運営します。" },
+    { ko: "프로젝트의 단일 책임자는 앵커드입니다. 사람이 바뀌어도 프로젝트는 계속되고, 연속성은 개인 계약자가 아니라 앵커드에 있습니다.", en: "Anchored is the single accountable party. People may change; the project carries on — continuity stays with Anchored, not with an individual contractor.", ja: "プロジェクトの単一責任者は Anchored です。人が入れ替わってもプロジェクトは続き、継続性は個人契約者ではなく Anchored にあります。" },
   ] as LText[],
   contactLabel: { ko: "연락처", en: "Contact", ja: "お問い合わせ" },
   contact: [
@@ -253,7 +389,6 @@ export const about4 = {
     { title: "Anchored School Winter Camp", who: { ko: "신진 로블록스 크리에이터", en: "Emerging Roblox creators", ja: "新人 Roblox クリエイター" }, when: "Winter 2026", where: { ko: "준비 중", en: "In preparation", ja: "準備中" }, href: "/projects/winter-roblox-camp-2026" },
   ],
   howLabel: { ko: "제작 방식", en: "How We Produce", ja: "制作の進め方" },
-  steps: model.steps,
   continuity: model.continuity,
   fleetLabel: { ko: "플릿", en: "Fleet", ja: "Fleet" },
   fleetNote: { ko: "앵커드 길드에서 선발한 로블록스 네이티브 팀. 로스터는 일부러 작게 유지합니다.", en: "Roblox-native teams selected from the Anchored Guild. We keep the roster small on purpose.", ja: "Anchored Guild から選抜した Roblox ネイティブなチーム。ロスターは意図的に小さく保っています。" },
@@ -264,10 +399,17 @@ export const about4 = {
     { value: "723", label: { ko: "앵커드 길드 크리에이터", en: "Anchored Guild creators", ja: "Anchored Guild のクリエイター" } },
     { value: { ko: "매월", en: "Monthly", ja: "毎月" }, label: { ko: "데모데이", en: "Demo Day", ja: "Demo Day" } },
     { value: "4", label: { ko: "선발된 플릿 팀", en: "Selected Fleet teams", ja: "選抜された Fleet チーム" } },
-    { value: "Full cycle", label: { ko: "기획 → 출시 → 라이브옵스", en: "Concept → launch → LiveOps", ja: "企画 → ローンチ → ライブオプス" } },
+    { value: "Full cycle", label: { ko: "컨셉에서 스케일까지", en: "Concept to scale", ja: "コンセプトからスケールまで" } },
   ],
   startLabel: "Production Sprint",
-  startTitle: sprint.headline,
-  startSteps: sprint.steps,
+  startTitle: { ko: "Brief를 주시면, 무엇을 어떻게 만들지 제안합니다.", en: "Give us a brief. We'll tell you what to build and how.", ja: "ブリーフをいただければ、何をどうつくるかを提案します。" },
+  startSteps: [
+    { ko: "게임 컨셉", en: "Game concept", ja: "ゲームコンセプト" },
+    { ko: "예산 범위", en: "Budget range", ja: "予算レンジ" },
+    { ko: "팀 구성", en: "Team", ja: "チーム編成" },
+    { ko: "일정", en: "Timeline", ja: "スケジュール" },
+    { ko: "벤치마크", en: "Benchmarks", ja: "ベンチマーク" },
+    { ko: "라이브옵스 방향", en: "LiveOps direction", ja: "ライブオプスの方向性" },
+  ] as LText[],
   startNote: sprint.note,
 };

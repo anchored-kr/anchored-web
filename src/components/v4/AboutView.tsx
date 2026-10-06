@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { useLang } from "@/components/os/LangContext";
 import { t } from "@/data/i18n";
-import { about4, captures, productionBySlug, statusText } from "@/data/v4";
+import { about4, captures, productionBySlug, statusText, strategy } from "@/data/v4";
 import { HeroReel } from "./HomeView";
 import { AppIcon } from "./icons";
 import { Pill } from "./controls";
+import { Checklist, LifecycleChain, Options, OrgDiagram, RecordSteps, Shift } from "./widgets";
 
 function Card({ label, children, className = "", id }: { label: string; children: ReactNode; className?: string; id?: string }) {
   return (
@@ -80,27 +81,13 @@ export function AboutView() {
           </dl>
         </Card>
 
-        {/* Capabilities with category tabs (Porto Rocha "Clients" card) */}
-        <Card label={t(about4.capLabel, lang)} className="xl:col-span-2">
-          <div className="flex flex-wrap gap-x-4 gap-y-1" role="tablist">
-            {[t(about4.capAll, lang), ...about4.capabilities.map((c) => t(c.tab, lang))].map((label, i) => (
-              <button
-                key={label}
-                type="button"
-                role="tab"
-                aria-selected={tab === i - 1}
-                onClick={() => setTab(i - 1)}
-                className={`transition-colors ${tab === i - 1 ? "text-v-fg" : "text-v-fg2 hover:text-v-fg"}`}
-              >
-                {label}
-              </button>
-            ))}
+        {/* Accountability — the questions a client no longer has to manage */}
+        <Card id="accountability" label={t(strategy.questionsLabel, lang)} className="xl:col-span-2">
+          <p className="v4-title max-w-[640px] text-v-fg">{t(strategy.questionsTitle, lang)}</p>
+          <p className="mt-2 text-v-fg2">{t(strategy.questionsLead, lang)}</p>
+          <div className="mt-5">
+            <Checklist wide />
           </div>
-          <ul className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3">
-            {caps.map((c) => (
-              <li key={t(c, "en")} className="break-inside-avoid text-v-fg">{t(c, lang)}</li>
-            ))}
-          </ul>
         </Card>
 
         {/* For creators (Porto Rocha "Current openings") */}
@@ -114,14 +101,20 @@ export function AboutView() {
           </ul>
         </Card>
 
-        {/* How we produce */}
+        {/* How we produce — concept to scale; launch is the halfway point */}
         <Card id="how" label={t(about4.howLabel, lang)} className="xl:col-span-2">
-          <ol className="border-t border-v-line">
-            {about4.steps.map((s, i) => (
-              <li key={s.en} className="grid gap-1 border-b border-v-line py-3 sm:grid-cols-[180px_1fr] sm:gap-6">
+          <p className="v4-title max-w-[640px] text-v-fg">{t(strategy.lifecycleTitle, lang)}</p>
+          <p className="mt-2 max-w-[640px] text-v-fg2">{t(strategy.lifecycleBody, lang)}</p>
+          <div className="mt-5">
+            <LifecycleChain />
+          </div>
+          <ol className="mt-5 border-t border-v-line">
+            {strategy.lifecycle.map((s, i) => (
+              <li key={s.en} className="grid gap-1 border-b border-v-line py-2.5 sm:grid-cols-[180px_1fr] sm:gap-6">
                 <p className="text-v-fg">
-                  <span className="mr-3 tabular-nums text-v-fg2">0{i + 1}</span>
-                  {s.en} <span className="text-v-fg2">— {t(s.title, lang)}</span>
+                  <span className="mr-3 tabular-nums text-v-fg2">{String(i + 1).padStart(2, "0")}</span>
+                  {s.en}
+                  {i === strategy.launchIndex && <span className="ml-2 rounded-full bg-v-pill px-2 py-0.5 text-[11px] text-v-fg2">{t(strategy.launchNote, lang)}</span>}
                 </p>
                 <p className="leading-[1.5] text-v-fg2">{t(s.desc, lang)}</p>
               </li>
@@ -151,6 +144,45 @@ export function AboutView() {
           </ul>
         </Card>
 
+        {/* Positioning — the fifth option */}
+        <Card id="positioning" label={t(strategy.optionsLabel, lang)} className="xl:col-span-2">
+          <p className="v4-title text-v-fg">{t(strategy.optionsTitle, lang)}</p>
+          <p className="mt-2 text-v-fg2">{t(strategy.optionsBody, lang)}</p>
+          <div className="mt-5 max-w-[720px]">
+            <Options />
+          </div>
+        </Card>
+
+        {/* Figures */}
+        <Card label={t(about4.figuresLabel, lang)}>
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-6 pt-3">
+            {about4.figures.map((f) => (
+              <div key={t(f.label, "en")}>
+                <dt className="sr-only">{t(f.label, lang)}</dt>
+                <dd className="text-[30px] leading-[1] tracking-[-0.02em] text-v-fg">{t(f.value, lang)}</dd>
+                <dd className="mt-2 text-v-fg2">{t(f.label, lang)}</dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
+        {/* After AI — execution gets cheaper, judgment gets scarcer */}
+        <Card id="ai" label={t(strategy.shiftLabel, lang)} className="xl:col-span-2">
+          <p className="v4-title text-v-fg">{t(strategy.shiftTitle, lang)}</p>
+          <p className="mt-2 max-w-[720px] text-v-fg2">{t(strategy.shiftBody, lang)}</p>
+          <div className="mt-5">
+            <Shift wide />
+          </div>
+        </Card>
+
+        {/* Track record — the moat */}
+        <Card id="record" label={t(strategy.recordLabel, lang)}>
+          <p className="text-[18px] leading-[1.3] text-v-fg">{t(strategy.recordTitle, lang)}</p>
+          <p className="mt-2 leading-[1.5] text-v-fg2">{t(strategy.recordBody, lang)}</p>
+          <div className="mt-5">
+            <RecordSteps />
+          </div>
+        </Card>
+
         {/* Fleet */}
         <Card label={t(about4.fleetLabel, lang)} className="xl:col-span-2">
           <p className="max-w-[560px] text-v-fg2">{t(about4.fleetNote, lang)}</p>
@@ -177,18 +209,38 @@ export function AboutView() {
           </ul>
         </Card>
 
-        {/* Figures */}
-        <Card label={t(about4.figuresLabel, lang)}>
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-6 pt-3">
-            {about4.figures.map((f) => (
-              <div key={t(f.label, "en")}>
-                <dt className="sr-only">{t(f.label, lang)}</dt>
-                <dd className="text-[30px] leading-[1] tracking-[-0.02em] text-v-fg">{t(f.value, lang)}</dd>
-                <dd className="mt-2 text-v-fg2">{t(f.label, lang)}</dd>
-              </div>
-            ))}
-          </dl>
+        {/* Production company — film analogy */}
+        <Card label={t(strategy.filmLabel, lang)}>
+          <p className="text-[18px] leading-[1.3] text-v-fg">{t(strategy.filmTitle, lang)}</p>
+          <p className="mt-2 leading-[1.5] text-v-fg2">{t(strategy.filmBody, lang)}</p>
+          <div className="mt-5">
+            <OrgDiagram />
+          </div>
         </Card>
+
+        {/* Capabilities with category tabs (Porto Rocha "Clients" card) */}
+        <Card label={t(about4.capLabel, lang)} className="xl:col-span-3">
+          <div className="flex flex-wrap gap-x-4 gap-y-1" role="tablist">
+            {[t(about4.capAll, lang), ...about4.capabilities.map((c) => t(c.tab, lang))].map((label, i) => (
+              <button
+                key={label}
+                type="button"
+                role="tab"
+                aria-selected={tab === i - 1}
+                onClick={() => setTab(i - 1)}
+                className={`transition-colors ${tab === i - 1 ? "text-v-fg" : "text-v-fg2 hover:text-v-fg"}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <ul className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3">
+            {caps.map((c) => (
+              <li key={t(c, "en")} className="break-inside-avoid text-v-fg">{t(c, lang)}</li>
+            ))}
+          </ul>
+        </Card>
+
       </div>
 
       {/* "office photos" → guild captures */}
