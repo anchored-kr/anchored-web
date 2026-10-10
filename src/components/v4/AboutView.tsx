@@ -4,9 +4,8 @@ import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { useLang } from "@/components/os/LangContext";
 import { t } from "@/data/i18n";
-import { about4, aboutPhotos, captures, productionBySlug, statusText, type Photo } from "@/data/v4";
+import { about4, aboutPhotos, captures, statusText, type Photo } from "@/data/v4";
 import { HeroReel } from "./HomeView";
-import { Poster } from "./icons";
 import { Pill } from "./controls";
 
 /* ── building blocks ── */
@@ -120,58 +119,9 @@ export function AboutView() {
         </div>
       </section>
 
-      {/* 03 · Selected work — Anchored Fleet */}
-      <section id="work" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
-        <Head n={3} label={t(about4.workLabel, lang)} title={t(about4.workTitle, lang)} />
-        <div className="mt-4 max-w-[760px]">
-          <p className="text-v-fg">{about4.fleetName}</p>
-          <p className="mt-1 text-v-fg">{t(about4.fleetTitle, lang)}</p>
-          <p className="mt-1 leading-[1.5] text-v-fg2">{t(about4.fleetDesc, lang)}</p>
-        </div>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2">
-          {about4.games.map((slug) => {
-            const p = productionBySlug(slug);
-            const team = about4.teams.find((tm) => tm.slug === slug);
-            if (!p) return null;
-            const cover = p.media?.[0];
-            return (
-              <Link key={slug} href={`/projects/${slug}`} className="group block">
-                <div className="overflow-hidden rounded-[6px]">
-                  {cover ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={cover.src} alt={cover.caption} loading="lazy" className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
-                  ) : (
-                    <div className="transition-transform duration-700 group-hover:scale-[1.03]">
-                      <Poster p={p} className="aspect-[16/9]" nameSize="clamp(30px, 3.4vw, 48px)" radius={0} />
-                    </div>
-                  )}
-                </div>
-                <div className="mt-3 flex items-baseline justify-between gap-3">
-                  <h3 className="text-[18px] text-v-fg">{p.name}</h3>
-                  <span className="flex shrink-0 items-center gap-1.5 text-[12.5px] text-v-fg2">
-                    {p.app.status === "live" && <span className="h-1.5 w-1.5 rounded-full bg-[#30d158]" aria-hidden="true" />}
-                    {t(statusText[p.app.status ?? "in-progress"], lang)}
-                  </span>
-                </div>
-                <p className="text-v-fg2">
-                  {team ? t(team.genre, lang) : ""}
-                  {team?.creators != null && ` · ${t(about4.creatorsCount, lang).replace("{n}", String(team.creators))}`}
-                </p>
-                <p className="mt-3 text-[12.5px] text-v-fg2">{t(about4.roleLabel, lang)}</p>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  {(p.app.role ?? []).map((r) => (
-                    <Tag key={t(r, "en")}>{t(r, lang)}</Tag>
-                  ))}
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 04 · Our community */}
+      {/* 03 · Our community */}
       <section id="community" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
-        <Head n={4} label={t(about4.communityLabel, lang)} title={t(about4.communityTitle, lang)} />
+        <Head n={3} label={t(about4.communityLabel, lang)} title={t(about4.communityTitle, lang)} />
         <p className="mt-2 max-w-[760px] leading-[1.5] text-v-fg2">{t(about4.communityLead, lang)}</p>
         <div className="mt-6 grid gap-2 sm:grid-cols-3">
           {communityPhotos.slice(0, 3).map((ph) => (
@@ -192,7 +142,13 @@ export function AboutView() {
             </li>
           ))}
         </ul>
-        <div className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-t border-v-line pt-4">
+        <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-v-line pt-4">
+          <p className="text-v-fg">{t(about4.communityProjects, lang)}</p>
+          <Link href="/all" className="v4-ul shrink-0 text-v-fg">
+            {t(about4.projectsLink, lang)} →
+          </Link>
+        </div>
+        <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
           <span className="text-v-fg2">{t(about4.creatorsLabel, lang)}</span>
           {about4.creators.map((c) => (
             <ExtLink key={c.href + t(c.label, "en")} href={c.href}>
@@ -202,9 +158,9 @@ export function AboutView() {
         </div>
       </section>
 
-      {/* 05 · How we work */}
+      {/* 04 · How we work */}
       <section id="how" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
-        <Head n={5} label={t(about4.howLabel, lang)} title={t(about4.howTitle, lang)} />
+        <Head n={4} label={t(about4.howLabel, lang)} title={t(about4.howTitle, lang)} />
         <p className="mt-3 text-v-fg2">
           {about4.way} — {t(about4.wayLine, lang)}
         </p>
@@ -241,9 +197,9 @@ export function AboutView() {
         <p className="mt-6 text-[17px] leading-[1.45] text-v-fg">{t(about4.closing, lang)}</p>
       </section>
 
-      {/* 06 · Start a project — contact lives here, at the end of the story */}
+      {/* 05 · Start a project — contact lives here, at the end of the story */}
       <section id="contact" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
-        <Head n={6} label={t(about4.startLabel, lang)} title={t(about4.startTitle, lang)} />
+        <Head n={5} label={t(about4.startLabel, lang)} title={t(about4.startTitle, lang)} />
         <div className="mt-5 flex flex-wrap items-center gap-x-1.5 gap-y-2">
           {about4.flow.map((f, i) => (
             <Fragment key={t(f, "en")}>
