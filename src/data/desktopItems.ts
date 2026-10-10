@@ -384,7 +384,7 @@ export const otherProjectApps: DesktopApp[] = [
     bullets: [
       { ko: "기획·개발·협업 기본기를 다지는 커리큘럼 운영", en: "Run a curriculum covering design, development, and collaboration fundamentals", ja: "企画・開発・協働の基礎を固めるカリキュラムを運営" },
       { ko: "팀 단위 게임 제작 인큐베이션", en: "Team-based game-production incubation", ja: "チーム単位のゲーム制作インキュベーション" },
-      { ko: "Anchored Fleet 데뷔로 이어지는 파이프라인", en: "A pipeline that leads into an Anchored Fleet debut", ja: "Anchored Fleet デビューへつながるパイプライン" },
+      { ko: "앵커드 프로젝트 합류로 이어지는 파이프라인", en: "A pipeline that leads into joining an Anchored project", ja: "Anchored のプロジェクト参加へつながるパイプライン" },
     ],
     meta: [
       { label: "Type", value: "Incubation" },

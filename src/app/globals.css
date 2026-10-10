@@ -40,6 +40,7 @@
   --color-v-pill: var(--v4-pill);
   --color-v-track: var(--v4-track);
   --color-v-knob: var(--v4-knob);
+  --color-v-accent: var(--v4-accent);
   --font-v4: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* ── v3 Kodansha-grammar palette ── */
@@ -291,6 +292,7 @@ body {
   --v4-pill: rgba(225, 229, 226, 0.1);
   --v4-track: rgba(255, 255, 255, 0.12);
   --v4-knob: #3a3b3b;
+  --v4-accent: #5aa9ff;
 }
 html[data-v4theme="light"] {
   --v4-bg: #ffffff;
@@ -301,6 +303,7 @@ html[data-v4theme="light"] {
   --v4-pill: rgba(17, 17, 17, 0.06);
   --v4-track: #e3e3e3;
   --v4-knob: #ffffff;
+  --v4-accent: #0062b8;
   color-scheme: light;
 }
 html[data-v4theme="dark"] { color-scheme: dark; }

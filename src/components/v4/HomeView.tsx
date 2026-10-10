@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { useLang } from "@/components/os/LangContext";
 import { t, type Lang } from "@/data/i18n";
-import { feed, heroSlides, productionBySlug, about4, ui4, type FeedItem, type FeedMedia } from "@/data/v4";
+import { feed, heroSlides, productionBySlug, ui4, type FeedItem, type FeedMedia } from "@/data/v4";
 import { AppIcon, BrandPoster, Poster } from "./icons";
+import { Checklist, LifecycleChain, Options, OrgDiagram, RecordSteps, Shift, SloganPoster } from "./widgets";
 
 /* ── hero: crossfading guild captures in one big media card ── */
 export function HeroReel({ slides = heroSlides, className = "aspect-[16/9]" }: { slides?: { src: string; caption: string }[]; className?: string }) {
@@ -54,27 +55,20 @@ function Media({ m, lang }: { m: FeedMedia; lang: Lang }) {
           })}
         </div>
       );
-    case "steps":
-      return (
-        <ol className="border-t border-v-line">
-          {about4.steps.map((s, i) => (
-            <li key={s.en} className="flex items-baseline justify-between border-b border-v-line py-2">
-              <span className="text-v-fg">{s.en}</span>
-              <span className="text-v-fg2">
-                {t(s.title, lang)} <span className="ml-2 tabular-nums">0{i + 1}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      );
     case "words":
-      return (
-        <div className="flex aspect-[4/3] flex-col justify-end rounded-[6px] bg-[#0072CE] p-[6%] text-white" aria-hidden="true">
-          {["Creators", "who build", "their own", "worlds."].map((w) => (
-            <p key={w} className="text-[clamp(26px,2.5vw,38px)] font-semibold leading-[0.98] tracking-[-0.035em]">{w}</p>
-          ))}
-        </div>
-      );
+      return <SloganPoster />;
+    case "checklist":
+      return <Checklist />;
+    case "shift":
+      return <Shift />;
+    case "lifecycle":
+      return <LifecycleChain />;
+    case "org":
+      return <OrgDiagram />;
+    case "options":
+      return <Options />;
+    case "record":
+      return <RecordSteps />;
     case "cta":
       return (
         <span className="inline-flex h-10 items-center gap-2 rounded-full bg-v-fg px-4 text-[14px] text-v-bg">
@@ -108,8 +102,22 @@ export function FeedCard({ item }: { item: FeedItem }) {
 
 /** Round-robin masonry: item 1 → col 1, item 2 → col 2 … (reading order kept across columns).
  *  Renders one block per breakpoint (display:none on the others) so SSR and client agree. */
-export function Masonry<T>({ items, render, keyOf, cols = { base: 1, sm: 2, xl: 3 } }: { items: T[]; render: (item: T) => ReactNode; keyOf: (item: T, i: number) => string; cols?: { base: number; sm: number; lg?: number; xl: number } }) {
-  const split = (n: number) => Array.from({ length: n }, (_, c) => items.map((it, i) => ({ it, i })).filter(({ i }) => i % n === c));
+export function Masonry<T>({ items, render, keyOf, weight, cols = { base: 1, sm: 2, xl: 3 } }: { items: T[]; render: (item: T) => ReactNode; keyOf: (item: T, i: number) => string; weight?: (item: T) => number; cols?: { base: number; sm: number; lg?: number; xl: number } }) {
+  // With a weight (estimated height), place each item in the currently shortest column — deterministic, so SSR and client agree.
+  const split = (n: number) => {
+    const out: { it: T; i: number }[][] = Array.from({ length: n }, () => []);
+    if (!weight) {
+      items.forEach((it, i) => out[i % n].push({ it, i }));
+      return out;
+    }
+    const h = Array(n).fill(0);
+    items.forEach((it, i) => {
+      const c = h.indexOf(Math.min(...h));
+      out[c].push({ it, i });
+      h[c] += weight(it) + 8;
+    });
+    return out;
+  };
   const block = (n: number, cls: string) => (
     <div key={cls} className={`${cls} gap-2`}>
       {split(n).map((col, c) => (
@@ -126,12 +134,19 @@ export function Masonry<T>({ items, render, keyOf, cols = { base: 1, sm: 2, xl: 
     : [block(cols.base, "flex sm:hidden"), block(cols.sm, "hidden sm:flex xl:hidden"), block(cols.xl, "hidden xl:flex")];
 }
 
+const MEDIA_H: Record<FeedMedia["kind"], number> = {
+  image: 190, brand: 230, poster: 230, words: 230, icons: 130, checklist: 330,
+  shift: 460, lifecycle: 130, org: 250, options: 300, record: 190, cta: 60,
+};
+/** Rough card height at ~300px width (Korean copy is the longest), used only to balance columns. */
+const feedWeight = (f: FeedItem) => 96 + t(f.body ?? "", "ko").length * 1.1 + (f.media ? MEDIA_H[f.media.kind] + 20 : 0);
+
 export function HomeView() {
   return (
     <>
       <HeroReel />
       <section id="updates" className="mt-2" aria-label="Studio updates">
-        <Masonry items={feed} keyOf={(f, i) => `${i}-${typeof f.title === "string" ? f.title : f.title.en}`} render={(f) => <FeedCard item={f} />} />
+        <Masonry items={feed} weight={feedWeight} keyOf={(f, i) => `${i}-${typeof f.title === "string" ? f.title : f.title.en}`} render={(f) => <FeedCard item={f} />} />
       </section>
     </>
   );
