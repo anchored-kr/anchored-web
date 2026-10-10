@@ -1,21 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { useLang } from "@/components/os/LangContext";
 import { t } from "@/data/i18n";
-import { about4, captures, productionBySlug, statusText, strategy } from "@/data/v4";
+import { about4, aboutPhotos, captures, productionBySlug, statusText, type Photo } from "@/data/v4";
 import { HeroReel } from "./HomeView";
-import { AppIcon } from "./icons";
+import { Poster } from "./icons";
 import { Pill } from "./controls";
-import { Checklist, LifecycleChain, Options, OrgDiagram, RecordSteps, Shift } from "./widgets";
+
+/* ── building blocks ── */
 
 function Card({ label, children, className = "", id }: { label: string; children: ReactNode; className?: string; id?: string }) {
   return (
-    <section id={id} className={`rounded-[8px] bg-v-card p-4 pb-5 ${className}`}>
+    <section id={id} className={`scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6 ${className}`}>
       <h2 className="text-v-fg2">{label}</h2>
       <div className="mt-3">{children}</div>
     </section>
+  );
+}
+
+/** Numbered section header inside a card: "02 · What we make" + headline. */
+function Head({ n, label, title }: { n: number; label: string; title: string }) {
+  return (
+    <>
+      <p className="text-v-fg2">
+        <span className="tabular-nums">{String(n).padStart(2, "0")}</span> · {label}
+      </p>
+      <h2 className="v4-title mt-2 max-w-[760px] text-v-fg">{title}</h2>
+    </>
   );
 }
 
@@ -28,254 +41,260 @@ const ExtLink = ({ href, children }: { href: string; children: ReactNode }) =>
     </a>
   );
 
-const Pin = () => (
-  <svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true" className="shrink-0">
-    <path d="M6 13s4.5-4.2 4.5-7.5a4.5 4.5 0 1 0-9 0C1.5 8.8 6 13 6 13z" />
-    <circle cx="6" cy="5.5" r="1.6" />
-  </svg>
-);
+function Tag({ children }: { children: ReactNode }) {
+  return <span className="inline-flex h-7 items-center rounded-full bg-v-pill px-2.5 text-[12.5px] text-v-fg">{children}</span>;
+}
+
+function PhotoTile({ p, className = "aspect-[16/10]" }: { p: Photo; className?: string }) {
+  return (
+    <figure className="relative overflow-hidden rounded-[6px] bg-v-bg">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={p.src} alt={p.caption} loading="lazy" className={`${className} w-full object-cover`} />
+      <figcaption className="absolute bottom-2.5 left-2.5 rounded-full bg-black/55 px-2.5 py-1 text-[11.5px] text-white backdrop-blur-md">{p.caption}</figcaption>
+    </figure>
+  );
+}
+
+function StatusChip({ status }: { status: "live" | "upcoming" }) {
+  const lang = useLang();
+  return (
+    <span className="inline-flex items-center gap-1.5 text-[12.5px] text-v-fg2">
+      <span className={`h-1.5 w-1.5 rounded-full ${status === "live" ? "bg-[#30d158]" : "border border-v-fg2"}`} aria-hidden="true" />
+      {t(statusText[status], lang)}
+    </span>
+  );
+}
+
+/* ── page ── */
 
 export function AboutView() {
   const lang = useLang();
-  const [tab, setTab] = useState(-1);
-  const caps = tab < 0 ? about4.capabilities.flatMap((c) => c.items) : about4.capabilities[tab].items;
+  const heroSlides = aboutPhotos.hero.length ? aboutPhotos.hero : [captures.hall, captures.hall2];
+  const communityPhotos = aboutPhotos.community.length ? aboutPhotos.community : [captures.hall2, captures.evergreen, captures.teamwork];
 
   return (
     <div className="space-y-2">
-      <HeroReel slides={[captures.hall, captures.hall2]} />
-
+      {/* 01 · Identity */}
+      <HeroReel slides={heroSlides} />
       <div className="grid grid-cols-1 gap-2 xl:grid-cols-3">
-        {/* Our studio */}
-        <Card label={t(about4.studioLabel, lang)} className="xl:col-span-2">
-          <div className="max-w-[640px] space-y-5">
-            {about4.studio.map((p, i) => (
-              <p key={i} className="v4-title text-v-fg">{t(p, lang)}</p>
+        <Card label={`01 · ${about4.identityLabel}`} className="xl:col-span-2">
+          <h1 className="max-w-[720px] text-[clamp(28px,2.7vw,38px)] leading-[1.15] tracking-[-0.01em] text-v-fg">{t(about4.headline, lang)}</h1>
+          <div className="mt-6 max-w-[680px] space-y-4">
+            {about4.identity.map((p, i) => (
+              <p key={i} className={i === 0 ? "text-[17px] leading-[1.5] text-v-fg" : "text-[17px] leading-[1.5] text-v-fg2"}>
+                {t(p, lang)}
+              </p>
             ))}
           </div>
         </Card>
-
-        {/* Contact */}
-        <Card label={t(about4.contactLabel, lang)}>
-          <dl className="space-y-4 pt-4">
-            {about4.contact.map((c) => (
-              <div key={t(c.label, "en")}>
-                <dt className="text-v-fg2">{t(c.label, lang)}</dt>
-                <dd>
-                  {"links" in c && c.links ? (
-                    <span className="flex gap-1">
-                      {c.links.map((l, i) => (
-                        <span key={l.href}>
-                          {i > 0 && <span className="text-v-fg2"> / </span>}
-                          <ExtLink href={l.href}>{l.label}</ExtLink>
-                        </span>
-                      ))}
-                    </span>
-                  ) : "href" in c && c.href ? (
-                    <ExtLink href={c.href}>{t(c.value, lang)}</ExtLink>
-                  ) : (
-                    <span className="text-v-fg">{t(c.value, lang)}</span>
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Card>
-
-        {/* Accountability — the questions a client no longer has to manage */}
-        <Card id="accountability" label={t(strategy.questionsLabel, lang)} className="xl:col-span-2">
-          <p className="v4-title max-w-[640px] text-v-fg">{t(strategy.questionsTitle, lang)}</p>
-          <p className="mt-2 text-v-fg2">{t(strategy.questionsLead, lang)}</p>
-          <div className="mt-5">
-            <Checklist wide />
-          </div>
-        </Card>
-
-        {/* For creators (Porto Rocha "Current openings") */}
-        <Card label={t(about4.creatorsLabel, lang)}>
-          <ul className="space-y-3 pt-4">
-            {about4.creators.map((c) => (
-              <li key={c.href + t(c.label, "en")}>
-                <ExtLink href={c.href}>{t(c.label, lang)}</ExtLink>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        {/* How we produce — concept to scale; launch is the halfway point */}
-        <Card id="how" label={t(about4.howLabel, lang)} className="xl:col-span-2">
-          <p className="v4-title max-w-[640px] text-v-fg">{t(strategy.lifecycleTitle, lang)}</p>
-          <p className="mt-2 max-w-[640px] text-v-fg2">{t(strategy.lifecycleBody, lang)}</p>
-          <div className="mt-5">
-            <LifecycleChain />
-          </div>
-          <ol className="mt-5 border-t border-v-line">
-            {strategy.lifecycle.map((s, i) => (
-              <li key={s.en} className="grid gap-1 border-b border-v-line py-2.5 sm:grid-cols-[180px_1fr] sm:gap-6">
-                <p className="text-v-fg">
-                  <span className="mr-3 tabular-nums text-v-fg2">{String(i + 1).padStart(2, "0")}</span>
-                  {s.en}
-                  {i === strategy.launchIndex && <span className="ml-2 rounded-full bg-v-pill px-2 py-0.5 text-[11px] text-v-fg2">{t(strategy.launchNote, lang)}</span>}
-                </p>
-                <p className="leading-[1.5] text-v-fg2">{t(s.desc, lang)}</p>
-              </li>
-            ))}
-          </ol>
-          <p className="mt-4 text-v-fg">{t(about4.continuity, lang)}</p>
-        </Card>
-
-        {/* Events */}
-        <Card label={t(about4.eventsLabel, lang)}>
-          <ul>
-            {about4.events.map((e) => (
-              <li key={e.title} className="border-t border-v-line py-3 first:mt-3">
-                <Link href={e.href} className="group block">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="text-v-fg group-hover:underline">{e.title}</span>
-                    <span className="shrink-0 text-v-fg2">{t(e.when, lang)}</span>
-                  </div>
-                  <p className="text-v-fg2">{t(e.who, lang)}</p>
-                  <p className="mt-2 flex items-center gap-1.5 text-v-fg2">
-                    <Pin />
-                    {t(e.where, lang)}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        {/* Positioning — the fifth option */}
-        <Card id="positioning" label={t(strategy.optionsLabel, lang)} className="xl:col-span-2">
-          <p className="v4-title text-v-fg">{t(strategy.optionsTitle, lang)}</p>
-          <p className="mt-2 text-v-fg2">{t(strategy.optionsBody, lang)}</p>
-          <div className="mt-5 max-w-[720px]">
-            <Options />
-          </div>
-        </Card>
-
-        {/* Figures */}
         <Card label={t(about4.figuresLabel, lang)}>
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-6 pt-3">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-7 pt-2">
             {about4.figures.map((f) => (
-              <div key={t(f.label, "en")}>
-                <dt className="sr-only">{t(f.label, lang)}</dt>
-                <dd className="text-[30px] leading-[1] tracking-[-0.02em] text-v-fg">{t(f.value, lang)}</dd>
-                <dd className="mt-2 text-v-fg2">{t(f.label, lang)}</dd>
+              <div key={f.name}>
+                <dd className={`${t(f.value, lang).length > 7 ? "text-[22px]" : "text-[30px]"} whitespace-nowrap leading-[1] tracking-[-0.02em] text-v-fg`}>{t(f.value, lang)}</dd>
+                <dt className="mt-2 text-v-fg">{f.name}</dt>
+                <dd className="text-[12.5px] leading-[1.4] text-v-fg2">{t(f.sub, lang)}</dd>
               </div>
             ))}
           </dl>
         </Card>
-        {/* After AI — execution gets cheaper, judgment gets scarcer */}
-        <Card id="ai" label={t(strategy.shiftLabel, lang)} className="xl:col-span-2">
-          <p className="v4-title text-v-fg">{t(strategy.shiftTitle, lang)}</p>
-          <p className="mt-2 max-w-[720px] text-v-fg2">{t(strategy.shiftBody, lang)}</p>
-          <div className="mt-5">
-            <Shift wide />
-          </div>
-        </Card>
-
-        {/* Track record — the moat */}
-        <Card id="record" label={t(strategy.recordLabel, lang)}>
-          <p className="text-[18px] leading-[1.3] text-v-fg">{t(strategy.recordTitle, lang)}</p>
-          <p className="mt-2 leading-[1.5] text-v-fg2">{t(strategy.recordBody, lang)}</p>
-          <div className="mt-5">
-            <RecordSteps />
-          </div>
-        </Card>
-
-        {/* Fleet */}
-        <Card label={t(about4.fleetLabel, lang)} className="xl:col-span-2">
-          <p className="max-w-[560px] text-v-fg2">{t(about4.fleetNote, lang)}</p>
-          <ul className="mt-4 border-t border-v-line">
-            {about4.teams.map((team) => {
-              const p = productionBySlug(team.slug ?? "");
-              return (
-                <li key={team.name} className="border-b border-v-line">
-                  <Link href={`/projects/${team.slug}`} className="flex items-center gap-3 py-3">
-                    {p && <AppIcon p={p} className="h-10 w-10" radius={8} />}
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-v-fg">{team.name}</span>
-                      <span className="block truncate text-v-fg2">{t(team.genre, lang)} · {team.strengths.map((s) => t(s, lang)).join(" · ")}</span>
-                    </span>
-                    <span className="hidden shrink-0 text-v-fg2 sm:block">{t(about4.creatorsCount, lang).replace("{n}", String(team.creators))}</span>
-                    <span className="flex shrink-0 items-center gap-1.5 text-v-fg">
-                      {team.status === "LIVE" && <span className="h-1.5 w-1.5 rounded-full bg-[#30d158]" />}
-                      {t(statusText[team.status === "LIVE" ? "live" : "in-progress"], lang)}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </Card>
-
-        {/* Production company — film analogy */}
-        <Card label={t(strategy.filmLabel, lang)}>
-          <p className="text-[18px] leading-[1.3] text-v-fg">{t(strategy.filmTitle, lang)}</p>
-          <p className="mt-2 leading-[1.5] text-v-fg2">{t(strategy.filmBody, lang)}</p>
-          <div className="mt-5">
-            <OrgDiagram />
-          </div>
-        </Card>
-
-        {/* Capabilities with category tabs (Porto Rocha "Clients" card) */}
-        <Card label={t(about4.capLabel, lang)} className="xl:col-span-3">
-          <div className="flex flex-wrap gap-x-4 gap-y-1" role="tablist">
-            {[t(about4.capAll, lang), ...about4.capabilities.map((c) => t(c.tab, lang))].map((label, i) => (
-              <button
-                key={label}
-                type="button"
-                role="tab"
-                aria-selected={tab === i - 1}
-                onClick={() => setTab(i - 1)}
-                className={`transition-colors ${tab === i - 1 ? "text-v-fg" : "text-v-fg2 hover:text-v-fg"}`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <ul className="mt-6 columns-1 gap-6 sm:columns-2 lg:columns-3">
-            {caps.map((c) => (
-              <li key={t(c, "en")} className="break-inside-avoid text-v-fg">{t(c, lang)}</li>
-            ))}
-          </ul>
-        </Card>
-
       </div>
 
-      {/* "office photos" → guild captures */}
-      <div className="grid gap-2 sm:grid-cols-2">
-        {[captures.evergreen, captures.teamwork].map((c) => (
-          <figure key={c.src} className="relative overflow-hidden rounded-[8px] bg-v-card">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={c.src} alt={c.caption} loading="lazy" className="aspect-[16/10] w-full object-cover" />
-            <figcaption className="absolute bottom-3 left-3 rounded-full bg-black/55 px-3 py-1.5 text-[12px] text-white backdrop-blur-md">{c.caption}</figcaption>
-          </figure>
-        ))}
-      </div>
+      {/* 02 · What we make */}
+      <section className="rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
+        <Head n={2} label={t(about4.makeLabel, lang)} title={t(about4.makeTitle, lang)} />
+        <div className="mt-6 grid gap-6 md:grid-cols-3 md:gap-5">
+          {about4.services.map((s, i) => (
+            <div key={s.title} className="border-t border-v-line pt-4">
+              <p className="tabular-nums text-v-fg2">{String(i + 1).padStart(2, "0")}</p>
+              <h3 className="mt-2 text-[22px] leading-[1.15] tracking-[-0.01em] text-v-fg">{s.title}</h3>
+              <p className="mt-2 text-v-fg">{t(s.line, lang)}</p>
+              <p className="mt-2 leading-[1.5] text-v-fg2">{t(s.desc, lang)}</p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {s.tags.map((tg) => (
+                  <Tag key={t(tg, "en")}>{t(tg, lang)}</Tag>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      {/* Start a production */}
-      <section className="rounded-[8px] bg-v-card p-4 pb-5">
-        <h2 className="text-v-fg2">{about4.startLabel}</h2>
-        <div className="mt-3 grid gap-6 lg:grid-cols-2">
+      {/* 03 · Selected work — Anchored Fleet */}
+      <section id="work" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
+        <Head n={3} label={t(about4.workLabel, lang)} title={t(about4.workTitle, lang)} />
+        <div className="mt-4 max-w-[760px]">
+          <p className="text-v-fg">{about4.fleetName}</p>
+          <p className="mt-1 text-v-fg">{t(about4.fleetTitle, lang)}</p>
+          <p className="mt-1 leading-[1.5] text-v-fg2">{t(about4.fleetDesc, lang)}</p>
+        </div>
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {about4.games.map((slug) => {
+            const p = productionBySlug(slug);
+            const team = about4.teams.find((tm) => tm.slug === slug);
+            if (!p) return null;
+            const cover = p.media?.[0];
+            return (
+              <Link key={slug} href={`/projects/${slug}`} className="group block">
+                <div className="overflow-hidden rounded-[6px]">
+                  {cover ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={cover.src} alt={cover.caption} loading="lazy" className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+                  ) : (
+                    <div className="transition-transform duration-700 group-hover:scale-[1.03]">
+                      <Poster p={p} className="aspect-[16/9]" nameSize="clamp(30px, 3.4vw, 48px)" radius={0} />
+                    </div>
+                  )}
+                </div>
+                <div className="mt-3 flex items-baseline justify-between gap-3">
+                  <h3 className="text-[18px] text-v-fg">{p.name}</h3>
+                  <span className="flex shrink-0 items-center gap-1.5 text-[12.5px] text-v-fg2">
+                    {p.app.status === "live" && <span className="h-1.5 w-1.5 rounded-full bg-[#30d158]" aria-hidden="true" />}
+                    {t(statusText[p.app.status ?? "in-progress"], lang)}
+                  </span>
+                </div>
+                <p className="text-v-fg2">
+                  {team ? t(team.genre, lang) : ""}
+                  {team?.creators != null && ` · ${t(about4.creatorsCount, lang).replace("{n}", String(team.creators))}`}
+                </p>
+                <p className="mt-3 text-[12.5px] text-v-fg2">{t(about4.roleLabel, lang)}</p>
+                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  {(p.app.role ?? []).map((r) => (
+                    <Tag key={t(r, "en")}>{t(r, lang)}</Tag>
+                  ))}
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 04 · Our community */}
+      <section id="community" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
+        <Head n={4} label={t(about4.communityLabel, lang)} title={t(about4.communityTitle, lang)} />
+        <p className="mt-2 max-w-[760px] leading-[1.5] text-v-fg2">{t(about4.communityLead, lang)}</p>
+        <div className="mt-6 grid gap-2 sm:grid-cols-3">
+          {communityPhotos.slice(0, 3).map((ph) => (
+            <PhotoTile key={ph.src} p={ph} />
+          ))}
+        </div>
+        <ul className="mt-6 grid gap-x-5 gap-y-6 sm:grid-cols-2 xl:grid-cols-4">
+          {about4.community.map((c) => (
+            <li key={c.name} className="border-t border-v-line pt-3">
+              <Link href={c.href} className="group block">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="text-v-fg group-hover:underline">{c.name}</h3>
+                  <StatusChip status={c.status} />
+                </div>
+                <p className="mt-0.5 text-v-fg2">{t(c.meta, lang)}</p>
+                <p className="mt-2 leading-[1.5] text-v-fg2">{t(c.desc, lang)}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-t border-v-line pt-4">
+          <span className="text-v-fg2">{t(about4.creatorsLabel, lang)}</span>
+          {about4.creators.map((c) => (
+            <ExtLink key={c.href + t(c.label, "en")} href={c.href}>
+              {t(c.label, lang)}
+            </ExtLink>
+          ))}
+        </div>
+      </section>
+
+      {/* 05 · How we work */}
+      <section id="how" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
+        <Head n={5} label={t(about4.howLabel, lang)} title={t(about4.howTitle, lang)} />
+        <p className="mt-3 text-v-fg2">
+          {about4.way} — {t(about4.wayLine, lang)}
+        </p>
+        <ol className="mt-6 grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-5">
+          {about4.steps.map((s, i) => (
+            <li key={s.en} className="border-t border-v-line pt-3">
+              <p className="text-v-fg2">
+                <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+              </p>
+              <h3 className="mt-1 text-[20px] leading-[1.15] text-v-fg">{s.en}</h3>
+              <p className="mt-2 text-v-fg">{t(s.head, lang)}</p>
+              <p className="mt-1.5 leading-[1.5] text-v-fg2">{t(s.desc, lang)}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-6 rounded-[6px] bg-v-pill p-4">
+          <p className="text-v-fg">{t(about4.giLabel, lang)}</p>
+          <dl className="mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-2 lg:grid-cols-5">
+            {about4.giAxes.map((a) => (
+              <div key={a.k}>
+                <dt className="font-mono text-[12px] tracking-[0.08em] text-v-fg">{a.k}</dt>
+                <dd className="leading-[1.4] text-v-fg2">{t(a.v, lang)}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        {aboutPhotos.work.length > 0 && (
+          <div className="mt-6 grid gap-2 sm:grid-cols-2">
+            {aboutPhotos.work.slice(0, 2).map((ph) => (
+              <PhotoTile key={ph.src} p={ph} />
+            ))}
+          </div>
+        )}
+        <p className="mt-6 text-[17px] leading-[1.45] text-v-fg">{t(about4.closing, lang)}</p>
+      </section>
+
+      {/* 06 · Start a project — contact lives here, at the end of the story */}
+      <section id="contact" className="scroll-mt-4 rounded-[8px] bg-v-card p-4 pb-5 md:p-6">
+        <Head n={6} label={t(about4.startLabel, lang)} title={t(about4.startTitle, lang)} />
+        <div className="mt-5 flex flex-wrap items-center gap-x-1.5 gap-y-2">
+          {about4.flow.map((f, i) => (
+            <Fragment key={t(f, "en")}>
+              <span className={`rounded-full px-3 py-1.5 text-[13px] ${i === 2 ? "bg-v-fg text-v-bg" : "bg-v-pill text-v-fg"}`}>{t(f, lang)}</span>
+              {i < about4.flow.length - 1 && <span className="text-v-fg2" aria-hidden="true">→</span>}
+            </Fragment>
+          ))}
+        </div>
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div>
-            <p className="v4-title text-v-fg">{t(about4.startTitle, lang).replace(/\n/g, " ")}</p>
+            <p className="text-v-fg2">{t(about4.deliverablesLabel, lang)}</p>
+            <ol className="mt-2 border-t border-v-line">
+              {about4.deliverables.map((d, i) => (
+                <li key={t(d, "en")} className="flex gap-4 border-b border-v-line py-2">
+                  <span className="tabular-nums text-v-fg2">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-v-fg">{t(d, lang)}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-3 text-v-fg2">{t(about4.startNote, lang)}</p>
+          </div>
+          <div>
+            <p className="text-v-fg2">{t(about4.contactLabel, lang)}</p>
+            <dl className="mt-2 space-y-4">
+              {about4.contact.map((c) => (
+                <div key={t(c.label, "en")}>
+                  <dt className="text-v-fg2">{t(c.label, lang)}</dt>
+                  <dd>
+                    {"links" in c && c.links ? (
+                      <span className="flex gap-1">
+                        {c.links.map((l, i) => (
+                          <span key={l.href}>
+                            {i > 0 && <span className="text-v-fg2"> / </span>}
+                            <ExtLink href={l.href}>{l.label}</ExtLink>
+                          </span>
+                        ))}
+                      </span>
+                    ) : "href" in c && c.href ? (
+                      <ExtLink href={c.href}>{t(c.value, lang)}</ExtLink>
+                    ) : (
+                      <span className="text-v-fg">{t(c.value, lang)}</span>
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
             <div className="mt-6">
               <Pill href="mailto:contact@anchored.kr?subject=Production%20Sprint" solid>
                 contact@anchored.kr
               </Pill>
             </div>
-          </div>
-          <div>
-            <ol className="border-t border-v-line">
-              {about4.startSteps.map((s, i) => (
-                <li key={i} className="flex gap-4 border-b border-v-line py-2">
-                  <span className="tabular-nums text-v-fg2">0{i + 1}</span>
-                  <span className="text-v-fg">{t(s, lang)}</span>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-3 text-v-fg2">{t(about4.startNote, lang)}</p>
           </div>
         </div>
       </section>
